@@ -28,9 +28,11 @@ def create_app():
 
     from .api import api
     from .views import views
+    from .auth import auth
 
-    app.register_blueprint(views, url_prefix="/view")
     app.register_blueprint(api, url_prefix="/api")
+    app.register_blueprint(auth, url_prefix="/auth")
+    app.register_blueprint(views, url_prefix="/view")
 
     hapi.add_resource(UserAPI, "/api/user", "/api/user/<int:user_id>")
     hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<string:venue_id>")
