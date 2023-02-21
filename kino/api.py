@@ -17,24 +17,18 @@ class NotFoundError(HTTPException):
 
 
 user_request_parse = reqparse.RequestParser()
-user_request_parse.add_argument("email")
-user_request_parse.add_argument("dob")
-user_request_parse.add_argument("first_name")
-user_request_parse.add_argument("last_name")
+user_request_parse.add_argument("name")
 user_request_parse.add_argument("username")
 user_request_parse.add_argument("password")
-user_request_parse.add_argument("recovery_key")
+user_request_parse.add_argument("email")
 user_request_parse.add_argument("created_on")
 
 user_response_fields = {
     "id": fields.Integer,
-    "email": fields.String,
-    "dob": fields.String,
-    "first_name": fields.String,
-    "last_name": fields.String,
+    "name": fields.String,
     "username": fields.String,
     "password": fields.String,
-    "recovery_key": fields.String,
+    "email": fields.String,
     "created_on": fields.String,
 }
 
@@ -60,23 +54,17 @@ class UserAPI(Resource):
     @marshal_with(user_response_fields)
     def post(self):
         args = user_request_parse.parse_args()
-        email = args.get("email", None)
-        dob = args.get("dob", None)
-        first_name = args.get("first_name", None)
-        last_name = args.get("last_name", None)
+        name = args.get("name", None)
         username = args.get("username", None)
         passwd = args.get("password", None)
-        recovery_key = args.get("recovery_key", None)
+        email = args.get("email", None)
         created_on = args.get("created_on", None)
 
         new_user = User(
-            email=email,
-            dob=dob,
-            first_name=first_name,
-            last_name=last_name,
+            name=name,
             username=username,
             passwd=passwd,
-            recovery_key=recovery_key,
+            email=email,
             created_on=created_on,
         )
         db.session.add(new_user)
