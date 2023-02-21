@@ -26,6 +26,16 @@ class Venue(db.Model):
     city = db.Column(db.String, unique=True, nullable=False)
     shows = db.relationship("Show", backref="venue")
 
+    def __repr__(self) -> str:
+        return self.name
+
+
+tags = db.Table(
+    "tags",
+    db.Column("show_id", db.Integer, db.ForeignKey("show.id")),
+    db.Column("tag_id", db.Integer, db.ForeignKey("tag.id")),
+)
+
 
 class Show(db.Model):
     __tablename__ = "show"
@@ -42,6 +52,19 @@ class Show(db.Model):
     banner_path = db.Column(db.String, nullable=False)
     venue = db.Column(db.Integer, db.ForeignKey("venue.id"))
     tickets = db.relationship("Ticket", backref="show")
+    show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
+
+    def __repr__(self) -> str:
+        return self.name
+
+
+class Tag(db.Model):
+    __tablename__ = "tag"
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(32), nullable=False)
+
+    def __repr__(self) -> str:
+        return self.name
 
 
 class Ticket(db.Model):
