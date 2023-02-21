@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/base.css') }}" type="text/css"/>
+{% endblock style %}
+
+{% block content %}
+<div class="container">
+	<div class="navbar">
+		<nav>
+			<h2 class="logo"><strong>K</strong><span>ino</span></h2>
+			<ul class="nav-links">
+				<li><input type="search" placeholder="Search"></li>
+				<li><button type="search btn-search">search</button></li>
+				<li><a href="#">Profile</a></li>
+				<li><a href="#">Bookings</a></li>
+				<li><a href="#">Login</a></li>
+				<li style="list-style-type:1"></li>
+			</ul>
+		</nav>
+	</div>
+</div>
+{% endblock content %}

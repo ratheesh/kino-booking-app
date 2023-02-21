@@ -1,0 +1,111 @@
+.container-layout {
+  display: flex;
+  border: 1px solid black;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.seating-layout {
+  padding: 0px 0px 10px 0px;
+  display: flex;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  width: 80%;
+  margin: 10px;
+}
+
+.layout {
+  display: inline-block;
+  padding: 0px 0px 0px 0px;
+  border: 1px solid black;
+  border-radius: 5px;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-items: center space-evenly;
+  justify-content: center space-evenly;
+  width: 100%;
+  margin: 10px;
+  /* border:1px solid black; */
+}
+
+.seat {
+  height: 24px;
+  width: 30px;
+  padding: 4px;
+  color: #000;
+  text-align: center;
+  font-size: 10px;
+  font-weight: bold;
+  background-color: #ffffff;
+  margin: 5px;
+  border: 1px solid #000;
+  border-radius: 3px;
+  vertical-align: bottom;
+}
+
+.seat:hover {
+  cursor: default;
+  padding: 3px;
+  transform: scale(1.1);
+}
+
+.seat:hover:disabled {
+  cursor: default;
+  padding: 3px;
+  transform: scale(1);
+}
+
+input[type="checkbox"]:not(:checked),
+input[type="checkbox"]:checked {
+  display: none;
+}
+
+.seat:checked + label {
+  height: 24px;
+  /* width: 24px; */
+  text-align: center;
+  border: 1px solid black;
+  color: white;
+  background-color: #5159ac;
+}
+
+.seat:disabled + label {
+  height: 24px;
+  /* width: 24px; */
+  text-align: center;
+  border: 1px solid black;
+  color: white;
+  background-color: #b0b0b0;
+}
+
+.row-screen {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  color: whitesmoke;
+  background-color: grey;
+  font-size: 10px;
+  align-items: center;
+  align-content: center;
+  justify-content: center, space-evenly;
+}
+
+h3 {
+  color: black;
+}
+
+h6 {
+  margin: 0px;
+  border: 1px solid black;
+}

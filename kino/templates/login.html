@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Kino Ticket Booking {% endblock %}
+{% block style %} <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" type="text/css"/> {% endblock %}
+
+{% block content %}
+<div class="container">
+	<div class="login">
+		<h1>Login</h1>
+		<form method="post">
+			<label for="username"><strong>Username</strong></label>
+			<br>
+			<input type="text" name="username" placeholder="user" required>
+			<br>
+			<label for="passwd"><strong>Password</strong></label>
+			<br>
+			<input type="password" name="passwd" required>
+			<br>
+			<br>
+			<button type="submit" class="btn btn-outline-success">Login</button>
+			<button type="" class="btn btn-outline-primary">Signup</button>
+			<br>
+			<a href="url_for("#")">Forget Password?</a>
+		</form>
+	</div>
+</div>
+{% endblock content %}
