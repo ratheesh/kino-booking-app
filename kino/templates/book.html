@@ -1,0 +1,45 @@
+{% extends 'base_nav.html' %}
+{% block style %}
+{{ super()  }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/book.css') }}" type="text/css"/>
+{% endblock style %}
+
+{% block content %}
+{{ super() }}
+<div class="container">
+	<div class="showdetails">
+
+	</div>
+	<div class="container-layout">
+		<div class="seating-layout">
+			<form method="POST">
+				<div class="layout">
+					{% for i in range(0,geometry['rows']) %}
+					{% set row="ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i] %}
+					<div class="row">
+						{% for seat in range(1,geometry['seats']+1) %}
+						{% if row in map %}
+						<input type="checkbox" class="seat" id="{{ 'check_'~row~seat }}" name="checkbox" value="{{ row~seat }}"/>
+						<label class="seat" for="{{ 'check_'~row~seat }}">{{ row~seat }}</label>
+						{% else %}
+						<input type="checkbox" class="seat" id="{{ 'check_'~row~seat }}" name="checkbox" value="{{ row~seat }}"/>
+						<label class="seat" for="{{ 'check_'~row~seat }}">{{ row~seat }}</label>
+						{% endif %}
+						{% endfor %}
+					</div>
+					{% endfor %}
+					<div class="row"></div>
+					<div class="row"></div>
+					<div class="row"></div>
+					<div class="row" style="background-color:black;color:white;border:1px solid white;border-radius:0px 0px 5px 5px;margin:0px 0px 0px 0px;text-align:center;">
+							<small><strong>SCREEN</strong></small>
+					</div>
+				</div>
+				<div class="row">
+					<button type="submit" style="background-color:lightgrey;border:1px solid black;border-radius:5px;margin:0px 0px 0px 0px;text-align:center;">Book</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock content %}
