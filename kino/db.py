@@ -13,7 +13,7 @@ class User(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String, nullable=False)
     username = db.Column(db.String, unique=True, nullable=False)
-    passwd = db.Column(db.String, nullable=False)
+    password = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     created_on = db.Column(db.String, nullable=False)
 
@@ -27,7 +27,7 @@ class Venue(db.Model):
     __tablename__ = "venue"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    city = db.Column(db.String, unique=True, nullable=False)
+    city = db.Column(db.String, nullable=False)
 
     shows = db.relationship("Show", backref="venue")
 
