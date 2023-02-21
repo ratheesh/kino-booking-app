@@ -1,16 +1,13 @@
 import os
 
-from flask import Flask, render_template
+from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
 from .api import ShowAPI, UserAPI, VenueAPI
 from .db import db
 
-# from flask_sqlalchemy import SQLAlchemy
-
-
-DB_NAME = "kino.db"
+DB_FILE = "kino.sqlite3"
 app = None
 
 
@@ -18,7 +15,7 @@ def create_app():
     global hapi
     basedir = os.path.abspath(os.path.dirname(__file__))
 
-    db_file = "sqlite:///" + os.path.join(basedir, "kino.sqlite3")
+    db_file = "sqlite:///" + os.path.join(basedir, DB_FILE)
     app = Flask(__name__, template_folder="templates")
 
     app.config["SECRET_KEY"] = "iitm-mad1-projeckt"
@@ -32,10 +29,12 @@ def create_app():
     # if not os.path.exists(db_file):
     #     db.create_all()
 
+    from .admin import admin
     from .api import api
     from .auth import auth
     from .frontend import frontend
 
+    app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(api, url_prefix="/api")
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(frontend, url_prefix="/")
