@@ -53,7 +53,9 @@ class UserAPI(Resource):
             else:
                 raise NotFoundError(status_code=404)
         else:  # send details of all users
-            pass
+            users = db.session.query(User).all()
+            print(users)
+            return users
 
     @marshal_with(user_response_fields)
     def post(self):

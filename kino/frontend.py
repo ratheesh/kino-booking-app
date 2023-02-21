@@ -1,30 +1,50 @@
-# from flask import Flask, request
-from flask import Blueprint
+from flask import Blueprint, render_template, request
 
 # from flask import current_app as app
 
 
-views = Blueprint("controller", __name__)
+frontend = Blueprint("frontend", __name__)
 
 
-@views.route("/", methods=["GET", "POST"])
-def venue():
-    return "<h1> Venu Management </h1>"
+@frontend.route("/", methods=["GET", "POST"])
+def main():
+    return render_template("index.html")
 
 
-@views.route("/user/signup", methods=["GET", "POST"])
+# test data
+# U -> unbooked(available)
+# B -> Booked
+# T -> reserved but not confirmed(used in PUT/transient state)
+seating_map = {
+    "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+    "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+    "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+    "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
+    "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+}
+
+
+@frontend.route("/book", methods=["GET", "POST"])
+def book():
+    if request.method == "POST":
+        pass
+    else:
+        return render_template("book.html", map=seating_map.items())
+
+
+@frontend.route("/user/signup", methods=["GET", "POST"])
 def signup():
-    return "<h1>User Signup</h1>"
+    return render_template("signup.html")
 
 
-@views.route("/user/login", methods=["GET", "POST"])
+@frontend.route("/user/login", methods=["GET", "POST"])
 def login():
-    return "<h1>User Login</h1>"
+    return render_template("login.html")
 
 
-@views.route("/user/logout", methods=["GET", "POST"])
+@frontend.route("/user/logout", methods=["GET", "POST"])
 def logout():
-    return "<h1>User Logout</h1>"
+    return render_template("login.html", logout=True)
 
 
 # End of File
