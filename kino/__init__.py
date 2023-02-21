@@ -29,7 +29,7 @@ def create_app():
     db.init_app(app)
     app.app_context().push()
 
-    # if not os.path.ewists(db_file):
+    # if not os.path.exists(db_file):
     #     db.create_all()
 
     from .api import api
