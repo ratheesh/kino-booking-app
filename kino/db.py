@@ -19,6 +19,9 @@ class User(db.Model):
 
     bookings = db.relationship("Booking", backref="user")
 
+    def __repr__(self) -> str:
+        return self.username
+
 
 class Venue(db.Model):
     __tablename__ = "venue"
@@ -79,6 +82,9 @@ class Ticket(db.Model):
     booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
     seats = db.relationship("Seat", backref="ticket")
 
+    def __repr__(self) -> str:
+        return super().__repr__()
+
 
 class Seat(db.Model):
     __tablename__ = "seat"
@@ -87,6 +93,9 @@ class Seat(db.Model):
     seat = db.Column(db.String, nullable=False)
 
     ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"))
+
+    def __repr__(self) -> str:
+        return self.row + self.seat
 
 
 class Booking(db.Model):
@@ -99,6 +108,9 @@ class Booking(db.Model):
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
     show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
     tickets = db.relationship("Ticket", backref="booking")
+
+    def __repr__(self) -> str:
+        return self.date + " " + self.time
 
 
 # End of File
