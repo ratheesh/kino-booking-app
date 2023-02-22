@@ -17,11 +17,11 @@ class NotFoundError(HTTPException):
 
 
 user_request_parse = reqparse.RequestParser()
-user_request_parse.add_argument("name", type=ascii)
-user_request_parse.add_argument("username", type=ascii)
-user_request_parse.add_argument("password", type=ascii)
-user_request_parse.add_argument("email", type=ascii)
-user_request_parse.add_argument("created_on", type=ascii)
+user_request_parse.add_argument("name")
+user_request_parse.add_argument("username")
+user_request_parse.add_argument("password")
+user_request_parse.add_argument("email")
+user_request_parse.add_argument("created_on")
 
 user_response_fields = {
     "id": fields.Integer,
