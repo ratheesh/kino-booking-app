@@ -1,11 +1,14 @@
 from flask import Blueprint, make_response
+from flask_httpauth import HTTPBasicAuth
 from flask_restful import Resource, fields, marshal_with, reqparse
 from werkzeug.exceptions import HTTPException
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Show, User, Venue, db
 
 # from flask_sqlalchemy import SQLAlchemy
 
+auth = HTTPBasicAuth()
 api = Blueprint("api", __name__)
 
 hapi = None
@@ -33,6 +36,24 @@ user_response_fields = {
 }
 
 
+@auth.verify_password
+def verify_password(username, password):
+    print("user:", username, "pass: ", password)
+    user = db.session.query(User).filter(User.username == username).first()
+    print(user)
+    if username == user.username and check_password_hash(user.password, password):
+        print("authentication successful!")
+        return username
+
+
+@auth.get_user_roles
+def get_user_roles(user: User):
+    if user.name == "admin":
+        return "admin"
+    else:
+        return "user"
+
+
 class UserAPI(Resource):
     @marshal_with(user_response_fields)
     def get(self, user_id=None):
@@ -56,12 +77,13 @@ class UserAPI(Resource):
         args = user_request_parse.parse_args(strict=True)
         name = args.get("name", None)
         username = args.get("username", None)
-        password = args.get("password", None)
+        password = generate_password_hash(args.get("password", None))
         email = args.get("email", None)
         created_on = args.get("created_on", None)
 
         new_user = User(
             name=name,
+            role="user",
             username=username,
             password=password,
             email=email,
@@ -92,6 +114,7 @@ venue_response_fields = {
 
 class VenueAPI(Resource):
     @marshal_with(venue_response_fields)
+    @auth.login_required(role="admin")
     def get(self, venue_id=None):
         if venue_id is not None:
             venue_details = db.session.query(
@@ -140,6 +163,19 @@ class ShowAPI(Resource):
 
     def delete(self, venue_id):
         pass
+
+
+def create_admin_user(db):
+    admin = User(
+            name="Admin",
+            email="admin@kino.app",
+            username="admin",
+            role="admin",
+            password=generate_password_hash("iitm"),
+            created_on="20-02-2023"
+            )
+    db.session.add(admin)
+    db.session.commit()
 
 
 # End of File

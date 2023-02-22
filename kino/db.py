@@ -15,7 +15,7 @@ class User(db.Model):
     password = db.Column(db.String(256), nullable=False)
     email = db.Column(db.String(128), unique=True, nullable=False)
     name = db.Column(db.String(32), nullable=False)
-    created_on = db.Column(db.String, nullable=False)
+    role = db.Column(db.String(32), nullable=False)
     created_on = db.Column(db.String(64), nullable=False)
 
     bookings = db.relationship("Booking", backref="user")

@@ -4,7 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-from .api import ShowAPI, UserAPI, VenueAPI
+from .api import ShowAPI, UserAPI, VenueAPI, create_admin_user
 from .db import db
 
 DB_FILE = "kino.sqlite3"
@@ -26,8 +26,13 @@ def create_app():
     db.init_app(app)
     app.app_context().push()
 
-    # if not os.path.exists(db_file):
-    #     db.create_all()
+    dbfile = os.path.join(basedir, DB_FILE)
+    if not os.path.exists(dbfile):
+        print("db file: ", dbfile)
+        print("==== DB FILE DOES NOT EXIST, CREATING TABLES =====")
+        db.create_all()
+        print("==== CREATING ADMIN USER =====")
+        create_admin_user(db)
 
     from .admin import admin
     from .api import api
