@@ -1,42 +1,38 @@
-{% extends 'common/base_nav.html' %}
-{% block style %}
-{{ super()  }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/user/book.css') }}" type="text/css"/>
+{% extends 'common/base_nav.html' %} {% block style %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/book.css') }}" type="text/css" />
 {% endblock style %}
 
-{% block content %}
-{{ super() }}
+<!-- main content -->
+{% block content %} {{ super() }}
 <div class="container">
-	<div class="showdetails">
-
-	</div>
 	<div class="container-layout">
 		<div class="seating-layout">
-			<form method="POST">
+			<form method="POST" style="justify-items=center;">
 				<div class="layout">
 					{% for row,seats in map %}
 					<div class="row">
-						{% for seat in seats %}
-						{% if seat == 'B' %}
-						{% set disable="disabled" %}
+						{% for seat in seats %} {% if seat == 'B' %}
+							{% set disable="disabled" %}
 						{% elif seat == 'T' %}
-						{% set check="checked" %}
+							{% set check="checked" %}
 						{% else %}
+							{% set disable="" %}
+							{% set check="" %}
 						{% endif %}
 						<input type="checkbox" class="seat" id="{{ 'check_'~row~loop.index }}" name="checkbox" value="{{ row~seat }}" {{ check }} {{ disable }} />
 						<label class="seat" for="{{ 'check_'~row~loop.index }}">{{ row~loop.index }}</label>
 						{% endfor %}
 					</div>
 					{% endfor %}
-					<div class="row"></div>
-					<div class="row"></div>
-					<div class="row"></div>
-					<div class="row" style="background-color:black;color:white;border:1px solid white;border-radius:0px 0px 5px 5px;margin:0px 0px 0px 0px;text-align:center;">
-							<small><strong>SCREEN</strong></small>
+					<br>
+					<div class="row">
+						<div class="row-screen">
+							<small><strong>SCREEN HERE</strong></small>
+						</div>
 					</div>
 				</div>
 				<div class="row">
-					<button type="submit" style="background-color:lightgrey;border:1px solid black;border-radius:5px;margin:0px 0px 0px 0px;text-align:center;">Book</button>
+					<button type="submit" style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 0px; text-align: center; "> Book </button>
 				</div>
 			</form>
 		</div>
