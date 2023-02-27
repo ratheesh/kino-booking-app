@@ -1,0 +1,70 @@
+.kard-container {
+	display: flex;
+	margin-top: 5px;
+	margin-bottom: 0px;
+	text-align: left;
+	font-size: 1.5rem;
+	border:1px solid black;
+}
+
+.kard {
+	display: flex;
+	flex-wrap: nowrap;
+	width: 25rem;
+	/* height: 15rem; */
+	margin-top: 10px;
+	margin-left: 10px;
+	padding:0;
+	background-color: #ddebf8;
+	border:4px solid white;
+	border-radius: 5px;
+}
+
+.kard.kard-add {
+	display: border-box;
+	flex-wrap: nowrap;
+	width: 25rem;
+	/* height: 15rem; */
+	margin-top: 10px;
+	margin-left: 10px;
+	padding:0;
+}
+
+.kard-venue-add {
+	height: 6rem;
+	width: 6rem;
+	margin:auto;
+	text-align:center;
+	background-color:inherit;
+}
+
+.kard-left {
+	border-radius:5px;
+}
+
+.kard-right {
+	/* width: 11rem; */
+	justify-items:center;
+	align-items: center;
+	text-align:center;
+	margin:auto
+	/* border:1px solid black; */
+}
+
+.kard-left .kard-right {
+	width: 25em;
+}
+
+.image {
+  height: 8rem;
+  width: 12rem;
+  padding: 4px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+.kard-title {
+	margin:5px 10px 0px;
+	text-align: center;
+}
+

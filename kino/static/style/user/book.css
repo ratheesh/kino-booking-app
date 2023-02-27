@@ -1,5 +1,10 @@
+* {
+  margin: 0px;
+}
+
 .container-layout {
-  display: flex;
+  display: block;
+  /* display: flex; */
   border: 1px solid black;
   align-items: center;
   justify-items: center;
@@ -14,13 +19,14 @@
   align-items: center;
   justify-items: center;
   justify-content: center;
-  width: 80%;
-  margin: 10px;
+  width: 100%;
+  /* margin: 10px; */
 }
 
 .layout {
-  display: inline-block;
-  padding: 0px 0px 0px 0px;
+  display: block;
+  margin-top: 15px;
+  padding: 10px 0px 0px 0px;
   border: 1px solid black;
   border-radius: 5px;
   align-items: center;
@@ -32,11 +38,20 @@
 .row {
   display: flex;
   align-items: center;
-  justify-items: center space-evenly;
-  justify-content: center space-evenly;
+  justify-items: center;
+  justify-content: center;
   width: 100%;
   margin: 10px;
+  padding: 0px 10px 0px 10px;
   /* border:1px solid black; */
+}
+
+.row:nth-child(1) {
+  margin-top: 10px;
+}
+
+.layout .row {
+  margin: 0 auto auto;
 }
 
 .seat {
@@ -57,10 +72,11 @@
 .seat:hover {
   cursor: default;
   padding: 3px;
+  border: 2px solid;
   transform: scale(1.1);
 }
 
-.seat:hover:disabled {
+.seat input:disabled:hover {
   cursor: default;
   padding: 3px;
   transform: scale(1);
@@ -87,18 +103,19 @@ input[type="checkbox"]:checked {
   border: 1px solid black;
   color: white;
   background-color: #b0b0b0;
+  transform: scale(1);
 }
 
 .row-screen {
-  width: 100%;
-  display: flex;
+  width: 81%;
+  background-color: black;
+  color: white;
+  border: 1px solid white;
+  border-radius: 8px;
+  margin: 0px 0px 0px 0px;
+  font-size: 9px;
   text-align: center;
-  color: whitesmoke;
-  background-color: grey;
-  font-size: 10px;
-  align-items: center;
-  align-content: center;
-  justify-content: center, space-evenly;
+  justify-content: center;
 }
 
 h3 {

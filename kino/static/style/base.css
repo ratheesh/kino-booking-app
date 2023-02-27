@@ -1,71 +1,45 @@
 * {
+  box-sizing: border-box;
+}
+
+body {
   margin: 0;
+  padding: 0;
 }
 
 .navbar {
-	display:flex;
-	justify-content: space-between;
-	margin-top: 0.25%;
-	height: 75px;
-	width: 100%;
-	align-items: center;
-	background-color: #254c73;
-	/* border: 1px solid red; */
-	border-radius: 5px 5px 0px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 5px;
+  padding-right:15px;
+  background-color: #254c73;
+  color: white;
 }
 
-nav {
-  height: 60px;
-  display: flex;
-  align-items: right;
-  justify-content: space-between;
-  padding-top: 10px;
-  padding-left: 10%;
-  padding-right: 10%;
+.applogo {
+  font-size: 2rem;
+  margin: 0.5rem;
 }
 
 .nav-links {
-  height: 60px;
+  margin: 0;
+  padding: 0;
   display: flex;
-  align-items: right;
-  justify-content: space-between;
-  padding-top: 10px;
-  padding-left: 10%;
-  padding-right: 10%;
 }
 
-.logo {
-  font-size: 32px;
-  color: lightgreen;
+.nav-links li {
+  list-style: none;
 }
 
-span {
-	color: orange;
-	font-size: 20px;
-}
-
-nav ul li {
-  list-style-type: none;
-  display: inline-block;
-  justify-content: flex-end;
-  padding: 10px 20px;
-}
-
-nav ul li a {
-  color: white;
+.nav-links li a {
   text-decoration: none;
-  font-weight: bold;
+  color: white;
+  font-size:1rem;
+  padding: 0.5rem;
+  display: block;
 }
 
-.card-grp {
-  width: 90%;
-  display: flex;
-  flex-wrap: wrap;
-  margin: auto;
-  align-items: center;
-  flex-grow: 1;
-  align-content: center;
-  margin-top: 5px;
-  padding: 5px;
-  /* border: 1px solid black; */
+.nav-links li:hover {
+  background-color: #456c93;
 }
