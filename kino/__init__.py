@@ -4,7 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-from .api import ShowAPI, UserAPI, VenueAPI, create_admin_user
+from .api import ShowAPI, UserAPI, VenueAPI, create_admin_user, populate_tags
 from .db import db
 
 DB_FILE = "kino.sqlite3"
@@ -33,6 +33,8 @@ def create_app():
         db.create_all()
         print("==== CREATING ADMIN USER =====")
         create_admin_user(db)
+        print("==== Populating tags =====")
+        populate_tags(db)
 
     from .admin import admin
     from .api import api

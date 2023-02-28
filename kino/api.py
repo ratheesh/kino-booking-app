@@ -178,4 +178,26 @@ def create_admin_user(db):
     db.session.commit()
 
 
+def populate_tags(db):
+    tags = (
+        "action",
+        "comedy",
+        "thriller",
+        "crime",
+        "scifi",
+        "fantasy",
+        "horror",
+        "period",
+        "romedy",
+    )
+    taglist = []
+
+    for tag in tags:
+        action = Tag(name=tag)
+        taglist.append(action)
+
+    db.session.add_all(taglist)
+    db.session.commit()
+
+
 # End of File
