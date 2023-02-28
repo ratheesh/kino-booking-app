@@ -7,39 +7,17 @@ body {
   padding: 0;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 5px;
-  padding-right:15px;
-  background-color: #254c73;
-  color: white;
+hr {
+	border:none;
+	height:2px;
+	margin-bottom:3px;
+	background-color: black;
 }
 
-.applogo {
-  font-size: 2rem;
-  margin: 0.5rem;
-}
-
-.nav-links {
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
-
-.nav-links li {
-  list-style: none;
-}
-
-.nav-links li a {
-  text-decoration: none;
-  color: white;
-  font-size:1rem;
-  padding: 0.5rem;
-  display: block;
-}
-
-.nav-links li:hover {
-  background-color: #456c93;
+footer {
+	width:100%;
+	height:10vh;
+	position: absolute;
+	bottom: 0;
+	text-align:center;
 }

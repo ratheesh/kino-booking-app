@@ -1,39 +1,43 @@
 {% extends 'common/base.html' %}
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/signup.css') }}" type="text/css"/>
+{% endblock style %}
 {% block title %} Signup {% endblock title %}
 
 {% block content %}
-    <div
-      id="container"
-	  style="margin:auto; width: 400px;border:color:0xFF00FF 1px solid">
-      <h1 style="text-align:center">Signup</h1>
-
-	  <form action="">
-		  <table style="text-align:center">
-			  <tr>
-				  <td align="right">User</td>
-				  <td align="left"><input type="text" name="username" placeholder="username" /></td>
-			  </tr>
-			  <tr>
-				  <td align="right">Password</td>
-				  <td align="left"><input type="text" name="pass" /></td>
-			  </tr>
-			  <tr>
-				  <td align="right">Email</td>
-				  <td align="left"><input type="email" name="email" placeholder="user@user.com" /></td>
-			  </tr>
-			  <tr>
-				  <td align="right">Date of Birth</td>
-				  <td align="left"><input type="text" name="dob" placeholder="DD/MM/YY" /></td>
-			  </tr>
-			  <br>
-			  <tr>
-				  <td></td>
-				  <td align="center">
-					  <button class="btn btn-primary">Register</button>
-					  <a href="auth.login">Login</a>
-				  </td>
-			  </tr>
-		  </table>
-	  </form>
-    </div>
+<div id="container">
+	<div class="signup">
+		<h1>Signup</h1>
+		<div class="signup-form">
+			<form action="">
+				<table style="text-align:center">
+					<tr>
+						<td align="right">User</td>
+						<td align="left"><input type="text" name="username" placeholder="username" /></td>
+					</tr>
+					<tr>
+						<td align="right">Password</td>
+						<td align="left"><input type="text" name="pass" /></td>
+					</tr>
+					<tr>
+						<td align="right">Email</td>
+						<td align="left"><input type="email" name="email" placeholder="user@user.com" /></td>
+					</tr>
+					<tr>
+						<td align="right">Date of Birth</td>
+						<td align="left"><input type="date" name="dob" placeholder="DD/MM/YY" id="dob" /></td>
+					</tr>
+					<br>
+					<tr>
+						<td></td>
+						<td align="center">
+							<button class="btn btn-primary">Register</button>
+							<button class="btn btn-primary">Login</button>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+</div>
 {% endblock content %}
