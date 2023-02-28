@@ -46,9 +46,20 @@ def create_app():
     app.register_blueprint(auth, url_prefix="/auth")
     app.register_blueprint(frontend, url_prefix="/")
 
-    hapi.add_resource(UserAPI, "/api/user", "/api/user/<int:user_id>")
-    hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<string:venue_id>")
-    hapi.add_resource(ShowAPI, "/api/show", "/api/show/<string:show_id>")
+    hapi.add_resource(
+        UserAPI,
+        "/api/user",
+        "/api/user/<int:user_id>",
+        "/api/user/<int:user_id>/bookings",
+    )
+    hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<int:venue_id>")
+    hapi.add_resource(
+        ShowAPI, "/api/<int:venue_id>/show", "/api/<int:venue_id>/show/<int:show_id>"
+    )
+    # hapi.add_resource(
+    #     BookAPI,
+    #     "/api/<int:venue_id>/<int:show_id>/book",
+    # )
 
     return app
 
