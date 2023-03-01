@@ -7,7 +7,7 @@ from sqlalchemy import delete
 from werkzeug.exceptions import HTTPException
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .db import Show, Tag, User, Venue, db
+from .db import Booking, Show, Tag, User, Venue, db
 
 # from flask_sqlalchemy import SQLAlchemy
 
@@ -344,6 +344,63 @@ class ShowAPI(Resource):
         else:
             db.session.delete(Show)
             db.session.commit()
+
+
+booking_request_parse = reqparse.RequestParser()
+booking_request_parse.add_argument("date", type=str, required=True)
+booking_request_parse.add_argument("time", type=str, required=True)
+booking_request_parse.add_argument("amount", type=str, required=True)
+
+booking_response_fields = {
+    "id": fields.Integer,
+    "date": fields.String,
+    "time": fields.String,
+    "amount": fields.String,
+}
+
+
+class BookingAPI(Resource):
+    @marshal_with(booking_response_fields)
+    def get(self, user_id, show_id, booking_id=None):
+        if user_id is None:
+            raise BadRequest("user id is not present")
+        if show_id is None:
+            raise BadRequest("show id is not present")
+        if booking_id is not None:
+            _booking = (
+                db.session.query(Booking)
+                .filter(
+                    Booking.id == booking_id
+                    and Show.id == show_id
+                    and User.id == user_id
+                )
+                .first()
+            )
+            if _booking is None:
+                raise NotFound("booking not found")
+        else:
+            _bookings = db.session.query(Booking).filter(
+                Booking.id == booking_id).all()
+            return _bookings
+
+    @marshal_with(booking_response_fields)
+    def post(self, user_id, show_id, seats):
+        if user_id is None:
+            raise BadRequest("user id is not present")
+        if show_id is None:
+            raise BadRequest("show id is not present")
+        if seats is None:
+            raise BadRequest("no seats selected")
+
+        _user = db.session.query(User).filter(User.id == user_id).first()
+        if _user is None:
+            raise NotFound(f"user id {user_id} not found")
+        _show = db.session.query(Show).filter(Show.id == show_id).first()
+        if _show is None:
+            raise NotFound(f"show {show_id} not found")
+
+    def delete(self, user_id, show_id, booking_id):
+        pass
 
 
 def create_admin_user(db):
