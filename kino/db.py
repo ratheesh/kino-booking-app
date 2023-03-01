@@ -51,14 +51,14 @@ class Show(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
-    popularity = db.Column(db.Integer, nullable=False)
+    popularity = db.Column(db.Integer)
     genre = db.Column(db.String(64))
     show_date = db.Column(db.String(64), nullable=False)
     show_time = db.Column(db.String(64), nullable=False)
     banner_path = db.Column(db.String(64), nullable=False)
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
-    tickets = db.relationship("Ticket", backref="show")
+    bookings = db.relationship("Booking", backref="show")
     show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
 
     def __repr__(self) -> str:
@@ -74,29 +74,21 @@ class Tag(db.Model):
         return self.name
 
 
-class Ticket(db.Model):
-    __tablename__ = "ticket"
-    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    # booked_at = db.Column(db.String, nullable=False)
-
-    show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
-    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
-    seats = db.relationship("Seat", backref="ticket")
-
-    def __repr__(self) -> str:
-        return super().__repr__()
-
-
 class Seat(db.Model):
     __tablename__ = "seat"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    row = db.Column(db.String(4), nullable=False)
-    seat = db.Column(db.String(4), nullable=False)
+    rowno = db.Column(db.String(4), nullable=False)
+    seatno = db.Column(db.String(4), nullable=False)
 
-    ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"))
+    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
 
     def __repr__(self) -> str:
         return self.row + self.seat
+
+
+# class Likes(db.Model):
+#     __tablename__ = "likes"
+#     isliked = db.Column(db.Boolean, nullable=False)
 
 
 class Booking(db.Model):
@@ -106,9 +98,8 @@ class Booking(db.Model):
     booking_time = db.Column(db.String(64), nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
     show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
-    tickets = db.relationship("Ticket", backref="booking")
+    seats = db.relationship("Seat", backref="booking")
 
     def __repr__(self) -> str:
         return self.date + " " + self.time
