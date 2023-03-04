@@ -9,30 +9,31 @@
 	<div class="signup">
 		<h1>Signup</h1>
 		<div class="signup-form">
-			<form action="/user/signup" method="POST">
+			<form action="/signup" method="POST">
 				<table style="text-align:center">
 					<tr>
 						<td align="right">Name</td>
-						<td align="left"><input type="text" name="name" placeholder="Name" /></td>
+						<td align="left"><input type="text" name="name" placeholder="Name" required></td>
 					</tr>
 					<tr>
 						<td align="right">User</td>
-						<td align="left"><input type="text" name="username" placeholder="username" /></td>
+						<td align="left"><input type="text" name="username" placeholder="username" required></td>
 					</tr>
 					<tr>
 						<td align="right">Password</td>
-						<td align="left"><input type="password" name="password1" placeholder="Password" /></td>
+						<td align="left"><input type="password" name="password1" placeholder="Password" required></td>
 					</tr>
 					<tr>
 						<td align="right">Reenter Password</td>
-						<td align="left"><input type="password" name="password2" placeholder="re-enter password" /></td>
+						<td align="left"><input type="password" name="password2" placeholder="re-enter password" required></td>
 					</tr>
 					<br>
 					<tr>
 						<td></td>
 						<td align="center">
-							<!-- <button class="btn btn-primary" href="">Register</button> -->
-							<button class="btn btn-primary" type="submit">Login</button>
+							<button class="btn btn-primary" type="submit">Register</button>
+							<small>Already registered?</small>
+							<button class="btn btn-primary" type="submit" formaction="url_for('controller.signup')">Login</button>
 						</td>
 					</tr>
 				</table>

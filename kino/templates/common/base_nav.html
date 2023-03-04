@@ -11,12 +11,13 @@
 			<div class="applogo">Kino</div>
 			<div class="nav-links">
 				<ul class="nav-links">
-					<li><a href="#">Profile</a></li>
-					<li><a href="#">Bookings</a></li>
-					{% if login==True %}
-					<li><a href="/login">Login</a></li>
-					{% else %}
+					<li><input type="text" name="search" value="" placeholder="Search..."></a></li>
+					{% if current_user.is_authenticated %}
+					<li><a href="/profile">Profile</a></li>
+					<li><a href="/bookings">Bookings</a></li>
 					<li><a href="/logout">Logout</a></li>
+					{% else %}
+					<li><a href="/login">Login</a></li>
 					{% endif %}
 				</ul>
 			</div>

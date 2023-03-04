@@ -1,15 +1,13 @@
+from flask_login import UserMixin, current_user, login_required
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import check_password_hash, generate_password_hash
 
-# from sqlalchemy.orm import backref
-
-engine = None
 Base = declarative_base()
 db = SQLAlchemy()
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "user"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
@@ -22,6 +20,11 @@ class User(db.Model):
 
     def __repr__(self) -> str:
         return self.username
+
+
+# @login_manager.user_loader
+# def load_user(id):
+#     return User.query.get(int(id))
 
 
 class Venue(db.Model):

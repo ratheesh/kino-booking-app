@@ -1,0 +1,15 @@
+{% extends 'common/base_nav.html' %}
+
+{% block title %} Profile {% endblock %}
+
+
+{% block content %}
+{{ super() }}
+<form method="POST">
+	<h2>{{ user.name }}'s Profile</h2>
+	<h3>Name: {{ user.name }}</h3>
+	<h3>User Name: {{ user.username }}</h3>
+	<h3>Role: {{ user.role }}</h3>
+	<button type="submit">Update</button>
+</form>
+{% endblock content%}

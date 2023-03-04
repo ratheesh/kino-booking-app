@@ -2,10 +2,14 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
+from flask_login import LoginManager
 from flask_restful import Api
 
-from .api import BookingAPI, ShowAPI, UserAPI, VenueAPI
-from .db import create_admin_user, db, populate_tags
+from .admin import admin
+# from .api import BookingAPI, ShowAPI, UserAPI, VenueAPI, api
+# from .auth import auth
+from .controller import controller
+from .db import User, create_admin_user, db, populate_tags
 
 DB_FILE = "kino.sqlite3"
 app = None
@@ -36,30 +40,34 @@ def create_app():
         print("==== Populating tags =====")
         populate_tags(db)
 
-    from .admin import admin
-    from .api import api
-    from .auth import auth
-    from .controller import controller
+    login_manager = LoginManager(app)
+    login_manager.login_view = "controller.login"
+    login_manager.init_app(app)
 
-    app.register_blueprint(admin, url_prefix="/admin")
-    app.register_blueprint(api, url_prefix="/api")
-    app.register_blueprint(auth, url_prefix="/auth")
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     app.register_blueprint(controller, url_prefix="/")
+    app.register_blueprint(admin, url_prefix="/admin")
+    # app.register_blueprint(api, url_prefix="/api")
+    # app.register_blueprint(auth, url_prefix="/auth")
 
-    hapi.add_resource(
-        UserAPI,
-        "/api/user",
-        "/api/user/<username>",
-        "/api/user/<username>/bookings",
-    )
-    hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<int:venue_id>")
-    hapi.add_resource(
-        ShowAPI, "/api/<int:venue_id>/show", "/api/<int:venue_id>/show/<int:show_id>"
-    )
-    hapi.add_resource(
-        BookingAPI,
-        "/api/<int:show_id>/book",
-    )
+    # hapi.add_resource(
+    #     UserAPI,
+    #     "/api/user",
+    #     "/api/user/<username>",
+    #     "/api/user/<username>/bookings",
+    # )
+    # hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<int:venue_id>")
+    # hapi.add_resource(
+    #     ShowAPI, "/api/<int:venue_id>/show",
+    # "/api/<int:venue_id>/show/<int:show_id>"
+    # )
+    # hapi.add_resource(
+    #     BookingAPI,
+    #     "/api/<int:show_id>/book",
+    # )
 
     return app
 

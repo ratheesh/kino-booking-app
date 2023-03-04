@@ -3,4 +3,10 @@
 {% block content %}
 {{ super() }}
 <h1> Admin Dash Board</h1>
+<div>
+	<form method="POST">
+		<button type="submit" name="venue-management" formaction="/admin"> Venue Management</button>
+		<button type="submit" name="show-management" formaction="/admin"> Show Management</button>
+	</form>
+</div>
 {% endblock content %}

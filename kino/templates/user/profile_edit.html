@@ -1,0 +1,22 @@
+{% extends 'common/base_nav.html' %}
+
+{% block title %} Profile {% endblock %}
+
+
+{% block content %}
+{{ super() }}
+<form method="POST">
+	<h2>{{ user.name }}'s Profile</h2>
+	Name: <input type="text" name="name" value="{{user.name}}" required>
+	<br>
+	<h6>User Name: {{ user.username }}</h6>
+	<br>
+	Password: <input type="password" name="password1" placeholder="Password" required>
+	<br>
+	Reenter Password: <input type="password" name="password2" placeholder="Password" required>
+	<br>
+	<h6>Role: {{ user.role }}</h6>
+	<br>
+	<button type="submit">Update</button>
+</form>
+{% endblock content%}
