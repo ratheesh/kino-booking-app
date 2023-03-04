@@ -16,7 +16,6 @@ def admin():
         if request.method == "POST":
             if "venue-management" in request.form:
                 return redirect(url_for("controller.venue_management"))
-                # return render_template("admin/venue.html")
             if "show-management" in request.form:
                 return redirect(url_for("controller.show_management"))
         else:
@@ -30,25 +29,29 @@ def venue_management():
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
-            return render_template("admin/venue.html")
+            venues = Venue.query.all()
+            return render_template("admin/venue.html", venues=venues)
         elif request.method == "POST":
-            return "admin venue post message"
+            return redirect(url_for("controller.venue_add"))
         else:
             pass
 
 
-@controller.route("/admin/venue/create", methods=["GET", "POST"])
+@controller.route("/admin/venue/add", methods=["GET", "POST"])
 @login_required
-def venue_create():
+def venue_add():
     if current_user.username != "admin":
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
-            return render_template("admin/venue_create.html")
-        elif request.method == "POST":
-            return "admin venue post message"
-        else:
-            pass
+            return render_template("admin/venue_add.html")
+        if request.method == "POST":
+            name = request.form["name"]
+            city = request.form["city"]
+            venue = Venue(name=name, city=city)
+            db.session.add(venue)
+            db.session.commit()
+            return redirect(url_for("controller.venue_management"))
 
 
 @controller.route("/admin/venue/<int:venue_id>/update", methods=["GET", "PUT"])
@@ -79,14 +82,15 @@ def venue_delete():
             pass
 
 
-@controller.route("/admin/show", methods=["GET", "POST"])
+@controller.route("/admin/<int:venue_id>/show", methods=["GET", "POST"])
 @login_required
-def show_management():
+def show_management(venue_id):
     if current_user.username != "admin":
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
-            return render_template("admin/show.html")
+            shows = Show.query.filter_by(venue_id=venue_id).all()
+            return render_template("admin/show.html", shows=shows)
         elif request.method == "POST":
             return "admin show post message"
         else:

@@ -8,16 +8,16 @@ body {
 }
 
 hr {
-	border:none;
-	height:2px;
-	margin-bottom:3px;
-	background-color: black;
+  border: none;
+  height: 2px;
+  margin-bottom: 3px;
+  background-color: black;
 }
 
 footer {
-	width:100%;
-	height:10vh;
-	position: absolute;
-	bottom: 0;
-	text-align:center;
+  width: 100%;
+  height: 10vh;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
 }

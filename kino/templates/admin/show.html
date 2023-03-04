@@ -1,30 +1,45 @@
 {% extends 'common/base_nav.html' %}
 
-{% block title %} Show Management {% endblock title %}
-
 {% block style %}
 {{ super()  }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
 {% endblock style %}
 
 {% block content %}
 {{ super() }}
-<h1>Admin Show Management</h1>
 <div class="container">
 	<div class="kard-container">
+		{% for show in shows %}
 		<div class="kard">
-			<div class="kard-left">
-				<h5 class="kard-title">Forum</h5>
-				<img src="https://via.placeholder.com/150" class="image" alt="venue" />
+			<div class="kard-img">
+				{% if show.img %}
+				<img src="{{show.img}}" class="kard-image" alt="venue" />
+				{% else %}
+				<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
+				{% endif %}
 			</div>
-			<div class="kard-right">
-				<label>Bengaluru</label>
-				<br>
-				<a href="#" class="btn btn-primary">Manage</a>
+			<div>
+				<h4 class="kard-title" style="bold">{{show.name}}</h4>
+			</div>
+			<div class="kard-bottom">
+				<h5>{{show.language}}</h5>
+				<h5>{{show.duration}}</h5>
+				<h5>{{show.rating}}</h5>
+				<h5>{{show.price}}</h5>
+				<h5>{{show.popularity}}</h5>
+				<h5>{{show.genre}}</h5>
+				<h5>{{show.date}}</h5>
+				<h5>{{show.time}}</h5>
+				<div class="kard-form">
+					<strong><a href="#" class="btn btn-primary">Book</a></strong>
+				</div>
 			</div>
 		</div>
-		<div class="kard kard-add">
-			<input class="kard-venue-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue">
+		{% endfor %}
+		<div class="kard">
+			<form id="add-show" action="/admin/show" class="kard-add-form" method="POST">
+				<input class="kard-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue">
+			</form>
 		</div>
 	</div>
 </div>

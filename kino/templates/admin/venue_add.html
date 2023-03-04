@@ -1,0 +1,29 @@
+{% extends 'common/base_nav.html' %}
+
+{% block title %}
+Add Venue
+{% endblock title %}
+
+{% block style %}
+{{ super()  }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue.css') }}" type="text/css"/>
+{% endblock style %}
+
+{% block content %}
+{{ super() }}
+<div class="container">
+	<h2 style="text-align=center:">Add New Venue </h2>
+	<div>
+		<form method="POST">
+			<label for="name">Venue Name</label>
+			<input type="text" name="name" value="" placeholder="Venue Name">
+			<br>
+			<label for="city">City Name</label>
+			<input type="text" name="city" value="" placeholder="City Name">
+			<br>
+			<button type="submit">Submit</button>
+		</form>
+
+	</div>
+</div>
+{% endblock content %}

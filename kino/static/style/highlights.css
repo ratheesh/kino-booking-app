@@ -1,5 +1,7 @@
 body {
-  background: #eef6f0;
+  box-sizing: border-box;
+  display: block;
+  background: #fff5ee; /* sea shell */
   font-size: 12px;
   margin: 0px auto;
 }
