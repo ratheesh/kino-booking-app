@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
+from werkzeug.security import check_password_hash, generate_password_hash
 
 # from sqlalchemy.orm import backref
 
@@ -11,12 +12,11 @@ db = SQLAlchemy()
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    name = db.Column(db.String(32), nullable=False)
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
-    email = db.Column(db.String(128), unique=True, nullable=False)
-    name = db.Column(db.String(32), nullable=False)
     role = db.Column(db.String(32), nullable=False)
-    created_on = db.Column(db.String(64), nullable=False)
+    image = db.Column(db.String(32))
 
     bookings = db.relationship("Booking", backref="user")
 
@@ -103,6 +103,39 @@ class Booking(db.Model):
 
     def __repr__(self) -> str:
         return self.date + " " + self.time
+
+
+def create_admin_user(db):
+    admin = User(
+        name="Admin",
+        username="admin",
+        role="admin",
+        password=generate_password_hash("iitm"),
+    )
+    db.session.add(admin)
+    db.session.commit()
+
+
+def populate_tags(db):
+    tags = (
+        "action",
+        "comedy",
+        "thriller",
+        "crime",
+        "scifi",
+        "fantasy",
+        "horror",
+        "period",
+        "romedy",
+    )
+    taglist = []
+
+    for tag in tags:
+        action = Tag(name=tag)
+        taglist.append(action)
+
+    db.session.add_all(taglist)
+    db.session.commit()
 
 
 # End of File

@@ -4,8 +4,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-from .api import ShowAPI, UserAPI, VenueAPI, create_admin_user, populate_tags
-from .db import db
+from .api import BookingAPI, ShowAPI, UserAPI, VenueAPI
+from .db import create_admin_user, db, populate_tags
 
 DB_FILE = "kino.sqlite3"
 app = None
@@ -39,27 +39,27 @@ def create_app():
     from .admin import admin
     from .api import api
     from .auth import auth
-    from .frontend import frontend
+    from .controller import controller
 
     app.register_blueprint(admin, url_prefix="/admin")
     app.register_blueprint(api, url_prefix="/api")
     app.register_blueprint(auth, url_prefix="/auth")
-    app.register_blueprint(frontend, url_prefix="/")
+    app.register_blueprint(controller, url_prefix="/")
 
     hapi.add_resource(
         UserAPI,
         "/api/user",
-        "/api/user/<int:user_id>",
-        "/api/user/<int:user_id>/bookings",
+        "/api/user/<username>",
+        "/api/user/<username>/bookings",
     )
     hapi.add_resource(VenueAPI, "/api/venue", "/api/venue/<int:venue_id>")
     hapi.add_resource(
         ShowAPI, "/api/<int:venue_id>/show", "/api/<int:venue_id>/show/<int:show_id>"
     )
-    # hapi.add_resource(
-    #     BookAPI,
-    #     "/api/<int:venue_id>/<int:show_id>/book",
-    # )
+    hapi.add_resource(
+        BookingAPI,
+        "/api/<int:show_id>/book",
+    )
 
     return app
 

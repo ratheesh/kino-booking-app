@@ -2,8 +2,8 @@ from datetime import datetime
 
 from flask import Blueprint, make_response
 from flask_httpauth import HTTPBasicAuth
-from flask_restful import NotFound, Resource, fields, marshal_with, reqparse
-from sqlalchemy import delete
+from flask_restful import (NotFound, Resource, fields, marshal_with, reqparse,
+                           request)
 from werkzeug.exceptions import HTTPException
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -32,23 +32,6 @@ class NotFoundError(HTTPException):
         self.response = make_response(msg, 404)
 
 
-user_request_parse = reqparse.RequestParser()
-user_request_parse.add_argument("name", type=str)
-user_request_parse.add_argument("username", type=str)
-user_request_parse.add_argument("password", type=str)
-user_request_parse.add_argument("email", type=str)
-# user_request_parse.add_argument("created_on", type=str)
-
-user_response_fields = {
-    "id": fields.Integer,
-    "name": fields.String,
-    "username": fields.String,
-    "password": fields.String,
-    "email": fields.String,
-    "created_on": fields.String,
-}
-
-
 @auth.verify_password
 def verify_password(username, password):
     print("user:", username, "pass: ", password)
@@ -57,6 +40,8 @@ def verify_password(username, password):
     if username == user.username and check_password_hash(user.password, password):
         print("authentication successful!")
         return username
+    else:
+        print("authentication failure")
 
 
 @auth.get_user_roles
@@ -67,38 +52,50 @@ def get_user_roles(user: User):
         return "user"
 
 
+user_request_parse = reqparse.RequestParser()
+user_request_parse.add_argument("name", type=str)
+user_request_parse.add_argument("username", type=str)
+user_request_parse.add_argument("password", type=str)
+user_request_parse.add_argument("image", type=str)
+
+user_response_fields = {
+    "name": fields.String,
+    "username": fields.String,
+    "password": fields.String,
+    "image": fields.String,
+}
+
+
 class UserAPI(Resource):
     @marshal_with(user_response_fields)
-    def get(self, user_id=None):
-        if user_id is not None:
-            user_details = db.session.query(
-                User).filter(User.id == user_id).first()
+    def get(self, username):
+        if username is not None:
+            _user = db.session.query(User).filter(
+                User.username == username).first()
 
-            if user_details:
-                return user_details
+            if _user:
+                return _user
             else:
                 raise NotFoundError(msg="User not found")
-        else:  # send details of all users
-            users = db.session.query(User).all()
-            # print(users)
-            return users
 
     @marshal_with(user_response_fields)
+    # @auth.login_required
     def post(self):
         args = user_request_parse.parse_args(strict=True)
         name = args.get("name", None)
         username = args.get("username", None)
-        password = generate_password_hash(args.get("password", None))
-        email = args.get("email", None)
-        # created_on = args.get("created_on", None)
-        if (
-            args is None
-            or name is None
-            or username is None
-            or password is None
-            or email is None
-        ):
-            raise BadRequest("incorrect argument")
+        password = args.get("password", None)
+
+        # if args is None or name is None or username is None or password is None:
+        #     raise BadRequest("incorrect argument")
+        if name is None:
+            raise BadRequest("name not provided")
+        if username is None:
+            raise BadRequest("username not provided")
+        if password is None:
+            raise BadRequest("password not provided")
+        if len(password) < 4:
+            raise BadRequest("password length is less than 4 chars")
 
         # check if the user already exists based on username
         _user = db.session.query(User).filter(
@@ -111,9 +108,7 @@ class UserAPI(Resource):
             name=name,
             role="user",
             username=username,
-            password=password,
-            email=email,
-            created_on=datetime.now(),
+            password=generate_password_hash(password),
         )
         db.session.add(_user)
         db.session.commit()
@@ -121,37 +116,41 @@ class UserAPI(Resource):
         return _user, 201
 
     @marshal_with(user_response_fields)
-    def put(self, user_id):
-        if user_id is None:
-            pass  # return error
+    @auth.login_required
+    def put(self, username):
+        if username is None:
+            raise BadRequest("username not given")
         else:
             args = user_request_parse.parse_args(strict=True)
             name = args.get("name", None)
             password = generate_password_hash(args.get("password", None))
-            email = args.get("email", None)
 
-            _user = db.session.query(User).filter(User.id == user_id).first()
-            if _user is not None:
-                _user.name = name
-                _user.password = password
-                _user.email = email
+            user = db.session.query(User).filter(
+                User.username == username).first()
+            if user is not None:
+                user.name = name
+                user.password = password
             else:
                 raise NotFoundError("user not found")
 
-            db.session.add(_user)
+            db.session.add(user)
             db.session.commit()
-            return _user
+            return user
 
-    def delete(self, user_id):
-        if user_id is None:
-            raise BadRequest("user id missing")
+    @auth.login_required
+    def delete(self, username):
+        if "Authorization" not in request.headers:
+            raise UnAuthorizedAccess("no authentication data")
+
+        if username is None:
+            raise BadRequest("user name is missing")
         else:
-            _user = db.session.query(User).filter(User.id == user_id)
-            if _user is None:
-                raise NotFoundError("user not found")
-            else:
-                db.session.delete(_user)
-                db.session.commit()
+            user = db.session.query(User).filter(
+                User.username == username).first()
+            # user = User.query.filter_by(username=username)
+            # user.delete()
+            db.session.delete(user)
+            db.session.commit()
 
 
 venue_request_parse = reqparse.RequestParser()
@@ -403,39 +402,37 @@ class BookingAPI(Resource):
         pass
 
 
-def create_admin_user(db):
-    admin = User(
-        name="Admin",
-        email="admin@kino.app",
-        username="admin",
-        role="admin",
-        password=generate_password_hash("iitm"),
-        created_on="20-02-2023",
-    )
-    db.session.add(admin)
-    db.session.commit()
-
-
-def populate_tags(db):
-    tags = (
-        "action",
-        "comedy",
-        "thriller",
-        "crime",
-        "scifi",
-        "fantasy",
-        "horror",
-        "period",
-        "romedy",
-    )
-    taglist = []
-
-    for tag in tags:
-        action = Tag(name=tag)
-        taglist.append(action)
-
-    db.session.add_all(taglist)
-    db.session.commit()
+# def create_admin_user(db):
+#     admin = User(
+#         name="Admin",
+#         username="admin",
+#         role="admin",
+#         password=generate_password_hash("iitm"),
+#     )
+#     db.session.add(admin)
+#     db.session.commit()
+#
+#
+# def populate_tags(db):
+#     tags = (
+#         "action",
+#         "comedy",
+#         "thriller",
+#         "crime",
+#         "scifi",
+#         "fantasy",
+#         "horror",
+#         "period",
+#         "romedy",
+#     )
+#     taglist = []
+#
+#     for tag in tags:
+#         action = Tag(name=tag)
+#         taglist.append(action)
+#
+#     db.session.add_all(taglist)
+#     db.session.commit()
 
 
 # End of File

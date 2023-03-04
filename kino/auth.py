@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request
+from flask_httpauth import HTTPBasicAuth
+from werkzeug.security import check_password_hash, generate_password_hash
 
 auth = Blueprint("auth", __name__)
 

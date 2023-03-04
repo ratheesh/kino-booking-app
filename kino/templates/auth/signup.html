@@ -9,30 +9,30 @@
 	<div class="signup">
 		<h1>Signup</h1>
 		<div class="signup-form">
-			<form action="">
+			<form action="/user/signup" method="POST">
 				<table style="text-align:center">
+					<tr>
+						<td align="right">Name</td>
+						<td align="left"><input type="text" name="name" placeholder="Name" /></td>
+					</tr>
 					<tr>
 						<td align="right">User</td>
 						<td align="left"><input type="text" name="username" placeholder="username" /></td>
 					</tr>
 					<tr>
 						<td align="right">Password</td>
-						<td align="left"><input type="text" name="pass" /></td>
+						<td align="left"><input type="password" name="password1" placeholder="Password" /></td>
 					</tr>
 					<tr>
-						<td align="right">Email</td>
-						<td align="left"><input type="email" name="email" placeholder="user@user.com" /></td>
-					</tr>
-					<tr>
-						<td align="right">Date of Birth</td>
-						<td align="left"><input type="date" name="dob" placeholder="DD/MM/YY" id="dob" /></td>
+						<td align="right">Reenter Password</td>
+						<td align="left"><input type="password" name="password2" placeholder="re-enter password" /></td>
 					</tr>
 					<br>
 					<tr>
 						<td></td>
 						<td align="center">
-							<button class="btn btn-primary">Register</button>
-							<button class="btn btn-primary">Login</button>
+							<!-- <button class="btn btn-primary" href="">Register</button> -->
+							<button class="btn btn-primary" type="submit">Login</button>
 						</td>
 					</tr>
 				</table>
