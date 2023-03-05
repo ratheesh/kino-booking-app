@@ -45,7 +45,8 @@ body {
 }
 
 footer {
-  height: 10vh;
+  height: 60px;
+  min-height: 10vh;
   position: absolute;
   bottom: 0;
 }

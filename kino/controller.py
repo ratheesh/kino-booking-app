@@ -24,17 +24,24 @@ def admin():
 
 @controller.route("/admin/venue", methods=["GET", "POST"])
 @login_required
-def venue_management():
+def venue_management(venue_id=None):
     if current_user.username != "admin":
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
             venues = Venue.query.all()
             return render_template("admin/venue.html", venues=venues)
-        elif request.method == "POST":
-            return redirect(url_for("controller.venue_add"))
-        else:
-            pass
+        if request.method == "POST":
+            venue_id = request.form["venue_id"]
+            if "add-venue" in request.form:
+                return redirect(url_for("controller.venue_add"))
+            if "manage-venue" in request.form:
+                return redirect(
+                    url_for("controller.show_management",
+                            venue_id=int(venue_id))
+                )
+            if "edit-venue" in request.form:
+                return redirect(url_for("controller.venue_update"))
 
 
 @controller.route("/admin/venue/add", methods=["GET", "POST"])

@@ -1,7 +1,10 @@
 body {
+  display: flex;
+  flex-direction: column;
   box-sizing: border-box;
   display: block;
   background: #fff5ee; /* sea shell */
   font-size: 12px;
   margin: 0px auto;
+  min-height: 100%;
 }

@@ -24,10 +24,14 @@
 			<div class="kard-bottom">
 				<h5>{{venue.city}}</h5>
 				<div class="kard-form">
-					<strong><a href="#" class="btn btn-primary">Manage Shows</a></strong>
+					<form id="manage-venue" action="/admin/venue" class="kard-add-form" method="POST">
+						<strong><a href="/admin/{{venue.id}}/show" class="btn btn-primary">Manage Shows</a></strong>
+					</form>
 				</div>
 				<div class="kard-form">
-					<strong><a href="#" class="btn btn-primary">Edit Venue</a></strong>
+					<form id="edit-venue" action="/admin/venue/edit" class="kard-add-form" method="POST">
+						<strong><a href="/admin/{{venue.id}}/edit" class="btn btn-primary">Edit Venue</a></strong>
+					</form>
 				</div>
 			</div>
 		</div>
