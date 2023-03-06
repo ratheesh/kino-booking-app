@@ -24,21 +24,21 @@
 			<div class="kard-bottom">
 				<h5>{{venue.city}}</h5>
 				<div class="kard-form">
-					<form id="manage-venue" action="/admin/venue" class="kard-add-form" method="POST">
-						<strong><a href="/admin/{{venue.id}}/show" class="btn btn-primary">Manage Shows</a></strong>
+					<form id="manage-show" action="/admin/{{venue.id}}/show" class="kard-add-form" method="POST">
+						<strong><a href="/admin/{{venue.id}}/show" name="manage-show" class="btn btn-primary">Manage Shows</a></strong>
 					</form>
 				</div>
 				<div class="kard-form">
-					<form id="edit-venue" action="/admin/venue/edit" class="kard-add-form" method="POST">
-						<strong><a href="/admin/{{venue.id}}/edit" class="btn btn-primary">Edit Venue</a></strong>
+					<form id="edit-venue" action="/admin/{{venue.id}}/venue/edit" class="kard-add-form" method="POST">
+						<strong><a href="/admin/{{venue.id}}/edit" name="edit-venue" class="btn btn-primary">Edit Venue</a></strong>
 					</form>
 				</div>
 			</div>
 		</div>
 		{% endfor %}
 		<div class="kard">
-			<form id="add-venue" action="/admin/venue" class="kard-add-form" method="POST">
-				<input class="kard-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue">
+			<form  action="/admin/venue" class="kard-add-form" method="POST">
+				<button style="border:0px;border-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"></button>
 			</form>
 		</div>
 	</div>

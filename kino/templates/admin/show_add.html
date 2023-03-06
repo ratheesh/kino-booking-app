@@ -1,0 +1,50 @@
+{% extends 'common/base_nav.html' %}
+
+{% block title %}
+Add Venue
+{% endblock title %}
+
+{% block style %}
+{{ super()  }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue.css') }}" type="text/css"/>
+{% endblock style %}
+
+{% block content %}
+{{ super() }}
+<div class="container">
+	<!-- <h2 style="text-align=center:">Add New Venue </h2> -->
+	<div>
+		<form method="POST">
+			<fieldset>
+				<legend>Add Show</legend>
+				<label for="title">Title</label>
+				<input type="text" name="title" value="" placeholder="Title" required>
+				<br>
+				<label for="language">Language</label>
+				<input type="text" name="language" value="" placeholder="Language" minlength="4" required>
+				<br>
+				<label for="duration">Duration</label>
+				<input type="number" name="duration" value="" placeholder="duration(mins)" min="10" max="100" required>
+				<br>
+				<label for="price">Price</label>
+				<input type="number" name="price" value="" placeholder="Ticket Price" min="100" max="500" required>
+				<br>
+				<label for="show_date">Show Date</label>
+				<input type="date" name="show_date" value="" placeholder="" required>
+				<br>
+				<label for="show_time">Show Time</label>
+				<input type="time" name="show_time" value="" placeholder="" required>
+				<br>
+				<label for="rows">Rows</label>
+				<input type="number" name="rows" value="" placeholder="Number of rows" min="5" max="15" required>
+				<br>
+				<label for="seats">Seats per Row</label>
+				<input type="number" name="seats" value="" placeholder="Seats per row" min="10" max="20" required>
+				<br>
+				<button type="submit">Add Show</button>
+			</fieldset>
+		</form>
+
+	</div>
+</div>
+{% endblock content %}

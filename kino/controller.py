@@ -3,6 +3,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Booking, Show, Tag, User, Venue, db
+from .forms import ShowForm
 
 controller = Blueprint("controller", __name__)
 
@@ -31,17 +32,23 @@ def venue_management(venue_id=None):
         if request.method == "GET":
             venues = Venue.query.all()
             return render_template("admin/venue.html", venues=venues)
+
         if request.method == "POST":
-            venue_id = request.form["venue_id"]
+            print(request.form)
             if "add-venue" in request.form:
+                print("== VENUE ADD ==")
                 return redirect(url_for("controller.venue_add"))
             if "manage-venue" in request.form:
+                print("== VENUE SHOW MGMT ==")
                 return redirect(
                     url_for("controller.show_management",
                             venue_id=int(venue_id))
                 )
             if "edit-venue" in request.form:
-                return redirect(url_for("controller.venue_update"))
+                print("== VENUE EDIT ==")
+                return redirect(url_for("controller.venue_edit"))
+
+            # return redirect(url_for("controller.venue_add"))
 
 
 @controller.route("/admin/venue/add", methods=["GET", "POST"])
@@ -61,14 +68,14 @@ def venue_add():
             return redirect(url_for("controller.venue_management"))
 
 
-@controller.route("/admin/venue/<int:venue_id>/update", methods=["GET", "PUT"])
+@controller.route("/admin/venue/<int:venue_id>/edit", methods=["GET", "POST"])
 @login_required
 def venue_update():
     if current_user.username != "admin":
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
-            return render_template("admin/venue_create.html")
+            return render_template("admin/venue_edit.html")
         elif request.method == "POST":
             return "admin venue post message"
         else:
@@ -97,11 +104,41 @@ def show_management(venue_id):
     else:
         if request.method == "GET":
             shows = Show.query.filter_by(venue_id=venue_id).all()
-            return render_template("admin/show.html", shows=shows)
+            return render_template("admin/show.html", shows=shows, venue_id=venue_id)
+
         elif request.method == "POST":
-            return "admin show post message"
+            return redirect(url_for("controller.show_add", venue_id=venue_id))
         else:
             pass
+
+
+@controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
+@login_required
+def show_add(venue_id):
+    if current_user.username != "admin":
+        return redirect(url_for("controller.login"))
+    else:
+        if request.method == "GET":
+            return render_template("admin/show_add.html")
+        if request.method == "POST":
+            print("== SHOW ADD ==")
+            show = Show(
+                title=request.form["title"],
+                language=request.form["language"],
+                duration=request.form["duration"],
+                price=request.form["price"],
+                popularity=0,  # this should updated based on user ratings
+                show_date=request.form["show_date"],
+                show_time=request.form["show_time"],
+                rows=request.form["rows"],
+                seats=request.form["seats"],
+                venue_id=venue_id,
+                banner_path="show.png",
+            )
+            db.session.add(show)
+            db.session.commit()
+            return redirect(url_for("controller.show_management", venue_id=venue_id))
+            # return render_template("admin/show.html")
 
 
 @controller.route("/", methods=["GET", "POST"])
@@ -236,6 +273,16 @@ def logout():
     logout_user()
     print("Logged out!")
     return redirect(url_for("controller.home"))
+
+
+@controller.errorhandler(404)
+def page_not_found():
+    return "page not found!"
+
+
+@controller.errorhandler(500)
+def internal_server_error():
+    return "Internal Server Error!"
 
 
 # End of File

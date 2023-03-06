@@ -19,17 +19,19 @@
 				{% endif %}
 			</div>
 			<div>
-				<h4 class="kard-title" style="bold">{{show.name}}</h4>
+				<h5 class="kard-title" style="bold">{{show.title}}</h5>
 			</div>
 			<div class="kard-bottom">
-				<h5>{{show.language}}</h5>
-				<h5>{{show.duration}}</h5>
-				<h5>{{show.rating}}</h5>
-				<h5>{{show.price}}</h5>
-				<h5>{{show.popularity}}</h5>
+				<h6>{{show.language}}</h6>
+				<h6>{{show.duration}}mins</h6>
+				<small>{{show.rating}}</small>
+				<h6>&#x20B9;{{show.price}}</h6>
+				<h5><span>&hearts;</span>{{show.popularity}}%</h5>
 				<h5>{{show.genre}}</h5>
 				<h5>{{show.date}}</h5>
 				<h5>{{show.time}}</h5>
+				<h5>Rows:{{show.rows}}</h5>
+				<h5>Seats{{show.seats}}</h5>
 				<div class="kard-form">
 					<strong><a href="#" class="btn btn-primary">Book</a></strong>
 				</div>
@@ -37,8 +39,9 @@
 		</div>
 		{% endfor %}
 		<div class="kard">
-			<form id="add-show" action="/admin/show" class="kard-add-form" method="POST">
-				<input class="kard-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue">
+			<form id="add-show" action="/admin/{{venue_id}}/show" class="kard-add-form" method="POST">
+				<button style="border:0px;border-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Show"></button>
+				<!-- <input class="kard-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"> -->
 			</form>
 		</div>
 	</div>

@@ -49,15 +49,17 @@ tags = db.Table(
 class Show(db.Model):
     __tablename__ = "show"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
+    title = db.Column(db.String(64), nullable=False)
     language = db.Column(db.String(32), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    rating = db.Column(db.String, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     popularity = db.Column(db.Integer)
-    genre = db.Column(db.String(64))
     show_date = db.Column(db.String(64), nullable=False)
     show_time = db.Column(db.String(64), nullable=False)
+    rows = db.Column(db.Integer, nullable=False)
+    seats = db.Column(
+        db.Integer, nullable=False
+    )  # seats per row -> not total no. of seats in the show
     banner_path = db.Column(db.String(64), nullable=False)
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
