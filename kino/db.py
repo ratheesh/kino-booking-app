@@ -1,7 +1,7 @@
-from flask_login import UserMixin, current_user, login_required
+from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
-from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.security import generate_password_hash
 
 Base = declarative_base()
 db = SQLAlchemy()
@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(32), nullable=False)
-    image = db.Column(db.String(32))
+    profile_img = db.Column(db.String(32))
 
     bookings = db.relationship("Booking", backref="user")
 
@@ -32,11 +32,12 @@ class Venue(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     city = db.Column(db.String(32), nullable=False)
+    venue_img = db.Column(db.String(64), nullable=False)
 
     shows = db.relationship("Show", backref="venue")
 
     def __repr__(self) -> str:
-        return self.name
+        return self.name, self.name, self.city, self.venue_img
 
 
 tags = db.Table(
@@ -60,14 +61,14 @@ class Show(db.Model):
     seats = db.Column(
         db.Integer, nullable=False
     )  # seats per row -> not total no. of seats in the show
-    banner_path = db.Column(db.String(64), nullable=False)
+    poster_img = db.Column(db.String(64), nullable=False)
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
-    bookings = db.relationship("Booking", backref="show")
+    # bookings = db.relationship("Booking", backref="show")
     show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
 
     def __repr__(self) -> str:
-        return self.name
+        return self.title
 
 
 class Tag(db.Model):
@@ -82,8 +83,7 @@ class Tag(db.Model):
 class Seat(db.Model):
     __tablename__ = "seat"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    rowno = db.Column(db.String(4), nullable=False)
-    seatno = db.Column(db.String(4), nullable=False)
+    seat = db.Column(db.String(4), nullable=False)
 
     booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
 
@@ -99,11 +99,14 @@ class Seat(db.Model):
 class Booking(db.Model):
     __tablename__ = "booking"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    booking_date = db.Column(db.String(64), nullable=False)
-    booking_time = db.Column(db.String(64), nullable=False)
+    date = db.Column(db.String(64), nullable=False)
+    time = db.Column(db.String(64), nullable=False)
+    # amount = db.Column(db.Integer, nullable=False)
+    # tax_amount = db.Column(db.Integer, nullable=False)
+    final_amount = db.Column(db.Integer, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
+    # show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
     seats = db.relationship("Seat", backref="booking")
 
     def __repr__(self) -> str:

@@ -1,0 +1,133 @@
+.kard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  min-width: 250px;
+  min-height: 300px;
+  justify-self: center;
+  margin: 0px;
+  margin-top: 10px;
+  padding: 0;
+  background-color: #d0e0f4;
+  border: 2px solid white;
+}
+
+.kard:hover {
+  box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.35);
+}
+
+.kard-image {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  overflow: hidden;
+}
+
+.kard-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.kard .kard-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.kard .kard-content h2 {
+  font-size: 1.2em;
+  font-weight: 500;
+  text-align: center;
+}
+
+.kard .kard-content h3 {
+  font-size: 0.6em;
+  font-weight: 500;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.kard .kard-content .kard-form {
+  display: flex;
+  margin-bottom: 10px;
+  justify-content: space-around;
+  align-content: center;
+  gap: 10px;
+}
+
+.kard .kard-content .kard-form .submit-btn {
+  display: flex;
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #555;
+  border-radius: 4px;
+  font-size: 0.5em;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.kard .kard-content .kard-form .submit-btn-delete {
+  display: flex;
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #555;
+  color: white;
+  background: rgba(255, 0, 0, 0.4);
+  border-radius: 4px;
+  font-size: 0.5em;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.kard .kard-content .kard-form .submit-btn-edit {
+  display: flex;
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #555;
+  color: white;
+  background: rgba(0, 0, 255, 0.4);
+  border-radius: 4px;
+  font-size: 0.5em;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.kard .kard-content .kard-form .submit-btn-general {
+  display: flex;
+  padding: 5px 10px;
+  border: none;
+  outline: none;
+  border: 1px solid #555;
+  color: black;
+  background: rgba(0, 255, 0, 0.4);
+  border-radius: 4px;
+  font-size: 0.5em;
+  font-weight: 500;
+  justify-content: space-between;
+}
+
+.kard-add {
+  margin: auto;
+  text-align: center;
+  background: transparent;
+  opacity: 1;
+}
+
+.kard.kard-add.kard-add-btn {
+  margin: auto;
+  border: none;
+  outline: none;
+  background: transparent;
+}

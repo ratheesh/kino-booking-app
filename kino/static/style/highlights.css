@@ -3,14 +3,31 @@
 }
 
 body {
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
   display: block;
-  background: #f5f5f5;
+  background: #f2f6f5;
   font-size: 12px;
   margin: 0px auto;
   padding: 0;
-  min-height: 100%;
+  min-height: 100vh;
   font-family: "Nunito", sans-serif;
+}
+
+.error .danger {
+  color: white;
+  background-color: red;
+}
+
+/* .danger {
+  color: black;
+  background-color: lightred;
+} */
+
+.success {
+  color: black;
+  background-color: lightgreen;
+}
+
+.warning {
+  color: black;
+  background-color: lightyellow;
 }

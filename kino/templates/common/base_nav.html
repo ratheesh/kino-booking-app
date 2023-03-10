@@ -15,6 +15,7 @@
 				<ul class="nav-links">
 					<li><input type="text" name="search" value="" placeholder="Search..."></a></li>
 					{% if current_user.is_authenticated %}
+					<li><a href="/">Home</a></li>
 					<li><a href="/profile">Profile</a></li>
 					<li><a href="/bookings">Bookings</a></li>
 					<li><a href="/logout">Logout</a></li>
@@ -25,4 +26,5 @@
 			</div>
 		</nav>
 </div>
+{{ super() }}
 {% endblock content %}

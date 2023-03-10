@@ -8,38 +8,45 @@
 {% block content %}
 {{ super() }}
 <div class="container">
-	<div class="kard-container">
-		{% for venue in venues %}
-		<div class="kard">
-			<div class="kard-img">
-				{% if venue.img %}
-				<img src="{{venue.img}}" class="kard-image" alt="venue" />
-				{% else %}
-				<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-				{% endif %}
+	<div class="main">
+		<div class="kard-container">
+			{% for venue in venues %}
+			<div class="kard">
+				<div class="kard-img">
+					{% if venue.venue_img %}
+					<img src="{{ url_for('static', filename='img/venue/' + venue.venue_img) }}" class="kard-image" alt="venue" />
+					{% else %}
+					<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
+					{% endif %}
+				</div>
+				<div class="kard-content">
+					<div class="kard-details">
+						<h2>{{venue.name}}</h2>
+						<h3>{{venue.city}}</h3>
+						<div class="kard-form">
+							<form id="manage-show" method="POST">
+								<!-- <a href="/admin/{{venue.id}}/show" name="manage-show" type="btn btn-info"> manage shows</a> -->
+								<button type="submit" class="submit-btn submit-btn-general" name="manage-show" value="{{venue.id}}">Manage Shows</button>
+							</form>
+							<form id="edit-venue" method="POST">
+								<button type="submit" class="submit-btn submit-btn-edit" name="edit-venue" value="{{venue.id}}">Edit</button>
+							</form>
+							<form id="delete-venue" method="POST">
+								<button type="submit" class="submit-btn submit-btn-delete" name="delete-venue" value="{{venue.id}}">Delete</button>
+							</form>
+						</div>
+					</div>
+				</div>
 			</div>
-			<div>
-				<h4 class="kard-title" style="bold">{{venue.name}}</h4>
-			</div>
-			<div class="kard-bottom">
-				<h5>{{venue.city}}</h5>
-				<div class="kard-form">
-					<form id="manage-show" action="/admin/{{venue.id}}/show" class="kard-add-form" method="POST">
-						<strong><a href="/admin/{{venue.id}}/show" name="manage-show" class="btn btn-primary">Manage Shows</a></strong>
+			{% endfor %}
+			<div class="kard">
+				<div class="kard-add">
+					<form  action="/admin/venue" method="POST">
+						<button style="border:0px;border-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img style="height:80px;width:80px;" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"></button>
+						<!-- <button class="kard-add-btn" type="submit" name="add-venue"><i class="bi bi-plus-circle-fill"></i></button> -->
 					</form>
 				</div>
-				<div class="kard-form">
-					<form id="edit-venue" action="/admin/{{venue.id}}/venue/edit" class="kard-add-form" method="POST">
-						<strong><a href="/admin/{{venue.id}}/edit" name="edit-venue" class="btn btn-primary">Edit Venue</a></strong>
-					</form>
-				</div>
 			</div>
-		</div>
-		{% endfor %}
-		<div class="kard">
-			<form  action="/admin/venue" class="kard-add-form" method="POST">
-				<button style="border:0px;border-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"></button>
-			</form>
 		</div>
 	</div>
 </div>
