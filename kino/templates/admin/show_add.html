@@ -6,7 +6,7 @@ Add Venue
 
 {% block style %}
 {{ super()  }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
 {% endblock style %}
 
 {% block content %}
@@ -14,35 +14,64 @@ Add Venue
 <div class="container">
 	<!-- <h2 style="text-align=center:">Add New Venue </h2> -->
 	<div>
-		<form method="POST">
-			<fieldset>
-				<legend>Add Show</legend>
-				<label for="title">Title</label>
-				<input type="text" name="title" value="" placeholder="Title" required>
-				<br>
-				<label for="language">Language</label>
-				<input type="text" name="language" value="" placeholder="Language" minlength="4" required>
-				<br>
-				<label for="duration">Duration</label>
-				<input type="number" name="duration" value="" placeholder="duration(mins)" min="10" max="100" required>
-				<br>
-				<label for="price">Price</label>
-				<input type="number" name="price" value="" placeholder="Ticket Price" min="100" max="500" required>
-				<br>
-				<label for="show_date">Show Date</label>
-				<input type="date" name="show_date" value="" placeholder="" required>
-				<br>
-				<label for="show_time">Show Time</label>
-				<input type="time" name="show_time" value="" placeholder="" required>
-				<br>
-				<label for="rows">Rows</label>
-				<input type="number" name="rows" value="" placeholder="Number of rows" min="5" max="15" required>
-				<br>
-				<label for="seats">Seats per Row</label>
-				<input type="number" name="seats" value="" placeholder="Seats per row" min="10" max="20" required>
-				<br>
-				<button type="submit">Add Show</button>
-			</fieldset>
+		<form class="form" method="POST" enctype="multipart/form-data">
+			{% if show is not none %}
+			<h5>Update Show</h5>
+			{% else %}
+			<h5>Add Show</h5>
+			{% endif %}
+			<div>
+				<label for="title">Title</label> <br>
+				<input type="text" name="title" value="{{show.title}}" placeholder="Title" required>
+			</div>
+			<br>
+			<div>
+				<label for="language">Language</label> <br>
+				<input type="text" name="language" value="{{show.language}}" placeholder="Language" minlength="4" required>
+			</div>
+			<br>
+			<div>
+				<label for="duration">Duration</label><br>
+				<input type="number" name="duration" value="{{show.duration}}" placeholder="duration(mins)" min="10" max="180" required>
+			</div>
+			<br>
+			<div>
+				<label for="price">Price</label><br>
+				<input type="number" name="price" value="{{show.price}}" placeholder="Ticket Price" min="100" max="500" required>
+			</div>
+			<br>
+			<div>
+				<label for="show_date">Show Date</label><br>
+				<input type="date" name="show_date" value="{{show.date}}" placeholder="" required>
+			</div>
+			<br>
+			<div>
+				<label for="show_time">Show Time</label><br>
+				<input type="time" name="show_time" value={{show.time}}"" placeholder="" required>
+			</div>
+			<br>
+			<div>
+				<label for="rows">Rows</label><br>
+				<input type="number" name="rows" value="{{show.rows}}" placeholder="Number of rows" min="5" max="15" required>
+			</div>
+			<br>
+			<div>
+				<label for="seats">Seats per Row</label><br>
+				<input type="number" name="seats" value={{show.seats}}"" placeholder="Seats per row" min="10" max="20" required>
+			</div>
+			<br>
+			<div>
+				<label for="file">Banner</label><br>
+				<input type="file" name="file" value="" placeholder="Choose banner file">
+			</div>
+			<br>
+			<div>
+				{% if show is not none %}
+				<input type="submit" name="update-show" value="Update">
+				{% else %}
+				<input type="submit" name="add-show" value="Add Show">
+				{% endif %}
+			</div>
 		</form>
 
 	</div>

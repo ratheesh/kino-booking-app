@@ -37,7 +37,7 @@ class Venue(db.Model):
     shows = db.relationship("Show", backref="venue")
 
     def __repr__(self) -> str:
-        return self.name, self.name, self.city, self.venue_img
+        return self.name
 
 
 tags = db.Table(
@@ -57,15 +57,17 @@ class Show(db.Model):
     popularity = db.Column(db.Integer)
     show_date = db.Column(db.String(64), nullable=False)
     show_time = db.Column(db.String(64), nullable=False)
-    rows = db.Column(db.Integer, nullable=False)
-    seats = db.Column(
+    n_rows = db.Column(db.Integer, nullable=False)
+    n_seats = db.Column(
         db.Integer, nullable=False
     )  # seats per row -> not total no. of seats in the show
-    poster_img = db.Column(db.String(64), nullable=False)
+    show_img = db.Column(db.String(64), nullable=False)
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
     # bookings = db.relationship("Booking", backref="show")
     show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
+
+    seats = db.relationship("Seat", backref="show")
 
     def __repr__(self) -> str:
         return self.title
@@ -85,10 +87,11 @@ class Seat(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     seat = db.Column(db.String(4), nullable=False)
 
+    show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
     booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
 
     def __repr__(self) -> str:
-        return self.row + self.seat
+        return f"{self.seat}"
 
 
 # class Likes(db.Model):
@@ -101,8 +104,6 @@ class Booking(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date = db.Column(db.String(64), nullable=False)
     time = db.Column(db.String(64), nullable=False)
-    # amount = db.Column(db.Integer, nullable=False)
-    # tax_amount = db.Column(db.Integer, nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))

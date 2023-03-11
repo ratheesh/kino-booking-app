@@ -19,7 +19,7 @@
 							{% set disable="" %}
 							{% set check="" %}
 						{% endif %}
-						<input type="checkbox" class="seat" id="{{ 'check_'~row~loop.index }}" name="checkbox" value="{{ row~seat }}" {{ check }} {{ disable }} />
+						<input type="checkbox" class="seat" id="{{ 'check_'~row~loop.index }}" name="seat" value="{{ row~loop.index }}" {{ check }} {{ disable }} />
 						<label class="seat" for="{{ 'check_'~row~loop.index }}">{{ row~loop.index }}</label>
 						{% endfor %}
 					</div>

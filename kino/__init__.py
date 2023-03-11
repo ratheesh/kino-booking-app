@@ -24,6 +24,7 @@ def create_app():
 
     app.config["SECRET_KEY"] = "iitm-mad1-projeckt"
     app.config["SQLALCHEMY_DATABASE_URI"] = db_file
+    app.config["IMG_FOLDER"] = basedir + "./static/img"
 
     CORS(app)
     hapi = Api(app)

@@ -5,17 +5,20 @@
 
 {% block content %}
 {{ super() }}
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
 	<h2>{{ user.name }}'s Profile</h2>
 	Name: <input type="text" name="name" value="{{user.name}}" required>
 	<br>
 	<h6>User Name: {{ user.username }}</h6>
 	<br>
-	Password: <input type="password" name="password1" placeholder="Password" required>
+	Password: <input type="password" name="password1" placeholder="Password">
 	<br>
-	Reenter Password: <input type="password" name="password2" placeholder="Password" required>
+	Reenter Password: <input type="password" name="password2" placeholder="Password">
 	<br>
 	<h6>Role: {{ user.role }}</h6>
+	<br>
+	<input type="file" name="file" placeholder="Upload Profile Image"
+								   accept="image/gif, image/jpeg, image/jpg, image/png" />
 	<br>
 	<button type="submit">Update</button>
 </form>

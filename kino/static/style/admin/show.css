@@ -1,14 +1,17 @@
 .kard-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-flow: row;
+  margin: 0px;
   margin-top: 5px;
   margin-bottom: 0px;
-  text-align: left;
+  row-gap: 20px;
+  column-gap: 20px;
   font-size: 1.5rem;
   border: 1px solid black;
 }
 
-.kard {
+/* .kard {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -20,13 +23,13 @@
   background-color: #d0e0f4;
   border: 4px solid white;
   border-radius: 5px;
-}
+} */
 
 .kard:hover {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
 }
 
-.kard-image {
+/* .kard-image {
   flex-grow: 1;
   max-width: 100%;
   min-width: 100%;
@@ -35,7 +38,7 @@
   background-size: contain;
   padding: 4px;
   margin: 0px;
-}
+} */
 
 .kard-title {
   margin: 5px 10px 0px;
@@ -61,4 +64,21 @@
 
 .kard.kard-add-form.kard-add {
   margin: auto;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  vertical-align: center;
+  text-align: left;
+  min-height: 100vh;
+  border: 2px solid white;
+  margin-top: 5px;
+  padding: 0px;
+  overflow: auto;
+}
+
+div {
+  font-size: 0.8rem;
 }

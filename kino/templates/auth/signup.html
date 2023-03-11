@@ -7,38 +7,35 @@
 {% block content %}
 <div id="container">
 	<div class="signup">
-		<h1>Signup</h1>
-		<div class="signup-form">
-			<form action="/signup" method="POST">
-				<table style="text-align:center">
-					<tr>
-						<td align="right">Name</td>
-						<td align="left"><input type="text" name="name" placeholder="Name" required></td>
-					</tr>
-					<tr>
-						<td align="right">User</td>
-						<td align="left"><input type="text" name="username" placeholder="username" required></td>
-					</tr>
-					<tr>
-						<td align="right">Password</td>
-						<td align="left"><input type="password" name="password1" placeholder="Password" required></td>
-					</tr>
-					<tr>
-						<td align="right">Reenter Password</td>
-						<td align="left"><input type="password" name="password2" placeholder="re-enter password" required></td>
-					</tr>
+			<form method="POST" enctype="multipart/form-data">
+				<legend>Signup</legend>
+				<div>
+					<label for="name">Name</label> <br> <input type="text" name="name" placeholder="Name" minlength="2" required>*
+				</div>
+				<br>
+				<div>
+					<label for="username">User Name</label>	<br> <input type="text" name="username" placeholder="username" minlength="4" required>*
+				</div>
+				<br>
+				<div>
+					<label for="password1">Password</label><br> <input type="password" name="password1" placeholder="Password" minlength="4" required>*
+				</div>
+				<br>
+				<div>
+					<label for="password2">Reenter Password</label>
 					<br>
-					<tr>
-						<td></td>
-						<td align="center">
-							<button class="btn btn-primary" type="submit">Register</button>
-							<small>Already registered?</small>
-							<button class="btn btn-primary" type="submit" formaction="url_for('controller.signup')">Login</button>
-						</td>
-					</tr>
-				</table>
+					<input type="password" name="password2" placeholder="re-enter password" minlength="4" required>*
+				</div>
+				<br>
+				<div>
+					<input type="file" name="file" value="Profile Picture">
+				</div>
+				<br>
+				<div>
+					<input type="submit" name="Register" value="Register">
+				</div>
+				<br>
 			</form>
-		</div>
 	</div>
 </div>
 {% endblock content %}

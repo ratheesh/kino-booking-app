@@ -5,7 +5,7 @@ from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .db import Show, User, Venue, db
+from .db import Booking, Seat, Show, User, Venue, db
 
 # from .forms import ShowForm
 
@@ -27,8 +27,19 @@ def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if current_user.role != "admin":
-            return redirect(url_for("auth.login", next=request.url))
+            return redirect(url_for("controller.login", next=request.url))
         if current_user.role == "admin":
+            return f(*args, **kwargs)
+
+    return decorated_function
+
+
+def user_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.role != "user":
+            return redirect(url_for("controller.login", next=request.url))
+        if current_user.role == "user":
             return f(*args, **kwargs)
 
     return decorated_function
@@ -199,7 +210,7 @@ def show_add(venue_id):
         return redirect(url_for("controller.login"))
     else:
         if request.method == "GET":
-            return render_template("admin/show_add.html")
+            return render_template("admin/show_add.html", show=None)
         if request.method == "POST":
             print("== SHOW ADD ==")
             show = Show(
@@ -210,15 +221,82 @@ def show_add(venue_id):
                 popularity=0,  # this should updated based on user ratings
                 show_date=request.form["show_date"],
                 show_time=request.form["show_time"],
-                rows=request.form["rows"],
-                seats=request.form["seats"],
+                n_rows=request.form["rows"],
+                n_seats=request.form["seats"],
                 venue_id=venue_id,
-                poster_img="show.png",
+                show_img="default.png",
             )
             db.session.add(show)
+            db.session.flush()
+
+            show_img_path = "default.png"
+            if request.files["file"]:
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                file = request.files["file"]
+                if not valid_img_type(file.filename):
+                    flash("img format is not supported")
+                    return render_template("admin/show_add.html", pic_err=True)
+
+                split_tup = os.path.splitext(file.filename)
+
+                show_img_path = os.path.join(
+                    basedir + "/static/img/show/", str(show.id) + split_tup[1]
+                )
+                print(show_img_path)
+                request.files["file"].save(show_img_path)
+                show.venue_img = os.path.basename(show_img_path)
+
             db.session.commit()
+
             return redirect(url_for("controller.show_management", venue_id=venue_id))
-            # return render_template("admin/show.html")
+
+
+@controller.route(
+    "/admin/<int:venue_id>/show/<int:show_id>/edit", methods=["GET", "POST"]
+)
+@login_required
+@admin_only
+def show_edit(venue_id, show_id):
+    if request.method == "GET":
+        show = Show.query.filter_by(id == show_id and venue_id == venue_id)
+        return render_template("admin/show_add.html", show=show)
+    if request.method == "POST":
+        show = Show(
+            title=request.form["title"],
+            language=request.form["language"],
+            duration=request.form["duration"],
+            price=request.form["price"],
+            popularity=0,  # this should updated based on user ratings
+            show_date=request.form["show_date"],
+            show_time=request.form["show_time"],
+            n_rows=request.form["rows"],
+            n_seats=request.form["seats"],
+            venue_id=venue_id,
+            show_img="default.png",
+        )
+        db.session.add(show)
+        db.session.flush()
+
+        show_img_path = "default.png"
+        if request.files["file"]:
+            basedir = os.path.abspath(os.path.dirname(__file__))
+            file = request.files["file"]
+            if not valid_img_type(file.filename):
+                flash("img format is not supported")
+                return render_template("admin/show_add.html", pic_err=True)
+
+            split_tup = os.path.splitext(file.filename)
+
+            show_img_path = os.path.join(
+                basedir + "/static/img/show/", str(show.id) + split_tup[1]
+            )
+            print(show_img_path)
+            request.files["file"].save(show_img_path)
+            show.venue_img = os.path.basename(show_img_path)
+
+        db.session.commit()
+
+        return redirect(url_for("controller.show_management", venue_id=venue_id))
 
 
 @controller.route("/", methods=["GET", "POST"])
@@ -229,24 +307,102 @@ def home():
 
 
 # test data
-# U -> unbooked(available)
 # B -> Booked
+# U -> unbooked(available for booking)
 # T -> reserved but not confirmed(used in PUT/transient state)
-seating_map = {
-    "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-    "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-    "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-    "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
-    "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-}
+# seating_map = {
+#     "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+# }
 
 
-@controller.route("/book", methods=["GET", "POST"])
+@controller.route("/booking_summary", methods=["GET", "POST"])
+@controller.route("/<int:booking_id>/booking_summary", methods=["GET", "POST"])
+@login_required
+@user_only
+def booking_summary(booking_id=None):
+    return "<p>Booking summary page</p>"
+
+
+def gen_seatingmap(show):
+    print(show)
+    init_row = "A"
+    # map = dict.fromkeys(
+    #     [chr(ord("A") + i) for i in range(show.n_rows)],
+    #     ["U" for _ in range(show.n_seats)],
+    # )
+    map = {}
+    for i in range(show.n_rows):
+        map[chr(ord(init_row) + i)] = ["U" for _ in range(show.n_seats)]
+
+    for seat in show.seats:
+        print("seat:", seat)
+        col = int(seat.seat[1:])
+        row = seat.seat[0]
+        print("ROWCOL:", row, col)
+        map[row][col - 1] = "B"
+        print(map[row])
+
+    print(map)
+    return map
+
+
+@controller.route("/<int:show_id>/book", methods=["GET", "POST"])
+@login_required
+@user_only
 def book(show_id):
+    show = Show.query.filter_by(id=show_id).first()
+    print("Show: ", show)
+    if show is None:
+        flash(f"No show by id:{show_id}")
+        return redirect(url_for("controller.home"))
+
+    venue = Venue.query.filter_by(id=show.venue_id).first()
+    print("Venue: ", venue)
+    if venue is None:
+        flash(f"no venue associated with the show:{show.title}")
+        return redirect(url_for("controller.home"))
+
     if request.method == "POST":
-        pass
+        sel_seats = request.form.getlist("seat")
+        print(sel_seats)
+        if sel_seats == []:
+            flash("No seats selected")
+            return render_template(
+                "user/book.html",
+                venue=venue,
+                show=show,
+                map=gen_seatingmap(show).items(),
+            )
+        else:
+            booking = Booking(
+                date="2023-03-11",
+                time="1:21PM",
+                final_amount=len(sel_seats) * show.price,
+                user_id=current_user.id,
+            )
+            db.session.add(booking)
+            db.session.flush()
+
+            seats_booked = []
+            for seat in sel_seats:
+                _seat = Seat(seat=seat, booking_id=booking.id, show_id=show_id)
+                seats_booked.append(_seat)
+
+            [print(seat) for seat in seats_booked]
+            db.session.add_all(seats_booked)
+            db.session.commit()
+            flash("Booking Successful")
+            return redirect(
+                url_for("controller.booking_summary", booking_id=booking.id)
+            )
     else:
-        return render_template("user/book.html", map=seating_map.items())
+        return render_template(
+            "user/book.html", venue=venue, show=show, map=gen_seatingmap(show).items()
+        )
 
 
 @controller.route("/profile", methods=["GET", "POST"])
@@ -283,18 +439,25 @@ def profile_edit():
                 current_user.name = name
                 current_user.password = generate_password_hash(password1)
 
+            profile_img_path = "default.png"
             if request.files["file"]:
-                if not valid_img_type(request.files["file"].filename):
-                    flash("Image type not supported", "error")
-                    return render_template("auth/signup.html", img_error=True)
-                request.files["file"].save(
-                    os.path.join(
-                        app.config["IMGFOLDER"] + "/profile /",
-                        str(current_user.id) + ".jpg",
-                    )
-                )
+                basedir = os.path.abspath(os.path.dirname(__file__))
+                file = request.files["file"]
+                if not valid_img_type(file.filename):
+                    flash("img format is not supported")
+                    return render_template("user/profile.html", pic_err=True)
 
-            # db.session.add(user)
+                split_tup = os.path.splitext(file.filename)
+
+                profile_img_path = os.path.join(
+                    basedir + "/static/img/profile/",
+                    str(current_user.id) + split_tup[1],
+                )
+                print(profile_img_path)
+                request.files["file"].save(profile_img_path)
+                profile.venue_img = os.path.basename(profile_img_path)
+
+            db.session.add(current_user)
             db.session.commit()
             flash("User details updated!", "success")
             return redirect(url_for("controller.profile", user=current_user))
@@ -353,7 +516,8 @@ def signup():
             print(profile_img_path)
             request.files["file"].save(profile_img_path)
             profile.venue_img = venue_img_path
-        db.session.add(user)
+
+        # db.session.add(user)
         db.session.commit()
         flash(f"{user.name}'s Profile created successfully!", "success")
         return redirect(url_for("controller.login"))
