@@ -9,22 +9,45 @@
 <div class="container">
 		<nav class="navbar">
 			<div class="applogo">
-				<a href="/">Kino</a>
+				Kino
 			</div>
+			<ul class="nav-links">
+					{% if current_user.is_authenticated %}
+					<li><a href="/">Home</a></li>
+					<li><a href="/bookings">Bookings</a></li>
+					{% if current_user.username == 'admin'%}
+						<li>{{current_user.name.capitalize()}}</li>
+					{% else %}
+						<li><a href="/profile">{{current_user.name.capitalize()}}</a></li>
+					{% endif %}
+					<li><a href="/logout"><i class="bi bi-box-arrow-right"></i></a></li>
+					{% else %}
+					<li><a href="/login">Log in <i class="bi bi-box-arrow-in-right"></i></a></li>
+					{% endif %}
+			</ul>
+		</nav>
+		<nav class="navbar">
+		{% if current_user.username == 'admin' %}
+		<div style="display:flex;flex-direction: row;">
+		&nbsp; &nbsp;
+		<div><a href="/admin/venue_management)">Venue Management</a></div>
+		&nbsp; &nbsp;
+		<div><a href="/admin/show_management">Show Management</a></div>
+		</div>
+		{% else %}
+		<div class="dummy"></div>
+		{% endif %}
 			<div class="nav-links">
 				<ul class="nav-links">
 					<li><input type="text" name="search" value="" placeholder="Search..."></a></li>
-					{% if current_user.is_authenticated %}
-					<li><a href="/">Home</a></li>
-					<li><a href="/profile">Profile</a></li>
-					<li><a href="/bookings">Bookings</a></li>
-					<li><a href="/logout">Logout</a></li>
-					{% else %}
-					<li><a href="/login">Login</a></li>
-					{% endif %}
 				</ul>
 			</div>
 		</nav>
+			{% with messages = get_flashed_messages(with_categories=true) %}
+			{% for category, message in messages %}
+			<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+			{% endfor %}
+			{% endwith %}
 </div>
 {{ super() }}
 {% endblock content %}

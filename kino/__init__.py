@@ -4,6 +4,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_restful import Api
+from flask_sqlalchemy import get_debug_queries
+from flask_debugtoolbar import DebugToolbarExtension
+
 
 from .admin import admin
 # from .api import BookingAPI, ShowAPI, UserAPI, VenueAPI, api
@@ -21,10 +24,19 @@ def create_app():
 
     db_file = "sqlite:///" + os.path.join(basedir, DB_FILE)
     app = Flask(__name__, template_folder="templates")
+    
+    app.debug=True
 
     app.config["SECRET_KEY"] = "iitm-mad1-projeckt"
     app.config["SQLALCHEMY_DATABASE_URI"] = db_file
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config["IMG_FOLDER"] = basedir + "./static/img"
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+    app.config['DEBUG_TB_TEMPLATE_EDITOR_ENABLED']=True
+    app.config['SQLALCHEMY_RECORD_QUERIES']=True
+    app.config['SQLALCHEMY_ECHO'] = False
+
+
 
     CORS(app)
     hapi = Api(app)
@@ -70,6 +82,8 @@ def create_app():
     #     "/api/<int:show_id>/book",
     # )
 
+
+    toolbar = DebugToolbarExtension(app)
     return app
 
 

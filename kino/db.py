@@ -91,7 +91,7 @@ class Seat(db.Model):
     booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
 
     def __repr__(self) -> str:
-        return f"{self.seat}"
+        return self.seat
 
 
 # class Likes(db.Model):

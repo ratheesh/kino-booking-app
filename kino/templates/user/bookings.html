@@ -1,0 +1,22 @@
+{% extends 'common/base_nav.html' %} {% block style %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/book.css') }}" type="text/css" />
+{% endblock style %}
+
+{% block content %}
+{{ super() }}
+<div class="container">
+    <h3>{{current_user.name}}'s Bookings</h3>
+<hr>
+{% if bookings is defined and bookings[0] is not defined %}
+    <h4 style="margin:0px auto;">You have No Bookings! </h4>
+{% else %}
+    {% for booking in bookings %}
+        <p>Booking ID: {{ booking.id }}</p>
+        <p>Booking Timestamp: {{ booking.date }} {{booking.time}}</p>
+        <p>Booking Amount :{{ booking.final_amount }}</p>
+        <p>Seats: {{booking.seats}}</p>
+        <hr>
+    {% endfor %}
+{% endif %}
+</div>
+{% endblock content %}

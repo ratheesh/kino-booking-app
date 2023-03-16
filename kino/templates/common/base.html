@@ -20,11 +20,8 @@
 </head>
 
 <body>
-	{%block navbar %} {% endblock navbar %} {% with messages =
-    get_flashed_messages(with_categories=true) %} {% for category, message in
-    messages %}
-	<div class="{{category}}" style="width: 40%">{{ message }}</div>
-	{% endfor %} {% endwith %}
+	{%block navbar %}
+	{% endblock navbar %}
 
 	{% block content %}
 	{% endblock content %}

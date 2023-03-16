@@ -6,20 +6,24 @@
 {% block content %} {{ super() }}
 <div class="container">
 	<div class="container-layout">
+		<div class="show-info">
+		<p><span>Venue: {{venue.name}},{{venue.city}}</span> <span>Show: {{show.title}}</span></p>
+		</div>
 		<div class="seating-layout">
-			<form method="POST" style="justify-items=center;">
+			<form method="POST" style="justify-items:center;">
 				<div class="layout">
 					{% for row,seats in map %}
 					<div class="row">
 						{% for seat in seats %} {% if seat == 'B' %}
-							{% set disable="disabled" %}
+						{% set disable="disabled" %}
 						{% elif seat == 'T' %}
-							{% set check="checked" %}
+						{% set check="checked" %}
 						{% else %}
-							{% set disable="" %}
-							{% set check="" %}
+						{% set disable="" %}
+						{% set check="" %}
 						{% endif %}
-						<input type="checkbox" class="seat" id="{{ 'check_'~row~loop.index }}" name="seat" value="{{ row~loop.index }}" {{ check }} {{ disable }} />
+						<input type="checkbox" class="seat" id="{{ 'check_'~row~loop.index }}" name="seat"
+							value="{{ row~loop.index }}" {{ check }} {{ disable }} />
 						<label class="seat" for="{{ 'check_'~row~loop.index }}">{{ row~loop.index }}</label>
 						{% endfor %}
 					</div>
@@ -32,10 +36,12 @@
 					</div>
 				</div>
 				<div class="row">
-					<button type="submit" style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 0px; text-align: center; "> Book </button>
+					<button type="submit"
+						style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 0px; text-align: center; ">
+						Book </button>
 				</div>
 			</form>
 		</div>
 	</div>
-</div>
+	</div>
 {% endblock content %}

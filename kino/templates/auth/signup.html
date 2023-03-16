@@ -7,7 +7,7 @@
 {% block content %}
 <div id="container">
 	<div class="signup">
-			<form method="POST" enctype="multipart/form-data">
+			<form id="signup-form" method="POST" enctype="multipart/form-data">
 				<legend>Signup</legend>
 				<div>
 					<label for="name">Name</label> <br> <input type="text" name="name" placeholder="Name" minlength="2" required>*
@@ -33,6 +33,7 @@
 				<br>
 				<div>
 					<input type="submit" name="Register" value="Register">
+					&nbsp;&nbsp;&nbsp;<a id="login" href="/login">Login</a>
 				</div>
 				<br>
 			</form>

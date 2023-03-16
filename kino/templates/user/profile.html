@@ -5,11 +5,14 @@
 
 {% block content %}
 {{ super() }}
-<form method="POST">
+<div class="container">
 	<h2>{{ user.name }}'s Profile</h2>
-	<h3>Name: {{ user.name }}</h3>
-	<h3>User Name: {{ user.username }}</h3>
-	<h3>Role: {{ user.role }}</h3>
-	<button type="submit">Update</button>
-</form>
+	<form method="POST">
+		<h3>Name: {{ user.name }}</h3>
+		<h3>User Name: {{ user.username }}</h3>
+		<h3>Role: {{ user.role }}</h3>
+		<input type="submit" value="Create">
+		<!-- <button type="submit">Update</button> -->
+	</form>
+</div>
 {% endblock content%}
