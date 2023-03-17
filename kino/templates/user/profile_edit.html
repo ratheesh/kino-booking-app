@@ -6,6 +6,11 @@
 {% block content %}
 {{ super() }}
 <form method="POST" enctype="multipart/form-data">
+	{% with messages = get_flashed_messages(with_categories=true) %}
+	{% for category, message in messages %}
+	<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+	{% endfor %}
+	{% endwith %}
 	<h2>{{ user.name }}'s Profile</h2>
 	Name: <input type="text" name="name" value="{{user.name}}" required>
 	<br>
@@ -17,9 +22,11 @@
 	<br>
 	<h6>Role: {{ user.role }}</h6>
 	<br>
+	<h6>Updated on: {{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</h6>
+	<br>
 	<input type="file" name="file" placeholder="Upload Profile Image"
 								   accept="image/gif, image/jpeg, image/jpg, image/png" />
 	<br>
-	<button type="submit">Update</button>
+	<input type="submit" value="Update">
 </form>
 {% endblock content%}

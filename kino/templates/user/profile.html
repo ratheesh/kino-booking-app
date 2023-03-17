@@ -11,8 +11,11 @@
 		<h3>Name: {{ user.name }}</h3>
 		<h3>User Name: {{ user.username }}</h3>
 		<h3>Role: {{ user.role }}</h3>
-		<input type="submit" value="Create">
-		<!-- <button type="submit">Update</button> -->
+		<h3>Created on: {{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</h3>
+		<h3>Updated on: {{ user.updated_timestamp.strftime('%d %b %Y %H:%M') }}</h3>
+		<form action={{ url_for('controller.home') }} method="post">
+		<button type="submit" class="submit-btn submit-btn-general" name="edit-profile" >Edit Profile</button>
+		<button type="submit" class="submit-btn submit-btn-general" name="go-back" >Goto Home</button>
 	</form>
 </div>
 {% endblock content%}
