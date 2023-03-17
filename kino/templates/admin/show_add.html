@@ -41,13 +41,18 @@ Add Venue
 			</div>
 			<br>
 			<div>
+				<label for="price">Rating</label><br>
+				<input type="number" name="rating" value="{{show.rating}}" placeholder="Critics Rating" min="0.5" max="5.0" step="0.1" required><span>&nbsp;/5</span>
+			</div>
+			<br>
+			<div>
 				<label for="show_date">Show Date</label><br>
 				<input type="date" name="show_date" value="{{show.date}}" placeholder="" required>
 			</div>
 			<br>
 			<div>
 				<label for="show_time">Show Time</label><br>
-				<input type="time" name="show_time" value={{show.time}}"" placeholder="" required>
+				<input type="time" name="show_time" value={{show.time}}"" placeholder="" step="900" required>
 			</div>
 			<br>
 			<div>

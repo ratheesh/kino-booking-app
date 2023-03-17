@@ -36,8 +36,8 @@ class User(db.Model, UserMixin):
 class Venue(db.Model):
     __tablename__ = "venue"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    name = db.Column(db.String(32), nullable=False)
-    city = db.Column(db.String(32), nullable=False)
+    name = db.Column(db.String(64), nullable=False)
+    place = db.Column(db.String(64), nullable=False)
     venue_img = db.Column(db.String(64), nullable=False, default="default.png")
     created_timestamp = db.Column(
         db.DateTime, nullable=False, default=datetime.now())
@@ -62,11 +62,9 @@ class Show(db.Model):
     language = db.Column(db.String(32), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
+    rating = db.Column(db.Float, nullable=False, default=0.0)
     popularity = db.Column(db.Integer)
-    show_date = db.Column(db.Date, nullable=False,
-                          default=datetime.now().date())
-    show_time = db.Column(db.String(64), nullable=False,
-                          default=datetime.now().time())
+    show_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
     n_rows = db.Column(db.Integer, nullable=False)
     n_seats = db.Column(
         db.Integer, nullable=False

@@ -1,25 +1,60 @@
 {% extends 'common/base_nav.html' %}
+
+{% block style %}
+{{ super()  }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
+{% endblock style %}
+
 {% block content %}
 {{ super() }}
+<div style="text-align=center;">
+	{% if shows|length == 0 %}
+	<h3>No Shows to Book!</h3>
+	{% endif%}
+</div>
+
 <div class="container">
-	<div class="card-grp">
-		<div class="card m-1" style="width: 15rem">
-			<img src="https://via.placeholder.com/150" class="card-img-top" alt="show1" />
-			<div class="card-body">
-				<h6 class="card-title">Avatar</h6>
-				<p class="card-text"><small>Genre: Fantasy</small></p>
-				<p class="card-text">
-				<small>Length:<span>180mins</span></small>
-				</p>
-				<p class="card-text">
-				<small>Certification:<span>U</span></small>
-				</p>
-				<p class="card-text">
-				<small>User Rating:<span>90%</span></small>
-				</p>
-				<a href="#" class="btn btn-primary">Book Now</a>
+	<div class="kard-container">
+
+		{% for show in shows %}
+		<div class="kard">
+			<div class="kard-img">
+				{% if show.show_img %}
+				<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
+				{% else %}
+				<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
+				{% endif %}
+			</div>
+			<div class="kard-content">
+				<div class="kard-details">
+					<h2 class="kard-title">{{show.title}}</h2>
+					<div>
+						<span> {{show.language}} </span>
+						<span> {{show.duration}}mins </span>
+					</div>
+					<div>
+						<span>&#x20B9;{{show.price}}</span>
+					</div>
+					<div>
+						<span>&hearts;{{show.popularity}}%</span>
+						<span>{{show.genre}}</span>
+					</div>
+					<div>
+						<span>{{show.date}}</span>
+						<span>{{show.time}}</span>
+					</div>
+					<div>
+						<span>Seating:{{show.n_rows}}x{{show.n_seats}}</span>
+					</div>
+					<div class="kard-form">
+						<!-- <strong><a href="#" class="btn btn-primary">Book</a></strong> -->
+						<input type="submit" name="Edit" value="Edit">
+						<input type="submit" name="Delete" value="Delete">
+					</div>
+				</div>
 			</div>
 		</div>
+		{% endfor %}
 	</div>
 </div>
 {% endblock content %}

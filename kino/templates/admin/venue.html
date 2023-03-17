@@ -22,10 +22,9 @@
 				<div class="kard-content">
 					<div class="kard-details">
 						<h2>{{venue.name}}</h2>
-						<h3>{{venue.city}}</h3>
+						<h3>{{venue.place}}</h3>
 						<div class="kard-form">
 							<form id="manage-show" method="POST">
-								<!-- <a href="/admin/{{venue.id}}/show" name="manage-show" type="btn btn-info"> manage shows</a> -->
 								<button type="submit" class="submit-btn submit-btn-general" name="manage-show" value="{{venue.id}}">Manage Shows</button>
 							</form>
 							<form id="edit-venue" method="POST">

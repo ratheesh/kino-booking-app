@@ -71,6 +71,7 @@ def venue_management():
         if "add-venue" in request.form:
             print("== VENUE ADD ==")
             return redirect(url_for("controller.venue_add"))
+
         if "manage-show" in request.form:
             print("== VENUE SHOW MGMT ==")
             return redirect(
@@ -108,8 +109,8 @@ def venue_add():
         return render_template("admin/venue_add.html")
     if request.method == "POST":
         name = request.form["name"]
-        city = request.form["city"]
-        venue = Venue(name=name, city=city, venue_img="default.png")
+        place = request.form["place"]
+        venue = Venue(name=name, place=place, venue_img="default.png")
         db.session.add(venue)
         db.session.flush()
 
@@ -144,7 +145,7 @@ def venue_edit(venue_id):
         return render_template("admin/venue_edit.html", venue=venue)
     elif request.method == "POST":
         venue.name = request.form["name"]
-        venue.city = request.form["city"]
+        venue.place = request.form["place"]
         if request.files["file"]:
             venue_img_path = "default.png"
             if request.files["file"]:
@@ -188,9 +189,27 @@ def venue_delete():
 def show_management(venue_id):
     if request.method == "GET":
         shows = Show.query.filter_by(venue_id=venue_id).all()
-        return render_template("admin/show.html", shows=shows, venue_id=venue_id)
+        venue = Venue.query.get_or_404(venue_id)
+        return render_template("admin/show.html", shows=shows, venue=venue)
 
     elif request.method == "POST":
+        if "edit-show" in request.form:
+            print("== SHOW EDIT ==")
+            return redirect(
+                url_for(
+                    "controller.show_edit",
+                    venue_id=int(request.form["edit-show"]),
+                )
+            )
+
+        if "delete-venue" in request.form:
+            print("== SHOW DELETE ==")
+            return redirect(
+                url_for(
+                    "controller.venue_delete",
+                    venue_id=int(request.form["delete-show"]),
+                )
+            )
         return redirect(url_for("controller.show_add", venue_id=venue_id))
     else:
         pass
@@ -204,14 +223,18 @@ def show_add(venue_id):
         return render_template("admin/show_add.html", venue_id=venue_id, show=None)
     if request.method == "POST":
         print("== SHOW ADD ==")
+        s_date = request.form["show_date"]
+        s_time = request.form["show_time"]
+        s_dt = datetime.strptime(s_date, "%Y-%m-%d")
+        s_tm = datetime.strptime(s_time, "%H:%M").time()
         show = Show(
             title=request.form["title"],
             language=request.form["language"],
             duration=request.form["duration"],
             price=request.form["price"],
+            rating=request.form["rating"],
             popularity=0,  # this should updated based on user ratings
-            show_date=request.form["show_date"],
-            show_time=request.form["show_time"],
+            show_time=datetime.combine(s_dt, s_tm),
             n_rows=request.form["rows"],
             n_seats=request.form["seats"],
             venue_id=venue_id,
@@ -253,6 +276,10 @@ def show_edit(venue_id, show_id):
         show = Show.query.filter_by(id == show_id and venue_id == venue_id)
         return render_template("admin/show_add.html", show=show)
     if request.method == "POST":
+        s_date = request.form["show_date"]
+        s_time = request.form["show_time"]
+        s_dt = datetime.strptime(s_date, "%Y-%m-%d")
+        s_tm = datetime.strptime(s_time, "%H:%M").time()
         show = Show(
             title=request.form["title"],
             language=request.form["language"],
@@ -260,7 +287,7 @@ def show_edit(venue_id, show_id):
             price=request.form["price"],
             popularity=0,  # this should updated based on user ratings
             show_date=request.form["show_date"],
-            show_time=request.form["show_time"],
+            show_time=datetime.combine(s_dt, s_tm),
             n_rows=request.form["rows"],
             n_seats=request.form["seats"],
             venue_id=venue_id,

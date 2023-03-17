@@ -22,8 +22,12 @@
 				<div class="kard-details">
 					<h2 class="kard-title">{{show.title}}</h3>
 					<div>
+						<span> {{venue.name}} </span>
+						<span> {{venue.place}} </span>
+					</div>
+					<div>
 						<span> {{show.language}} </span>
-						<span> {{show.duration}}mins </span>
+						<span> {{show.duration}} mins </span>
 					</div>
 					<div>
 						<span>&#x20B9;{{show.price}}</span>
@@ -33,23 +37,26 @@
 						<span>{{show.genre}}</span>
 					</div>
 					<div>
-						<span>{{show.date}}</span>
-						<span>{{show.time}}</span>
+						<span>{{ show.show_time.strftime("%Y-%m-%d") }}</span>
+						<span>{{ show.show_time.strftime("%I:%M %p") }}</span>
 					</div>
 					<div>
 						<span>Seating:{{show.n_rows}}x{{show.n_seats}}</span>
 					</div>
 					<div class="kard-form">
-						<!-- <strong><a href="#" class="btn btn-primary">Book</a></strong> -->
-						<input type="submit" name="Edit" value="Edit">
-						<input type="submit" name="Delete" value="Delete">
+						<form id="edit-venue" method="POST">
+							<button type="submit" class="submit-btn submit-btn-edit" name="edit-venue" value="{{venue.id}}">Edit</button>
+						</form>
+						<form id="delete-venue" method="POST">
+							<button type="submit" class="submit-btn submit-btn-delete" name="delete-venue" value="{{venue.id}}">Delete</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 		{% endfor %}
 		<div class="kard">
-			<form id="add-show" action="/admin/{{venue_id}}/show" class="kard-add-form" method="POST">
+			<form id="add-show" action="/admin/{{venue.id}}/show" class="kard-add-form" method="POST">
 				<button style="border:0px;box-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Show"></button>
 				<!-- <input class="kard-add" type="image" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"> -->
 			</form>
