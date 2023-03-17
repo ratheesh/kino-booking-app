@@ -1,6 +1,6 @@
 import os
-from functools import wraps
 from datetime import datetime
+from functools import wraps
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -131,7 +131,7 @@ def venue_add():
             venue.venue_img = os.path.basename(venue_img_path)
 
         db.session.commit()
-        flash("Venue Created Successfully!","success")
+        flash("Venue Created Successfully!", "success")
         return redirect(url_for("controller.venue_management"))
 
 
@@ -157,7 +157,8 @@ def venue_edit(venue_id):
                 split_tup = os.path.splitext(file.filename)
 
                 venue_img_path = os.path.join(
-                    basedir + "/static/img/venue/", str(venue.id) + split_tup[1]
+                    basedir +
+                    "/static/img/venue/", str(venue.id) + split_tup[1]
                 )
                 print(venue_img_path)
                 request.files["file"].save(venue_img_path)
@@ -200,7 +201,7 @@ def show_management(venue_id):
 @admin_only
 def show_add(venue_id):
     if request.method == "GET":
-        return render_template("admin/show_add.html",venue_id=venue_id, show=None)
+        return render_template("admin/show_add.html", venue_id=venue_id, show=None)
     if request.method == "POST":
         print("== SHOW ADD ==")
         show = Show(
@@ -339,6 +340,7 @@ def gen_seatingmap(show):
     # print(map)
     return map
 
+
 @controller.route("/bookings", methods=["GET", "POST"])
 @login_required
 @user_only
@@ -347,7 +349,8 @@ def bookings():
         pass
     else:
         _bookings = Booking.query.filter_by(user_id=current_user.id).all()
-        return render_template('user/bookings.html', bookings=_bookings)
+        return render_template("user/bookings.html", bookings=_bookings)
+
 
 @controller.route("/<int:show_id>/book", methods=["GET", "POST"])
 @login_required
@@ -457,7 +460,7 @@ def profile_edit():
             request.files["file"].save(profile_img_path)
             current_user.profile_img = os.path.basename(profile_img_path)
 
-        current_user.updated_timestamp=datetime.now()
+        current_user.updated_timestamp = datetime.now()
         db.session.add(current_user)
         db.session.commit()
         flash("User details updated!", "success")
@@ -539,7 +542,7 @@ def login():
         else:
             login_user(user)
             print(f"{user.username} logged in")
-            flash("Logged in!","success")
+            flash("Logged in!", "success")
             if current_user.username == "admin":
                 return redirect(url_for("controller.admin"))
             else:
@@ -550,7 +553,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Logged out!","success")
+    flash("Logged out!", "success")
     return redirect(url_for("controller.home"))
 
 
