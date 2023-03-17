@@ -1,5 +1,6 @@
 import os
 from functools import wraps
+from datetime import datetime
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
@@ -194,12 +195,13 @@ def show_management(venue_id):
         pass
 
 
+@controller.route("/admin/show/add", methods=["GET", "POST"])
 @controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
 @login_required
 @admin_only
 def show_add(venue_id):
     if request.method == "GET":
-        return render_template("admin/show_add.html", show=None)
+        return render_template("admin/show_add.html",venue_id=venue_id, show=None)
     if request.method == "POST":
         print("== SHOW ADD ==")
         show = Show(
@@ -413,7 +415,10 @@ def profile():
         if request.method == "GET":
             return render_template("user/profile.html", user=current_user)
         if request.method == "POST":
-            return redirect(url_for("controller.profile_edit"))
+            if "edit-profile" in request.form:
+                return redirect(url_for("controller.profile_edit"))
+            else:
+                return redirect(url_for("controller.home"))
 
 
 @controller.route("/profile/edit", methods=["GET", "POST"])
@@ -451,8 +456,9 @@ def profile_edit():
             )
             print(profile_img_path)
             request.files["file"].save(profile_img_path)
-            profile.venue_img = os.path.basename(profile_img_path)
+            current_user.profile_img = os.path.basename(profile_img_path)
 
+        current_user.updated_timestamp=datetime.now()
         db.session.add(current_user)
         db.session.commit()
         flash("User details updated!", "success")
@@ -490,6 +496,8 @@ def signup():
             username=username,
             password=generate_password_hash(password1),
             profile_img="default.png",
+            created_timestamp=datetime.now(),
+            updated_timestamp=datetime.now(),
         )
         db.session.add(user)
         db.session.flush()
