@@ -195,7 +195,6 @@ def show_management(venue_id):
         pass
 
 
-@controller.route("/admin/show/add", methods=["GET", "POST"])
 @controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
 @login_required
 @admin_only
