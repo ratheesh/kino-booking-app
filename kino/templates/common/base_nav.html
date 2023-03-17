@@ -13,16 +13,22 @@
 			</div>
 			<ul class="nav-links">
 					{% if current_user.is_authenticated %}
-					<li><a href="/">Home</a></li>
-					<li><a href="/bookings">Bookings</a></li>
-					{% if current_user.username == 'admin'%}
-						<li>{{current_user.name.capitalize()}}</li>
+						{% if current_user.role == 'user' %}
+							<li><a href="/">Home</a></li>
+							<li><a href="/bookings">Bookings</a></li>
+						{%else%}
+							<li><a href="/admin">Home</a></li>
+							<li><a href="/admin/summary">Summary</a></li>
+						{%endif%}
+						{% if current_user.username == 'admin'%}
+							<li>{{current_user.name.capitalize()}}</li>
+						{% else %}
+							<li><a href="/profile">{{current_user.name.capitalize()}}</a></li>
+						{% endif %}
+
+						<li><a href="/logout"><i class="bi bi-box-arrow-right"></i></a></li>
 					{% else %}
-						<li><a href="/profile">{{current_user.name.capitalize()}}</a></li>
-					{% endif %}
-					<li><a href="/logout"><i class="bi bi-box-arrow-right"></i></a></li>
-					{% else %}
-					<li><a href="/login">Log in <i class="bi bi-box-arrow-in-right"></i></a></li>
+						<li><a href="/login">Log in <i class="bi bi-box-arrow-in-right"></i></a></li>
 					{% endif %}
 			</ul>
 		</nav>
@@ -31,8 +37,8 @@
 		<div style="display:flex;flex-direction: row;">
 		&nbsp; &nbsp;
 		<div><a href="/admin/venue_management)">Venue Management</a></div>
-		&nbsp; &nbsp;
-		<div><a href="/admin/show_management">Show Management</a></div>
+		<!-- &nbsp; &nbsp; -->
+		<!-- <div><a href="/admin/show_management">Show Management</a></div> -->
 		</div>
 		{% else %}
 		<div class="dummy"></div>
