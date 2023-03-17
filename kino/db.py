@@ -2,6 +2,7 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
 from werkzeug.security import generate_password_hash
+from datetime import datetime
 
 Base = declarative_base()
 db = SQLAlchemy()
@@ -13,8 +14,10 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(32), nullable=False)
     username = db.Column(db.String(32), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
-    role = db.Column(db.String(32), nullable=False)
-    profile_img = db.Column(db.String(32))
+    role = db.Column(db.String(32), nullable=False,default="user")
+    profile_img = db.Column(db.String(32), default="default.png")
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     bookings = db.relationship("Booking", backref="user")
 
@@ -32,7 +35,8 @@ class Venue(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     city = db.Column(db.String(32), nullable=False)
-    venue_img = db.Column(db.String(64), nullable=False)
+    venue_img = db.Column(db.String(64), nullable=False, default="default.png")
+    created_timestamp=db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     shows = db.relationship("Show", backref="venue")
 
@@ -55,16 +59,13 @@ class Show(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     popularity = db.Column(db.Integer)
-    show_date = db.Column(db.String(64), nullable=False)
-    show_time = db.Column(db.String(64), nullable=False)
+    show_date = db.Column(db.Date, nullable=False, default=datetime.now().date())
+    show_time = db.Column(db.String(64), nullable=False, default=datetime.now().time())
     n_rows = db.Column(db.Integer, nullable=False)
-    n_seats = db.Column(
-        db.Integer, nullable=False
-    )  # seats per row -> not total no. of seats in the show
-    show_img = db.Column(db.String(64), nullable=False)
+    n_seats = db.Column( db.Integer, nullable=False)  # seats per row -> not total no. of seats in the show
+    show_img = db.Column(db.String(64), nullable=False, default="default.png")
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
-    # bookings = db.relationship("Booking", backref="show")
     show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
 
     seats = db.relationship("Seat", backref="show")
@@ -102,8 +103,8 @@ class Seat(db.Model):
 class Booking(db.Model):
     __tablename__ = "booking"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    date = db.Column(db.String(64), nullable=False)
-    time = db.Column(db.String(64), nullable=False)
+    datetime = db.Column(db.String(64), nullable=False, default=datetime.now())
+    # time = db.Column(db.String(64), nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -120,6 +121,8 @@ def create_admin_user(db):
         username="admin",
         role="admin",
         password=generate_password_hash("iitm"),
+        created_timestamp=datetime.now(),
+        updated_timestamp=datetime.now()
     )
     db.session.add(admin)
     db.session.commit()
