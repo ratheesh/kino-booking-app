@@ -2,11 +2,12 @@ import os
 from datetime import datetime
 from functools import wraps
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (Blueprint, abort, flash, redirect, render_template, request,
+                   url_for)
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .db import Booking, Seat, Show, User, Venue, db
+from .db import Booking, Seat, Show, User, Venue, db, Tag
 
 # from .forms import ShowForm
 
@@ -188,45 +189,46 @@ def venue_delete():
 @admin_only
 def show_management(venue_id):
     if request.method == "GET":
-        shows = Show.query.filter_by(venue_id=venue_id).all()
         venue = Venue.query.get_or_404(venue_id)
+        shows = Show.query.filter_by(venue_id=venue_id).all()
         return render_template("admin/show.html", shows=shows, venue=venue)
 
     elif request.method == "POST":
         if "edit-show" in request.form:
             print("== SHOW EDIT ==")
+            show_id = int(request.form["edit-show"])
             return redirect(
                 url_for(
                     "controller.show_edit",
-                    venue_id=int(request.form["edit-show"]),
-                )
+                    venue_id=venue_id, show_id=show_id),
             )
 
-        if "delete-venue" in request.form:
+        if "delete-show" in request.form:
             print("== SHOW DELETE ==")
+            show_id = int(request.form["delete-show"])
             return redirect(
-                url_for(
-                    "controller.venue_delete",
-                    venue_id=int(request.form["delete-show"]),
-                )
+                url_for("controller.show_delete", venue_id=venue_id, show_id=show_id)
             )
         return redirect(url_for("controller.show_add", venue_id=venue_id))
     else:
         pass
 
 
-@controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
-@login_required
-@admin_only
+@ controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
+@ login_required
+@ admin_only
 def show_add(venue_id):
     if request.method == "GET":
-        return render_template("admin/show_add.html", venue_id=venue_id, show=None)
+        tags = Tag.query.all()
+        return render_template("admin/show_add.html", tags=tags, venue_id=venue_id)
     if request.method == "POST":
         print("== SHOW ADD ==")
         s_date = request.form["show_date"]
         s_time = request.form["show_time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
+        dt = datetime.combine(s_dt, s_tm)
+        print(dt, type(dt))
         show = Show(
             title=request.form["title"],
             language=request.form["language"],
@@ -272,27 +274,32 @@ def show_add(venue_id):
 @login_required
 @admin_only
 def show_edit(venue_id, show_id):
+    show = Show.query.filter_by(id=show_id).first()
     if request.method == "GET":
-        show = Show.query.filter_by(id == show_id and venue_id == venue_id)
-        return render_template("admin/show_add.html", show=show)
+        if show is not None:
+            return render_template("admin/show_add.html", show=show)
+        else:
+            abort(404)
+
     if request.method == "POST":
         s_date = request.form["show_date"]
         s_time = request.form["show_time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
-        show = Show(
-            title=request.form["title"],
-            language=request.form["language"],
-            duration=request.form["duration"],
-            price=request.form["price"],
-            popularity=0,  # this should updated based on user ratings
-            show_date=request.form["show_date"],
-            show_time=datetime.combine(s_dt, s_tm),
-            n_rows=request.form["rows"],
-            n_seats=request.form["seats"],
-            venue_id=venue_id,
-            show_img="default.png",
-        )
+        dt=datetime.combine(s_dt, s_tm)
+        print(dt, type(dt))
+
+        show.title = request.form["title"],
+        show.language = request.form["language"],
+        show.duration = request.form["duration"],
+        show.price = request.form["price"],
+        show.popularity = 0,  # this should updated based on user ratings
+        show.show_time = dt,  # datetime.combine(s_dt, s_tm),
+        show.n_rows = request.form["rows"],
+        show.n_seats = request.form["seats"],
+        show.venue_id = venue_id,
+        show.show_img = "default.png",
+
         db.session.add(show)
         db.session.flush()
 
@@ -302,7 +309,7 @@ def show_edit(venue_id, show_id):
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
-                return render_template("admin/show_add.html", pic_err=True)
+                return render_template("admin/show_add.html", show=show, pic_err=True)
 
             split_tup = os.path.splitext(file.filename)
 

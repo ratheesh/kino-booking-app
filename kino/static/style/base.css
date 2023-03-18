@@ -6,7 +6,7 @@ body {
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 100vh; /* footer always botton*/
+  height: 100%;
   background: #f5f5f5;
   font-size: 16px;
   margin: 0px auto;
@@ -20,25 +20,14 @@ body {
   flex-direction: column;
 }
 
-.error .danger {
-  color: white;
-  background-color: red;
-}
-
-.success {
-  color: black;
-  background-color: lightgreen;
-}
-
-.warning {
-  color: black;
-  background-color: lightyellow;
+header {
+  flex-shrink: 0;
 }
 
 footer {
   display: fixed;
-  left:0;
-  bottom:0;
+  left: 0;
+  bottom: 0;
   width: 100%;
   min-height: 10vh;
   position: fixed;

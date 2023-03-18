@@ -42,7 +42,8 @@ class Venue(db.Model):
     created_timestamp = db.Column(
         db.DateTime, nullable=False, default=datetime.now())
 
-    shows = db.relationship("Show", backref="venue")
+    shows = db.relationship("Show", backref="venue",
+                            cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return self.name
@@ -64,17 +65,19 @@ class Show(db.Model):
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False, default=0.0)
     popularity = db.Column(db.Integer)
-    show_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    show_time = db.Column(db.DateTime, nullable=False)
     n_rows = db.Column(db.Integer, nullable=False)
     n_seats = db.Column(
         db.Integer, nullable=False
     )  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.png")
 
-    venue_id = db.Column(db.Integer, db.ForeignKey("venue.id"))
+    venue_id = db.Column(db.Integer, db.ForeignKey(
+        "venue.id", ondelete="CASCADE"))
     show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
 
-    seats = db.relationship("Seat", backref="show")
+    seats = db.relationship("Seat", backref="show",
+                            cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
         return self.title
@@ -94,8 +97,10 @@ class Seat(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     seat = db.Column(db.String(4), nullable=False)
 
-    show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
-    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id"))
+    show_id = db.Column(db.Integer, db.ForeignKey(
+        "show.id", ondelete="CASCADE"))
+    booking_id = db.Column(db.Integer, db.ForeignKey(
+        "booking.id", ondelete="CASCADE"))
 
     def __repr__(self) -> str:
         return self.seat
@@ -113,9 +118,11 @@ class Booking(db.Model):
     # time = db.Column(db.String(64), nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "user.id", ondelete="CASCADE"))
     # show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
-    seats = db.relationship("Seat", backref="booking")
+    seats = db.relationship("Seat", backref="booking",
+                            cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return self.date + " " + self.time
