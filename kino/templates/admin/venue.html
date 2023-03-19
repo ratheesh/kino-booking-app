@@ -1,4 +1,4 @@
-{% extends 'common/base_nav.html' %}
+{% extends 'common/base.html' %}
 
 {% block style %}
 {{ super()  }}
@@ -8,8 +8,8 @@
 {% block content %}
 {{ super() }}
 <div class="container">
-	<div class="main">
-		<div class="kard-container">
+	<div class="row">
+		<div class="grid gap-3 kard-container">
 			{% for venue in venues %}
 			<div class="kard">
 				<div class="kard-img">
