@@ -20,11 +20,14 @@
 </head>
 
 <body>
-	{% if request.endpoint != 'controller.login' and request.endpoint !=
-    'controller.signup' %} {% include 'common/navbar.html' %} {% endif %} {%
-    block content %} {% endblock content %}
+	{% if request.endpoint != 'controller.login' and request.endpoint != 'controller.signup' %}
+	{% include 'common/navbar.html' %}
+	{% endif %}
 
-	<footer>
+	{% block content %}
+	{% endblock content %}
+
+	<footer class="footer">
 		<div>
 			<small style="color:white;"">Ratheesh © 2023</small>
 		</div>

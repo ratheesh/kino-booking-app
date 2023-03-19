@@ -4,13 +4,15 @@
   grid-auto-flow: row;
   margin: 0px;
   margin-top: 5px;
-  margin-bottom: 0px;
+  margin-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   row-gap: 20px;
   column-gap: 20px;
   font-size: 1.5rem;
   overflow: auto;
-  height: 100%;
   /* border: 1px solid black; */
+  height: 100%;
 }
 
 .form {
