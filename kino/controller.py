@@ -406,7 +406,7 @@ def book(show_id):
         sel_seats = request.form.getlist("seat")
         print(sel_seats)
         if sel_seats == []:
-            flash("No seats selected")
+            flash("No seats selected for booking", "warning")
             return render_template(
                 "user/book.html",
                 venue=venue,
@@ -415,8 +415,7 @@ def book(show_id):
             )
         else:
             booking = Booking(
-                date="2023-03-11",
-                time="1:21PM",
+                booking_time=datetime.now(),
                 final_amount=len(sel_seats) * show.price,
                 user_id=current_user.id,
             )

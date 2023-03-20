@@ -5,10 +5,62 @@
 .container-layout {
   display: block;
   /* display: flex; */
-  border: 1px solid black;
+  /* border: 1px solid black; */
   align-items: center;
   justify-items: center;
   justify-content: center;
+}
+
+form .layout {
+  margin-top: 0px;
+}
+
+.show-info-1 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+.show-info-2 {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.seating-legend {
+  display: flex;
+  flex-direction: column-reverse;
+  text-align: center;
+  padding: 0;
+}
+
+.seating-legend label small {
+  height: 5px;
+  width: 15px;
+  /* background-color: gray; */
+}
+
+.seating-booked {
+  background-color: gray;
+  border: 1px solid black;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+.seating-avl {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+.seating-selected {
+  background-color: #5159ac;
+  border: 1px solid black;
+  border-radius: 3px;
+  font-size: 0.7rem;
 }
 
 .seating-layout {
@@ -26,8 +78,8 @@
 .layout {
   display: block;
   margin-top: 15px;
-  padding: 10px 0px 0px 0px;
-  border: 1px solid black;
+  padding: 30px 50px 0px 50px;
+  border: 4px solid gray;
   border-radius: 5px;
   align-items: center;
   justify-items: center;

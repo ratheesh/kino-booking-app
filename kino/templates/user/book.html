@@ -7,8 +7,19 @@
 {% block content %} {{ super() }}
 <div class="container">
 	<div class="container-layout">
-		<div class="show-info">
-		<p><span>Venue: {{venue.name}},{{venue.place}}</span> <span>Show: {{show.title}}</span></p>
+		<div class="show-info-1">
+			<b>{{show.title}}</b>({{ show.language }})
+		</div>
+		<div class="show-info-2">
+			{{ show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ show.duration }}mins, {{venue.name|capitalize}}, {{venue.place|capitalize}}
+		</div>
+		<hr style="height:2px;background-color:gray;margin-top:3px;">
+		<div class="seating-legend">
+			<span>
+				<label>Booked: <small class="seating-booked">&nbsp;&nbsp;&nbsp;&nbsp;</small></label>
+				<label>Selected: <small class="seating-selected">&nbsp;&nbsp;&nbsp;&nbsp;</small></label>
+				<label>Available: <small class="seating-avl">&nbsp;&nbsp;&nbsp;&nbsp;</small></label>
+			</span>
 		</div>
 		<div class="seating-layout">
 			<form method="POST" style="justify-items:center;">
@@ -32,13 +43,13 @@
 					<br>
 					<div class="row">
 						<div class="row-screen">
-							<small><strong>SCREEN HERE</strong></small>
+							<small><strong>SCREEN</strong></small>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<button type="submit"
-						style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 0px; text-align: center; ">
+						style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 30px; text-align: center; ">
 						Book </button>
 				</div>
 			</form>
