@@ -575,7 +575,7 @@ def login():
         else:
             login_user(user)
             print(f"{user.username} logged in")
-            flash("Logged in!", "success")
+            flash(f"Welcome {user.username}!", "success")
             if current_user.username == "admin":
                 return redirect(url_for("controller.admin"))
             else:
@@ -586,7 +586,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("Logged out!", "success")
+    flash("Bye till next time!", "success")
     return redirect(url_for("controller.home"))
 
 
