@@ -262,6 +262,13 @@ def show_add(venue_id):
             request.files["file"].save(show_img_path)
             show.venue_img = os.path.basename(show_img_path)
 
+        tags = request.form.getlist("tags")
+        for tag in tags:
+            tg = Tag.query.filter_by(name=tag).first()
+            if tg is None:
+                abort(404)
+            show.tags.append(tg)
+
         db.session.commit()
 
         flash("Show Created Successfully!", "success")
