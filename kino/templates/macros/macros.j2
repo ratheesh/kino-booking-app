@@ -1,0 +1,50 @@
+{# show card #}
+{% macro display_show(show, is_admin) %}
+<div class="kard">
+	<div class="kard-img">
+		{% if show.show_img %}
+		<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
+		{% else %}
+		<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
+		{% endif %}
+	</div>
+	<div class="kard-content">
+		<div class="kard-details">
+			<h2 class="kard-title">{{show.title}}</h2>
+			<hr style="height:1px;background-color:black;margin:0px;">
+			<div class="kard-item">
+				<span> {{show.language}} </span>
+				<span> {{show.duration}}mins </span>
+			</div>
+			<div class="kard-item">
+				<span>&#x20B9;{{show.price}}</span>
+				<span>&hearts;{{show.popularity}}%</span>
+			</div>
+			<div class="kard-item">
+				<span>{{show.show_time}}</span>
+			</div>
+			<div class="kard-item">
+				<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
+				<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
+			</div>
+			{% if is_admin %}
+			<div class="kard-form">
+				<form id="edit-venue" method="POST">
+					<button type="submit" class="submit-btn submit-btn-edit" name="edit-show" value="{{show.id}}">Edit</button>
+				</form>
+				<form id="delete-venue" method="POST">
+				<button type="submit" class="submit-btn submit-btn-delete" name="delete-show" value="{{show.id}}">Delete</button>
+				</form>
+			</div>
+			{% else %}
+			<form action={{url_for('controller.book', show_id=show.id)}} method="post">
+				<div class="kard-form">
+					<input type="submit" name="book" value="Book" class="submit-btn-general">
+					<!-- <input type="submit" name="Delete" value="Delete"> -->
+				</div>
+			</form>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endmacro %}

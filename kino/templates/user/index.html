@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% import 'macros/macros.j2' as macros %}
 
 {% block style %}
 {{ super()  }}
@@ -6,48 +7,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style/user/index.css') }}" type="text/css"/>
 {% endblock style %}
 
-{% macro display_show(show) %}
-<div class="kard">
-	<div class="kard-img">
-		{% if show.show_img %}
-		<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
-		{% else %}
-		<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-		{% endif %}
-	</div>
-	<div class="kard-content">
-		<div class="kard-details">
-			<h2 class="kard-title">{{show.title}}</h2>
-			<hr style="height:1px;background-color:black;margin:0px;">
-			<div class="kard-item">
-				<span> {{show.language}} </span>
-				<span> {{show.duration}}mins </span>
-			</div>
-			<div class="kard-item">
-				<span>&#x20B9;{{show.price}}</span>
-				<span>&hearts;{{show.popularity}}%</span>
-			</div>
-			<div class="kard-item">
-				<span>{{show.show_time}}</span>
-			</div>
-			<div class="kard-item">
-				<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
-				<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
-			</div>
-			<form action={{url_for('controller.book', show_id=show.id)}} method="post">
-				<div class="kard-form">
-					<input type="submit" name="book" value="Book" class="submit-btn-general">
-					<!-- <input type="submit" name="Delete" value="Delete"> -->
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-{% endmacro %}
-
 {% block content %}
 {{ super() }}
 
+<div class="content">
 <div class="container">
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -61,14 +24,14 @@
 		<div class="tab-pane fade show active" id="nav-today" role="tabpanel" tabindex="0">
 			<div class="kard-container">
 				{% for show in data.today %}
-				{{ display_show(show) }}
+				{{ macros.display_show(show, is_admin=false) }}
 				{% endfor %}
 			</div>
 		</div>
 		<div class="tab-pane fade" id="nav-tomorrow" role="tabpanel" tabindex="0">
 			<div class="kard-container">
 				{% for show in data.tomorrow %}
-				{{ display_show(show) }}
+				{{ macros.display_show(show, is_admin=false) }}
 				{% endfor %}
 			</div>
 		</div>
@@ -78,7 +41,7 @@
 			<h3 class="named-line">&nbsp;&nbsp; {{ venue|capitalize }}&nbsp;&nbsp; </h3>
 			<div class="kard-container">
 			{% for show in shows %}
-				{{ display_show(show) }}
+				{{ macros.display_show(show, is_admin=false) }}
 			{% endfor %}
 			</div>
 			{% endif %}
@@ -90,52 +53,13 @@
 			<h3 class="named-line">&nbsp;&nbsp; {{ tag|capitalize }}&nbsp;&nbsp; </h3>
 			<div class="kard-container">
 			{% for show in shows %}
-				{{ display_show(show) }}
+				{{ macros.display_show(show, is_admin=false) }}
 			{% endfor %}
 			</div>
 			{% endif %}
 			{% endfor %}
 		</div>
 	</div>
-	<div class="kard-container">
-		{% for show in shows %}
-		<div class="kard">
-			<div class="kard-img">
-				{% if show.show_img %}
-				<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
-				{% else %}
-				<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-				{% endif %}
-			</div>
-			<div class="kard-content">
-				<div class="kard-details">
-					<h2 class="kard-title">{{show.title}}</h2>
-					<hr style="height:1px;background-color:black;margin:0px;">
-					<div class="kard-item">
-						<span> {{show.language}} </span>
-						<span> {{show.duration}}mins </span>
-					</div>
-					<div class="kard-item">
-						<span>&#x20B9;{{show.price}}</span>
-						<span>&hearts;{{show.popularity}}%</span>
-					</div>
-					<div class="kard-item">
-						<span>{{show.show_time}}</span>
-					</div>
-					<div class="kard-item">
-						<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
-						<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
-					</div>
-					<form action={{url_for('controller.book', show_id=show.id)}} method="post">
-						<div class="kard-form">
-							<input type="submit" name="book" value="Book" class="submit-btn-general">
-							<!-- <input type="submit" name="Delete" value="Delete"> -->
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-	</div>
+</div>
 </div>
 {% endblock content %}

@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% import 'macros/macros.j2' as macros %}
 
 {% block style %}
 {{ super()  }}
@@ -7,54 +8,12 @@
 
 {% block content %}
 {{ super() }}
+
 <div class="content">
 <div class="container">
 	<div class="kard-container">
 		{% for show in shows %}
-		<div class="kard">
-			<div class="kard-img">
-				{% if show.show_img %}
-				<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
-				{% else %}
-				<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-				{% endif %}
-			</div>
-			<div class="kard-content">
-				<div class="kard-details">
-					<h2 class="kard-title">{{show.title}}</h3>
-					<div>
-						<span> {{venue.name}} </span>
-						<span> {{venue.place}} </span>
-					</div>
-					<div>
-						<span> {{show.language}} </span>
-						<span> {{show.duration}} mins </span>
-					</div>
-					<div>
-						<span>&#x20B9;{{show.price}}</span>
-					</div>
-					<div>
-						<span>&hearts;{{show.popularity}}%</span>
-						<span>{{show.genre}}</span>
-					</div>
-					<div>
-						<span>{{ show.show_time.strftime("%Y-%m-%d") }}</span>
-						<span>{{ show.show_time.strftime("%I:%M %p") }}</span>
-					</div>
-					<div>
-						<span>Seating:{{show.n_rows}}x{{show.n_seats}}</span>
-					</div>
-					<div class="kard-form">
-						<form id="edit-venue" method="POST">
-							<button type="submit" class="submit-btn submit-btn-edit" name="edit-show" value="{{show.id}}">Edit</button>
-						</form>
-						<form id="delete-venue" method="POST">
-							<button type="submit" class="submit-btn submit-btn-delete" name="delete-show" value="{{show.id}}">Delete</button>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
+		{{ macros.display_show(show, is_admin=true) }}
 		{% endfor %}
 		<div class="kard">
 			<form id="add-show" action="/admin/{{venue.id}}/show" class="kard-add-form" method="POST">
