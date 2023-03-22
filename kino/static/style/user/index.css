@@ -1,0 +1,12 @@
+.named-line {
+  display: flex;
+  flex-direction: row;
+}
+
+.named-line:before,
+.named-line:after {
+  content: "";
+  flex: 1 1;
+  border-bottom: 3px solid lightgray;
+  margin: auto;
+}

@@ -332,11 +332,46 @@ def show_edit(venue_id, show_id):
         return redirect(url_for("controller.show_management", venue_id=venue_id))
 
 
+# data
+# {
+#  "today": [show1, show2, ...],
+#  "tomorrow": [show1, show2, ...],
+#  "venues": {
+#       "venue1": [show1, show2, ...]
+#       "venue2":[show1, show2, ...]
+#  },
+# "tags": {
+#  "tag1": [show1, show2, ...]
+#  "tag2": [show1, show2, ...]
+#  "tag3": [show1, show2, ...]
+#  }
+# }
+#
 @controller.route("/", methods=["GET", "POST"])
 # @login_required
 def home():
-    shows = Show.query.all()
-    return render_template("user/index.html", shows=shows)
+    if current_user.is_authenticated and current_user.role == 'admin':
+        return redirect(url_for('controller.admin'))
+
+    data = {}
+    today = Show.query.filter(func.date(Show.show_time) == datetime.now().date()).all()
+    data["today"] = today
+    tomorrow = Show.query.filter(func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).all()
+    data["tomorrow"] = tomorrow
+    data["venues"] = {}
+    venues = Venue.query.all()
+    for venue in venues:
+        data['venues'][venue.name] = venue.shows
+
+    data["tags"] = {}
+    taglist = Tag.query.all()
+    for tag in taglist:
+        print(tag.name)
+        data["tags"][tag.name] = tag.shows
+
+    print(data)
+    # shows=Show.query.all()
+    return render_template("user/index.html", data=data)
 
 
 # test data

@@ -3,19 +3,101 @@
 {% block style %}
 {{ super()  }}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/index.css') }}" type="text/css"/>
 {% endblock style %}
+
+{% macro display_show(show) %}
+<div class="kard">
+	<div class="kard-img">
+		{% if show.show_img %}
+		<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
+		{% else %}
+		<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
+		{% endif %}
+	</div>
+	<div class="kard-content">
+		<div class="kard-details">
+			<h2 class="kard-title">{{show.title}}</h2>
+			<hr style="height:1px;background-color:black;margin:0px;">
+			<div class="kard-item">
+				<span> {{show.language}} </span>
+				<span> {{show.duration}}mins </span>
+			</div>
+			<div class="kard-item">
+				<span>&#x20B9;{{show.price}}</span>
+				<span>&hearts;{{show.popularity}}%</span>
+			</div>
+			<div class="kard-item">
+				<span>{{show.show_time}}</span>
+			</div>
+			<div class="kard-item">
+				<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
+				<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
+			</div>
+			<form action={{url_for('controller.book', show_id=show.id)}} method="post">
+				<div class="kard-form">
+					<input type="submit" name="book" value="Book" class="submit-btn-general">
+					<!-- <input type="submit" name="Delete" value="Delete"> -->
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endmacro %}
 
 {% block content %}
 {{ super() }}
-<div style="text-align=center;">
-	{% if shows|length == 0 %}
-	<h3>No Shows to Book!</h3>
-	{% endif%}
-</div>
 
 <div class="container">
+	<nav>
+		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<button class="nav-link active" id="nav-today-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab">Today</button>
+			<button class="nav-link" id="nav-tomorrow-tab" data-bs-toggle="tab" data-bs-target="#nav-tomorrow" type="button" role="tab" >Tomorrow</button>
+			<button class="nav-link" id="nav-venue-tab" data-bs-toggle="tab" data-bs-target="#nav-venue" type="button" role="tab" >Venue</button>
+			<button class="nav-link" id="nav-category-tab" data-bs-toggle="tab" data-bs-target="#nav-category" type="button" role="tab" >Category</button>
+		</div>
+	</nav>
+	<div class="tab-content" id="nav-tabContent">
+		<div class="tab-pane fade show active" id="nav-today" role="tabpanel" tabindex="0">
+			<div class="kard-container">
+				{% for show in data.today %}
+				{{ display_show(show) }}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="tab-pane fade" id="nav-tomorrow" role="tabpanel" tabindex="0">
+			<div class="kard-container">
+				{% for show in data.tomorrow %}
+				{{ display_show(show) }}
+				{% endfor %}
+			</div>
+		</div>
+		<div class="tab-pane fade" id="nav-venue" role="tabpanel" tabindex="0">
+			{% for venue,shows in data.venues.items() %}
+			{% if shows|length > 0 %}
+			<h3 class="named-line">&nbsp;&nbsp; {{ venue|capitalize }}&nbsp;&nbsp; </h3>
+			<div class="kard-container">
+			{% for show in shows %}
+				{{ display_show(show) }}
+			{% endfor %}
+			</div>
+			{% endif %}
+			{% endfor %}
+		</div>
+		<div class="tab-pane fade" id="nav-category" role="tabpanel" tabindex="0">
+			{% for tag,shows in data.tags.items() %}
+			{% if shows|length > 0 %}
+			<h3 class="named-line">&nbsp;&nbsp; {{ tag|capitalize }}&nbsp;&nbsp; </h3>
+			<div class="kard-container">
+			{% for show in shows %}
+				{{ display_show(show) }}
+			{% endfor %}
+			</div>
+			{% endif %}
+			{% endfor %}
+		</div>
+	</div>
 	<div class="kard-container">
-
 		{% for show in shows %}
 		<div class="kard">
 			<div class="kard-img">
@@ -28,28 +110,28 @@
 			<div class="kard-content">
 				<div class="kard-details">
 					<h2 class="kard-title">{{show.title}}</h2>
-					<div>
+					<hr style="height:1px;background-color:black;margin:0px;">
+					<div class="kard-item">
 						<span> {{show.language}} </span>
 						<span> {{show.duration}}mins </span>
 					</div>
-					<div>
+					<div class="kard-item">
 						<span>&#x20B9;{{show.price}}</span>
-					</div>
-					<div>
 						<span>&hearts;{{show.popularity}}%</span>
-						<span>{{show.genre}}</span>
 					</div>
-					<div>
-						<span>{{show.date}}</span>
-						<span>{{show.time}}</span>
+					<div class="kard-item">
+						<span>{{show.show_time}}</span>
 					</div>
-					<div>
-						<span>Seating:{{show.n_rows}}x{{show.n_seats}}</span>
+					<div class="kard-item">
+						<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
+						<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
 					</div>
-					<div class="kard-form">
-						<input type="submit" name="book" value="Book">
-						<!-- <input type="submit" name="Delete" value="Delete"> -->
-					</div>
+					<form action={{url_for('controller.book', show_id=show.id)}} method="post">
+						<div class="kard-form">
+							<input type="submit" name="book" value="Book" class="submit-btn-general">
+							<!-- <input type="submit" name="Delete" value="Delete"> -->
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
