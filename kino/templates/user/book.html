@@ -5,6 +5,7 @@
 
 <!-- main content -->
 {% block content %} {{ super() }}
+<div class="content">
 <div class="container">
 	<div class="container-layout">
 		<div class="show-info-1">
@@ -48,12 +49,11 @@
 					</div>
 				</div>
 				<div class="row">
-					<button type="submit"
-						style=" background-color: lightgrey; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 30px; text-align: center; ">
-						Book </button>
+					<input type="submit" name="" value="Book" style="background-color: lightblue; border: 1px solid black; border-radius: 5px; margin: 0px 0px 0px 30px; text-align: center;">
 				</div>
 			</form>
 		</div>
+	</div>
 	</div>
 	</div>
 {% endblock content %}
