@@ -58,7 +58,7 @@
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
-				<h6> Booking ID #{{ booking.id }}
+			<h6> Ticket: #{{ booking.id }}</h6>
 				<h6 class="card-title text-center">{{ booking.seats[0].show.title }}({{ booking.seats[0].show.language }})</h6>
 				<hr>
 				<div class="card-text">
@@ -73,6 +73,40 @@
 				</div>
 				<br>
 				<p class="card-text"><small class="text-muted">{{ booking.seats[0].show.venue.name }},{{ booking.seats[0].show.venue.place }}</small></p>
+			</div>
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+{# show checkout summary #}
+{% macro display_checkout(booking) %}
+<div class="card mb-3" style="max-width: 540px;">
+	<div class="row g-0">
+		<div class="col-md-4">
+			<img src="{{ url_for('static', filename='img/show/' + booking.seats[0].show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
+		</div>
+		<div class="col-md-8">
+			<div class="card-body">
+			<h6> Ticket: #{{ booking.id }}</h6>
+				<h6 class="card-title text-center">{{ booking.seats[0].show.title }}({{ booking.seats[0].show.language }})</h6>
+				<hr>
+				<p class="card-text"><i class="fa fa-map-marker"></i><small>{{ booking.seats[0].show.venue.name }},{{ booking.seats[0].show.venue.place }}</small></p>
+				<div class="card-text">
+					{{ booking.seats[0].show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ booking.seats[0].show.duration }}mins
+				</div>
+				<div class="card-text">
+					<br>
+					<label>No. of seats:{{ booking.seats|count }} </label>
+				</div>
+				<div class="card-text">
+					<br>
+					<label>Seats: </label>
+					{% for seat in booking.seats %}
+						<span>&nbsp;{{ seat.seat }}</span>
+					{% endfor %}
+				</div>
+				<br>
 			</div>
 		</div>
 	</div>

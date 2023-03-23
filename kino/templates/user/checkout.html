@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+{% import 'macros/macros.j2' as macros %}
+{% block style %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/booking.css') }}" type="text/css" />
+{% endblock style %}
+{% block title %}
+Ticket Confirmation
+{% endblock title %}
+
+{% block content %}
+{{ super() }}
+<div class="content">
+  <div class="container">
+	  {% if booking %}
+	  <h3> Ticket Confirmation </h3>
+	  <br>
+	  <input type="submit" name="" value="Back to Home" style="background-color: lightgray; border: 1px solid black; border-radius: 5px; margin: 0px; text-align: center;">
+	  <br>
+	  <br>
+	  {{ macros.display_checkout(booking) }}
+	  <h4>Ticket Info<h4>
+      <h5>No.of Seats: {{ booking.seats|length }}</h5>
+	  <h5>Total Ticket Price: {{ booking.final_amount }}
+	  {% else %}
+	  <h3>Booking does not exist</h3>
+	  {% endif %}
+  </div>
+</div>
+{% endblock content %}
