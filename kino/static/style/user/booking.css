@@ -1,0 +1,38 @@
+.card-body {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  margin: 2px;
+  height: 100%;
+  width: 100%;
+}
+
+.card-body hr {
+  margin: 0;
+  height: 3px;
+  background-color: #505050;
+  padding: 0;
+}
+
+.card-text {
+  display: flex;
+  flex-direction: row;
+}
+
+.card-details {
+  display: flex;
+  width: 100%;
+}
+
+.card-title.text-center {
+  margin: 3px;
+}
+
+.card-line {
+  display: flex;
+  width: 100%;
+}
+
+.card-body .card-details {
+  display: flex;
+}
