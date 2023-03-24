@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash
 
 Base = declarative_base()
@@ -17,12 +18,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(32), nullable=False, default="user")
     profile_img = db.Column(db.String(32), default="default.png")
-    created_timestamp = db.Column(
-        db.DateTime, nullable=False, default=datetime.now())
-    updated_timestamp = db.Column(
-        db.DateTime, nullable=False, default=datetime.now())
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    bookings = db.relationship("Booking", backref="user")
+    bookings = db.relationship("Booking", backref="user", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return self.username
@@ -39,18 +38,16 @@ class Venue(db.Model):
     name = db.Column(db.String(64), nullable=False)
     place = db.Column(db.String(64), nullable=False)
     venue_img = db.Column(db.String(64), nullable=False, default="default.png")
-    created_timestamp = db.Column(
-        db.DateTime, nullable=False, default=datetime.now())
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
-    shows = db.relationship("Show", backref="venue",
-                            cascade="all, delete-orphan")
+    shows = db.relationship("Show", backref="venue", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
         return self.name
 
 
-tags = db.Table(
-    "tags",
+show_tags = db.Table(
+    "show_tags",
     db.Column("show_id", db.Integer, db.ForeignKey("show.id")),
     db.Column("tag_id", db.Integer, db.ForeignKey("tag.id")),
 )
@@ -72,12 +69,10 @@ class Show(db.Model):
     )  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.png")
 
-    venue_id = db.Column(db.Integer, db.ForeignKey(
-        "venue.id", ondelete="CASCADE"))
-    show_tags = db.relationship("Tag", secondary=tags, backref="tag_tags")
+    venue_id = db.Column(db.Integer, db.ForeignKey("venue.id", ondelete="CASCADE"))
+    tags = db.relationship("Tag", secondary=show_tags, backref="shows")
 
-    seats = db.relationship("Seat", backref="show",
-                            cascade="all,delete-orphan")
+    seats = db.relationship("Seat", backref="show", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
         return self.title
@@ -97,10 +92,8 @@ class Seat(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     seat = db.Column(db.String(4), nullable=False)
 
-    show_id = db.Column(db.Integer, db.ForeignKey(
-        "show.id", ondelete="CASCADE"))
-    booking_id = db.Column(db.Integer, db.ForeignKey(
-        "booking.id", ondelete="CASCADE"))
+    show_id = db.Column(db.Integer, db.ForeignKey("show.id", ondelete="CASCADE"))
+    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id", ondelete="CASCADE"))
 
     def __repr__(self) -> str:
         return self.seat
@@ -114,18 +107,16 @@ class Seat(db.Model):
 class Booking(db.Model):
     __tablename__ = "booking"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    datetime = db.Column(db.String(64), nullable=False, default=datetime.now())
+    booking_time = db.Column(db.DateTime, nullable=False)
     # time = db.Column(db.String(64), nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey(
-        "user.id", ondelete="CASCADE"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
     # show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
-    seats = db.relationship("Seat", backref="booking",
-                            cascade="all, delete-orphan")
+    seats = db.relationship("Seat", backref="booking", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
-        return self.date + " " + self.time
+        return str(self.id) + " " + str(self.final_amount) + " " + str(self.user_id)
 
 
 def create_admin_user(db):

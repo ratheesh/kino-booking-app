@@ -1,13 +1,14 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import wraps
 
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
+from sqlalchemy import func, or_
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .db import Booking, Seat, Show, User, Venue, db, Tag
+from .db import Booking, Seat, Show, Tag, User, Venue, db
 
 # from .forms import ShowForm
 
@@ -159,8 +160,7 @@ def venue_edit(venue_id):
                 split_tup = os.path.splitext(file.filename)
 
                 venue_img_path = os.path.join(
-                    basedir +
-                    "/static/img/venue/", str(venue.id) + split_tup[1]
+                    basedir + "/static/img/venue/", str(venue.id) + split_tup[1]
                 )
                 print(venue_img_path)
                 request.files["file"].save(venue_img_path)
@@ -177,11 +177,18 @@ def venue_edit(venue_id):
 @controller.route("/admin/venue/<int:venue_id>/delete", methods=["POST"])
 @login_required
 @admin_only
-def venue_delete():
+def venue_delete(venue_id):
     if request.method == "POST":
-        return "admin venue delete message"
+        venue = Venue.get_or_404(venue_id)
+        try:
+            db.session.delete(venue)
+            db.session.commit()
+        except:
+            flash("Unable to delete Venue")
+        flash("Venue deleted successfully")
+        return redirect("controller.venue_management")
     else:
-        return f"This method does not support non-post methods-{request.method()}"
+        abort(403)
 
 
 @controller.route("/admin/<int:venue_id>/show", methods=["GET", "POST"])
@@ -198,9 +205,7 @@ def show_management(venue_id):
             print("== SHOW EDIT ==")
             show_id = int(request.form["edit-show"])
             return redirect(
-                url_for(
-                    "controller.show_edit",
-                    venue_id=venue_id, show_id=show_id),
+                url_for("controller.show_edit", venue_id=venue_id, show_id=show_id),
             )
 
         if "delete-show" in request.form:
@@ -214,9 +219,9 @@ def show_management(venue_id):
         pass
 
 
-@ controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
-@ login_required
-@ admin_only
+@controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
+@login_required
+@admin_only
 def show_add(venue_id):
     if request.method == "GET":
         tags = Tag.query.all()
@@ -293,19 +298,19 @@ def show_edit(venue_id, show_id):
         s_time = request.form["show_time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
-        dt=datetime.combine(s_dt, s_tm)
+        dt = datetime.combine(s_dt, s_tm)
         print(dt, type(dt))
 
-        show.title = request.form["title"],
-        show.language = request.form["language"],
-        show.duration = request.form["duration"],
-        show.price = request.form["price"],
-        show.popularity = 0,  # this should updated based on user ratings
-        show.show_time = dt,  # datetime.combine(s_dt, s_tm),
-        show.n_rows = request.form["rows"],
-        show.n_seats = request.form["seats"],
-        show.venue_id = venue_id,
-        show.show_img = "default.png",
+        show.title = (request.form["title"],)
+        show.language = (request.form["language"],)
+        show.duration = (request.form["duration"],)
+        show.price = (request.form["price"],)
+        show.popularity = (0,)  # this should updated based on user ratings
+        show.show_time = (dt,)  # datetime.combine(s_dt, s_tm),
+        show.n_rows = (request.form["rows"],)
+        show.n_seats = (request.form["seats"],)
+        show.venue_id = (venue_id,)
+        show.show_img = ("default.png",)
 
         db.session.add(show)
         db.session.flush()
@@ -350,18 +355,20 @@ def show_edit(venue_id, show_id):
 @controller.route("/", methods=["GET", "POST"])
 # @login_required
 def home():
-    if current_user.is_authenticated and current_user.role == 'admin':
-        return redirect(url_for('controller.admin'))
+    if current_user.is_authenticated and current_user.role == "admin":
+        return redirect(url_for("controller.admin"))
 
     data = {}
     today = Show.query.filter(func.date(Show.show_time) == datetime.now().date()).all()
     data["today"] = today
-    tomorrow = Show.query.filter(func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).all()
+    tomorrow = Show.query.filter(
+        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))
+    ).all()
     data["tomorrow"] = tomorrow
     data["venues"] = {}
     venues = Venue.query.all()
     for venue in venues:
-        data['venues'][venue.name] = venue.shows
+        data["venues"][venue.name] = venue.shows
 
     data["tags"] = {}
     taglist = Tag.query.all()
@@ -369,8 +376,6 @@ def home():
         print(tag.name)
         data["tags"][tag.name] = tag.shows
 
-    print(data)
-    # shows=Show.query.all()
     return render_template("user/index.html", data=data)
 
 
@@ -387,12 +392,16 @@ def home():
 # }
 
 
-@controller.route("/booking_summary", methods=["GET", "POST"])
-@controller.route("/<int:booking_id>/booking_summary", methods=["GET", "POST"])
+@controller.route("/<int:booking_id>/checkout", methods=["GET", "POST"])
 @login_required
 @user_only
-def booking_summary(booking_id=None):
-    return "<p>Booking summary page</p>"
+def checkout(booking_id=None):
+    if request.method == "POST":
+        pass
+    else:
+        if booking_id:
+            booking = Booking.query.get_or_404(booking_id)
+            return render_template("/user/checkout.html", booking=booking)
 
 
 def gen_seatingmap(show):
@@ -473,9 +482,7 @@ def book(show_id):
             db.session.add_all(seats_booked)
             db.session.commit()
             flash("Booking Successful", "success")
-            return redirect(
-                url_for("controller.booking_summary", booking_id=booking.id)
-            )
+            return redirect(url_for("controller.checkout", booking_id=booking.id))
     else:
         return render_template(
             "user/book.html", venue=venue, show=show, map=gen_seatingmap(show).items()
@@ -549,6 +556,63 @@ def profile_delete():
     pass
 
 
+@controller.route("/search", methods=["GET", "POST"])
+@login_required
+@user_only
+def search():
+    search = request.args.get("search")
+    print("Searched:", search)
+    if search is None:
+        flash("search query is empty", "warning")
+        return redirect(url_for("controller.home"))
+
+    # venue_name = (
+    #     db.session.query(Venue).filter(Venue.name.ilike("%" + search + "%")).all()
+    # )
+    # venue_place = (
+    #     db.session.query(Venue).filter(Venue.place.ilike("%" + search + "%")).all()
+    # )
+    # show_title = (
+    #     db.session.query(Show).filter(Show.title.ilike("%" + search + "%")).all()
+    # )
+    # show_language = (
+    #     db.session.query(Show).filter(Show.language.ilike("%" + search + "%")).all()
+    # )
+    # show_rating = (
+    #     db.session.query(Show).filter(Show.rating.ilike("%" + search + "%")).all()
+    # )
+    # show_popularity = (
+    #     db.session.query(Show).filter(Show.popularity.ilike("%" + search + "%")).all()
+    # )
+    venues = (
+        db.session.query(Venue)
+        .filter(
+            or_(
+                Venue.name.ilike("%" + search + "%"),
+                Venue.place.ilike("%" + search + "%"),
+            )
+        )
+        .all()
+    )
+
+    shows = (
+        db.session.query(Show).filter(
+            or_(
+                Show.title.ilike("%" + search + "%"),
+                Show.language.ilike("%" + search + "%"),
+                Show.rating.ilike("%" + search + "%"),
+                Show.popularity.ilike("%" + search + "%"),
+                # Show.tags.ilike("%" + search + "%"),
+            )
+        )
+    ).all()
+
+    # tags = db.session.query(Tag).filter(Tag.name.ilike("%" + search + "%")).all()
+
+    print("Search Results: ", venues, shows)
+    return render_template("/search.html", searched=search, venues=venues, shows=shows)
+
+
 @controller.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "GET":
@@ -617,7 +681,7 @@ def login():
         else:
             login_user(user)
             print(f"{user.username} logged in")
-            flash(f"Welcome {user.username}!", "success")
+            flash(f"Welcome {user.name.capitalize()}!", "success")
             if current_user.username == "admin":
                 return redirect(url_for("controller.admin"))
             else:

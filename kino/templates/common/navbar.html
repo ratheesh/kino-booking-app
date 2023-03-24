@@ -1,49 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <title></title>
+  </head>
 
-	<title></title>
-</head>
-
-<body>
-	<nav class="navbar sticky-top navbar-expand-lg bg-dark navbar-dark">
-		<div class="container">
-			<h1><a href="#" class="navbar-brand">Kino</a></h1>
-			<ul class="navbar-nav">
-				{% if current_user.role == 'admin' %}
-				<li class="nav-item"><a href="/admin" class="nav-link">Home</a></li>
-				{%else%}
-				<li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-				{%endif%} {% if current_user.is_authenticated %}
-				<li class="nav-item">
-					<a href="/bookings" class="nav-link">Bookings</a>
-				</li>
-				<li class="nav-item">
-					<a href="/profile" class="nav-link">{{current_user.name.capitalize()}}</a>
-				</li>
-				<li class="nav-item">
-					<a href="/logout" class="nav-link">Logout</a>
-				</li>
-				{%else%}
-				<li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
-				{%endif%}
-			</ul>
-		</div>
-	</nav>
-	{% with messages = get_flashed_messages(with_categories=true) %} {% for
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg bg-dark navbar-dark">
+      <div class="container">
+        {% if current_user.role == 'admin' %}
+        <h1><a href="/admin" class="navbar-brand">Kino</a></h1>
+        {%else%}
+        <h1><a href="/" class="navbar-brand">Kino</a></h1>
+        {%endif%}
+        <form class="d-flex" action="/search">
+          <input
+            class="form-control me-2"
+            type="search"
+            name="search"
+            placeholder="venues/shows..."
+          />
+          <button class="btn btn-outline-secondary" type="submit">
+            Search
+          </button>
+        </form>
+        <ul class="navbar-nav">
+          {% if current_user.role == 'admin' %}
+          <li class="nav-item"><a href="/admin" class="nav-link">Home</a></li>
+          {%else%}
+          <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+          {%endif%} {% if current_user.is_authenticated %}
+          <li class="nav-item">
+            <a href="/bookings" class="nav-link">Bookings</a>
+          </li>
+          <li class="nav-item">
+            <a href="/profile" class="nav-link"
+              >{{current_user.name.capitalize()}}</a
+            >
+          </li>
+          <li class="nav-item">
+            <a href="/logout" class="nav-link">Logout</a>
+          </li>
+          {%else%}
+          <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
+          {%endif%}
+        </ul>
+      </div>
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% for
     category, message in messages %}
-	<div class="alert alert-{{category}}" style="text-align:center;font-weight:700;bold;margin:0px">
-		{{ message }}
-	</div>
-	{% endfor %} {% endwith %}
-</body>
-
+    <div
+      class="alert alert-{{category}}"
+      style="text-align:center;font-weight:700;bold;margin:0px"
+    >
+      {{ message }}
+    </div>
+    {% endfor %} {% endwith %}
+  </body>
 </html>

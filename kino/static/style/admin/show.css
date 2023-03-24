@@ -17,7 +17,7 @@
 }
 
 .kard-title {
-  margin: 5px 10px 0px;
+  margin: 5px 5px 0px;
   text-align: center;
 }
 
@@ -40,6 +40,17 @@
 
 .kard.kard-add-form.kard-add {
   margin: auto;
+}
+
+.kard-item {
+  display: flex;
+  width: 100%;
+  padding: 0;
+}
+
+div span {
+  font-weight: 600;
+  font-size: 0.5em;
 }
 
 .form {

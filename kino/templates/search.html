@@ -1,0 +1,30 @@
+{% extends 'common/base.html' %}
+{% import 'macros/macros.j2' as macros %}
+{% block style %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/index.css') }}" type="text/css"/>
+{% endblock style %}
+{% block title %}
+Search
+{% endblock title %}
+
+{% block content %}
+{{ super() }}
+<div class="content">
+	<div class="container">
+		<br>
+		<h3>You searched for <em style="color:red;">{{ searched }}</em></h3>
+		<h4>Venue based</h4>
+		{% for venue in venues %}
+		{% endfor %}
+		<hr>
+		<h4>Show based</h4>
+		{% for show in shows %}
+		<div class="kard-container">
+			{{ macros.display_show(show) }}
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endblock content %}
