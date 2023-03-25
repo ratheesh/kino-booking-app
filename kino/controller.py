@@ -58,7 +58,9 @@ def admin():
         if "show-management" in request.form:
             return redirect(url_for("controller.show_management"))
     else:
-        return render_template("admin/index.html")
+        venue_count=Venue.query.count()
+        show_count=Show.query.count()
+        return render_template("admin/index.html", venue_count=venue_count, show_count=show_count)
 
 
 @controller.route("/admin/venue", methods=["GET", "POST"])
