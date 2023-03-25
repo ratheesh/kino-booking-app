@@ -5,43 +5,51 @@
 {% block title %} Signup {% endblock title %}
 
 {% block content %}
-<div id="container">
-	<div class="signup">
-			<form id="signup-form" method="POST" enctype="multipart/form-data">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-				{% for category, message in messages %}
-				<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
-				{% endfor %}
-				{% endwith %}
-				<legend>Signup</legend>
-				<div>
-					<label for="name">Name</label> <br> <input type="text" name="name" placeholder="Name" minlength="2" required>*
+<div class="content">
+	<div class="container">
+		<div class="row g-3">
+			{% with messages = get_flashed_messages(with_categories=true) %}
+			{% for category, message in messages %}
+			<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+			{% endfor %}
+			{% endwith %}
+			<form class="row g-5" method="POST" enctype="multipart/form-data">
+				<h2>Signup</h2>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="name" class="form-label">Name</label> <input type="text" class="form-control" id="user" name="name" placeholder="Name" autocomplete="off"
+							minlength="2" required>
+					</div>
 				</div>
-				<br>
-				<div>
-					<label for="username">User Name</label>	<br> <input type="text" name="username" placeholder="username" minlength="4" required>*
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="username" class="form-label">User Name</label> <input type="text" class="form-control" id="username" name="username" placeholder="User Name" autocomplete="off" minlength="4" required>
+					</div>
 				</div>
-				<br>
-				<div>
-					<label for="password1">Password</label><br> <input type="password" name="password1" placeholder="Password" minlength="4" required>*
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="password1" class="form-label">Password </label> <input type="password" class="form-control" id="password1" name="password1" placeholder="Set Password" autocomplete="off" minlength="4" required>
+					</div>
 				</div>
-				<br>
-				<div>
-					<label for="password2">Reenter Password</label>
-					<br>
-					<input type="password" name="password2" placeholder="re-enter password" minlength="4" required>*
-				</div>
-				<br>
-				<div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="password2" class="form-label">Password </label> <input type="password" class="form-control" id="password2" name="password2" placeholder="Reenter Password" autocomplete="off" minlength="4" required>
+					</div>
+			</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
 					<input type="file" name="file" value="Profile Picture">
 				</div>
-				<br>
-				<div>
-					<input type="submit" name="Register" value="Register">
-					&nbsp;&nbsp;&nbsp;<a id="login" href="/login">Login</a>
 				</div>
-				<br>
+				<div class="row mb-3">
+					<div class="col-md-4" id="btnid">
+						<input type="submit" name="register" value="Register">
+						&nbsp; &nbsp;
+						<span>Already Registered? </span>&nbsp <a id="login" href="/login">Login</a>
+					</div>
+				</div>
 			</form>
+		</div>
 	</div>
 </div>
 {% endblock content %}

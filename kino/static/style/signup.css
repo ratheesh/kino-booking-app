@@ -1,31 +1,15 @@
-.signup {
-  box-sizing: border-box;
+.content .container .row {
   display: flex;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   justify-content: center;
   align-items: center;
-  color: black;
-  background-color: #fffad1;
-  border: 5px solid white;
-  border-radius: 8px;
-  box-shadow: -1px -1px 3px 3px #a0a0a0;
 }
 
-h1 {
+.row h2 {
   text-align: center;
 }
 
-.signup-form {
-  position: relative;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.signup-form div {
-  display:flex;
+#btnid {
+  display: flex;
   justify-content: center;
   align-items: center;
 }
