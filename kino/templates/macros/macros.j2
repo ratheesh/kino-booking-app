@@ -15,12 +15,15 @@
 	<div class="card-detail">
 		<span>No of Shows: {{ venue.shows|length }}</span>
 	</div>
-	<div class="card-form mt-2">
+	<div class="card-form">
 		<form id="edit-venue" method="POST">
-			<button type="submit" class="btn btn-secondary" name="edit-venue" value="{{venue.id}}">Edit</button>
+			<button type="submit" class="btn btn-secondary btn-sm" style="font-size:0.7em;" name="edit-venue" value="{{venue.id}}">Edit</button>
 		</form>
 		<form id="delete-venue" method="POST">
-		<button type="submit" class="btn btn-danger" name="delete-venue" value="{{venue.id}}">Delete</button>
+		<button type="submit" class="btn btn-danger btn-sm" name="delete-venue" style="font-size:0.7em;" value="{{venue.id}}">Delete</button>
+		</form>
+		<form id="manage-show" method="POST">
+			<button type="submit" class="btn btn-secondary btn-sm" name="manage-show" style="font-size:0.7em;" value="{{venue.id}}">Manage Shows</button>
 		</form>
 	</div>
   </div>

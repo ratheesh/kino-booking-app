@@ -2,7 +2,7 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 3px 2px;
 }
 
-.card-body {
+.card .card-body {
   margin:3px;
 }
 
@@ -30,4 +30,3 @@ div span {
   font-weight: 600;
   font-size: 0.8em;
 }
-

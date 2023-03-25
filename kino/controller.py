@@ -81,7 +81,7 @@ def venue_management():
             return redirect(
                 url_for(
                     "controller.show_management",
-                    venue_id=int(request.form["manage-show"],timedelta=timedelta),
+                    venue_id=int(request.form["manage-show"])
                 )
             )
         if "edit-venue" in request.form:

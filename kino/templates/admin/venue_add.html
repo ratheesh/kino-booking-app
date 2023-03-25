@@ -15,19 +15,29 @@ Add Venue
 	<div class="container">
 		<div class="row g-3">
 				<form class="row g-5" name="venue-add-form" method="POST" enctype="multipart/form-data">
+					{% if venue is defined %}
+					<h3 style="text-align: center;"> Update Venue </h3>
+					{% else %}
 					<h3 style="text-align: center;"> Add New Venue </h3>
+					{% endif %}
 					<div class="row mb-3">
 						<div class="col-md-4">
-							<label for="venue-name" class="form-label">Name</label>
-							<input type="text" class="form-control" id="venue-name" name="name" value="{{ venue.name
-								}}" placeholder="Name" autocomplete="off" required>
+							<label for="-name" class="form-label">Name</label>
+							{% if venue is defined %}
+							<input type="text" class="form-control" id="name" name="name" value="{{ venue.name }}" placeholder="Name" autocomplete="off" required>
+							{% else %}
+							<input type="text" class="form-control" id="-name" name="name" value="" placeholder="Name" autocomplete="off" required>
+							{% endif %}
 						</div>
 					</div>
 					<div class="row mb-3">
 						<div class="col-md-4">
-							<label for="venue-place" class="form-label">Place</label>
-							<input type="text" class="form-control" id="venue-place" name="place"
-								value="{{ venue.place }}" placeholder="Place" autocomplete="off" required>
+							<label for="place" class="form-label">Place</label>
+							{% if venue is defined %}
+							<input type="text" class="form-control" id="place" name="place" value="{{ venue.place}}" placeholder="Place" autocomplete="off" required>
+							{% else %}
+							<input type="text" class="form-control" id="place" name="place" value="" placeholder="Place" autocomplete="off" required>
+							{% endif %}
 						</div>
 					</div>
 					<div class="row mb-3">
