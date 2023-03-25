@@ -1,16 +1,15 @@
-.login-form {
+.content .container .row {
   display: flex;
-  flex-flow: column;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  top: 30%;
-  left: 40%;
-  margin-top: -10px;
-  margin-left: -50px;
-  background-color: #e0e0e0;
-  border: 5px  solid white;
-  border-radius: 10px;
-  padding: 20px 80px 80px 80px;
 }
 
+.row h2 {
+  text-align: center;
+}
+
+#btnid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
