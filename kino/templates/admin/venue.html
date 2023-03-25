@@ -1,4 +1,5 @@
 {% extends 'common/base.html' %}
+{% import 'macros/macros.j2' as macros %}
 
 {% block style %}
 {{ super()  }}
@@ -8,47 +9,26 @@
 {% block content %}
 {{ super() }}
 <div class="content">
-<div class="container">
-	<div class="row">
-		<div class="grid gap-3 kard-container">
-			{% for venue in venues %}
-			<div class="kard">
-				<div class="kard-img">
-					{% if venue.venue_img %}
-					<img src="{{ url_for('static', filename='img/venue/' + venue.venue_img) }}" class="kard-image" alt="venue" />
-					{% else %}
-					<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-					{% endif %}
-				</div>
-				<div class="kard-content">
-					<div class="kard-details">
-						<h2>{{venue.name}}</h2>
-						<h3>{{venue.place}}</h3>
-						<div class="kard-form">
-							<form id="manage-show" method="POST">
-								<button type="submit" class="submit-btn submit-btn-general" name="manage-show" value="{{venue.id}}">Manage Shows</button>
-							</form>
-							<form id="edit-venue" method="POST">
-								<button type="submit" class="submit-btn submit-btn-edit" name="edit-venue" value="{{venue.id}}">Edit</button>
-							</form>
-							<form id="delete-venue" method="POST">
-								<button type="submit" class="submit-btn submit-btn-delete" name="delete-venue" value="{{venue.id}}">Delete</button>
+	<div class="container">
+		<div class="row mt-5 mb-3">
+				{% for venue in venues %}
+				{{ macros.display_venue(venue, is_admin=true) }}
+				{% endfor %}
+				<div class="col-sm-3 ms-2">
+					<div class="card" style="width:16rem;height:100%;min-height:400px">
+						<div class="kard-add">
+							<form action="/admin/venue" method="POST">
+								<button style="border:0px;border-radius:0px;border-radius:0px;" class="kard-add"
+									type="submit" name="add-venue" value="someValue"><img
+										style="height:80px;width:80px;"
+										src="https://img.icons8.com/ios-filled/140/add--v1.png"
+										alt="Add Venue"></button>
+								<!-- <button class="kard-add-btn" type="submit" name="add-venue"><i class="bi bi-plus-circle-fill"></i></button> -->
 							</form>
 						</div>
 					</div>
 				</div>
-			</div>
-			{% endfor %}
-			<div class="kard">
-				<div class="kard-add">
-					<form  action="/admin/venue" method="POST">
-						<button style="border:0px;border-shadow:0px;border-radius:0px;" class="kard-add" type="submit" name="add-venue" value="someValue"><img style="height:80px;width:80px;" src="https://img.icons8.com/ios-filled/140/add--v1.png" alt="Add Venue"></button>
-						<!-- <button class="kard-add-btn" type="submit" name="add-venue"><i class="bi bi-plus-circle-fill"></i></button> -->
-					</form>
-				</div>
-			</div>
 		</div>
 	</div>
-</div>
 </div>
 {% endblock content %}

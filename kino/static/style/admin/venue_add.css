@@ -1,0 +1,15 @@
+.content .container .row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.row h2 {
+  text-align: center;
+}
+
+#btnid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -6,29 +6,43 @@ Add Venue
 
 {% block style %}
 {{ super()  }}
-<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/venue_add.css') }}" type="text/css"/>
 {% endblock style %}
 
 {% block content %}
 {{ super() }}
-<div class="container">
-	<h3 style="text-align=center:">Add New Venue </h3>
-	<div>
-		<form class="form" name="venue-add-form" method="POST" enctype="multipart/form-data">
-			<div>
-				<label for="name">Venue Name<br><input type="text" name="name" value="" placeholder="Venue Name" autocomplete="off" required></label>
-			</div>
-			<br>
-			<div>
-				<label for="place">Place<br><input type="text" name="place" value="" placeholder="Place Name" autocomplete="off" required></label>
-			</div>
-			<br>
-			<div>
-				<input type="file" name="file" placeholder="Upload Profile Image" value="" autocomplete="off" accept="image/jpeg, image/jpg, image/png" />
-			</div>
-			<br>
-			<input type="submit" name="submit" value="Submit">
-		</form>
+<div class="content">
+	<div class="container">
+		<div class="row g-3">
+				<form class="row g-5" name="venue-add-form" method="POST" enctype="multipart/form-data">
+					<h3 style="text-align: center;"> Add New Venue </h3>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<label for="venue-name" class="form-label">Name</label>
+							<input type="text" class="form-control" id="venue-name" name="name" value="{{ venue.name
+								}}" placeholder="Name" autocomplete="off" required>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<label for="venue-place" class="form-label">Place</label>
+							<input type="text" class="form-control" id="venue-place" name="place"
+								value="{{ venue.place }}" placeholder="Place" autocomplete="off" required>
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<input type="file" name="file" placeholder="Upload Profile Image" value=""
+								autocomplete="off" accept="image/jpeg, image/jpg, image/png" />
+						</div>
+					</div>
+					<div class="row mb-3">
+						<div class="col-md-4">
+							<input type="submit" name="submit" value="Update">
+						</div>
+					</div>
+				</form>
+		</div>
 	</div>
 </div>
 {% endblock content %}

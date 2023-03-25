@@ -81,7 +81,7 @@ def venue_management():
             return redirect(
                 url_for(
                     "controller.show_management",
-                    venue_id=int(request.form["manage-show"]),
+                    venue_id=int(request.form["manage-show"],timedelta=timedelta),
                 )
             )
         if "edit-venue" in request.form:
@@ -146,7 +146,7 @@ def venue_add():
 def venue_edit(venue_id):
     venue = Venue.query.filter_by(id=venue_id).first()
     if request.method == "GET":
-        return render_template("admin/venue_edit.html", venue=venue)
+        return render_template("admin/venue_add.html", venue=venue)
     elif request.method == "POST":
         venue.name = request.form["name"]
         venue.place = request.form["place"]
@@ -157,7 +157,7 @@ def venue_edit(venue_id):
                 file = request.files["file"]
                 if not valid_img_type(file.filename):
                     flash("img format is not supported", "danger")
-                    return render_template("admin/venue_add.html", pic_err=True)
+                    return render_template("admin/venue_add.html", venue=venue,pic_err=True)
 
                 split_tup = os.path.splitext(file.filename)
 

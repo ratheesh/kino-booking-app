@@ -1,53 +1,87 @@
-{# show card #}
-{% macro display_show(show, is_admin) %}
-<div class="kard">
-	<div class="kard-img">
-		{% if show.show_img %}
-		<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="kard-image" alt="venue" />
-		{% else %}
-		<img src="https://via.placeholder.com/150" class="kard-image" alt="venue" />
-		{% endif %}
+{# show venue #}
+{% macro display_venue(venue, is_admin) %}
+<div class="col-sm-3 ms-2">
+<div class="card" style="width: 16rem;">
+	{% if venue.venue_img %}
+	<img src="{{ url_for('static', filename='img/venue/' + venue.venue_img) }}" class="card-img-top" alt="venue" />
+	{% else %}
+	<img src="https://via.placeholder.com/150" class="card-img-top" alt="venue" />
+	{% endif %}
+  <div class="card-body">
+    <h5 class="card-title text-center">{{ venue.name|capitalize }}</h5>
+	<div class="card-detail">
+		<span> {{venue.place|capitalize}} </span>
 	</div>
-	<div class="kard-content">
-		<div class="kard-details">
-			<h2 class="kard-title">{{show.title}}</h2>
-			<hr style="height:1px;background-color:black;margin:0px;">
-			<div class="kard-item">
-				<span> {{show.language}} </span>
-				<span> {{show.duration}}mins </span>
-			</div>
-			<div class="kard-item">
-				<span>&#x20B9;{{show.price}}</span>
-				<span>&hearts;{{show.popularity}}%</span>
-			</div>
-			<div class="kard-item">
-				<span>{{show.show_time}}</span>
-			</div>
-			<div class="kard-item">
-				<span>Seats Avl: {{(show.n_rows * show.n_seats) - (show.seats|length) }}</span>
-				<!-- <span>Seating:{{show.n_rows}}x{{show.n_seats}}</span> -->
-			</div>
-			{% if is_admin %}
-			<div class="kard-form">
-				<form id="edit-venue" method="POST">
-					<button type="submit" class="submit-btn submit-btn-edit" name="edit-show" value="{{show.id}}">Edit</button>
-				</form>
-				<form id="delete-venue" method="POST">
-				<button type="submit" class="submit-btn submit-btn-delete" name="delete-show" value="{{show.id}}">Delete</button>
-				</form>
-			</div>
-			{% else %}
-			<form action={{url_for('controller.book', show_id=show.id)}} method="post">
-				<div class="kard-form">
-					<input type="submit" name="book" value="Book" class="submit-btn-general">
-					<!-- <input type="submit" name="Delete" value="Delete"> -->
-				</div>
-			</form>
-			{% endif %}
-		</div>
+	<div class="card-detail">
+		<span>No of Shows: {{ venue.shows|length }}</span>
 	</div>
+	<div class="card-form mt-2">
+		<form id="edit-venue" method="POST">
+			<button type="submit" class="btn btn-secondary" name="edit-venue" value="{{venue.id}}">Edit</button>
+		</form>
+		<form id="delete-venue" method="POST">
+		<button type="submit" class="btn btn-danger" name="delete-venue" value="{{venue.id}}">Delete</button>
+		</form>
+	</div>
+  </div>
+</div>
 </div>
 {% endmacro %}
+
+{################################################################}
+
+{# show show #}
+{% macro display_show(show, is_admin) %}
+<div class="col-sm-3 ms-2">
+<div class="card" style="width: 16rem;">
+	{% if show.show_img %}
+	<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="card-img-top" alt="show" />
+	{% else %}
+	<img src="https://via.placeholder.com/150" class="card-img-top" alt="show" />
+	{% endif %}
+  <div class="card-body">
+    <h5 class="card-title text-center">{{ show.title }}({{ show.language }})</h5>
+	<div class="card-detail">
+		<span> {{show.duration}}mins </span>
+		<span> &#9733; {{show.rating}}/5.0 </span>
+	</div>
+	<div class="card-detail">
+		<span>Price: &#x20B9;{{show.price}}</span>
+		<span><i class="fa-solid fa-5x" style="color:red;">&hearts;</i>{{show.popularity}}%</span>
+	</div>
+	<div class="card-detail">
+		<span>&#x1F4C5;{{show.show_time.strftime("%a %d %b %Y")}}</span>
+		<span>&#x1F551;{{show.show_time.strftime("%I.%M%p")}}</span>
+		{{ tmp }}
+	</div>
+
+	<div class="card-detail">
+		<span>Seats:{{ show.n_rows*show.n_seats }}(Avl:{{(show.n_rows * show.n_seats) - (show.seats|length) }},Booked:{{show.seats|length}})</span>
+	</div>
+	{% if is_admin %}
+	<div class="card-form mt-2">
+		<form id="edit-show" method="POST">
+			<button type="submit" class="btn btn-secondary" name="edit-show" value="{{show.id}}">Edit</button>
+		</form>
+		<form id="delete-show" method="POST">
+		<button type="submit" class="btn btn-danger" name="delete-show" value="{{show.id}}">Delete</button>
+		</form>
+	</div>
+	{% else %}
+	<div class="card-form mt-2">
+	<form action={{url_for('controller.book', show_id=show.id)}} method="post">
+		<div class="card-form">
+			<input type="submit" class="btn btn-success" name="book" value="Book" class="btn btn-general">
+		</div>
+	</form>
+	</div>
+	{% endif %}
+  </div>
+</div>
+</div>
+{% endmacro %}
+
+{################################################################}
 
 {# show booking #}
 {% macro display_booking(booking) %}
