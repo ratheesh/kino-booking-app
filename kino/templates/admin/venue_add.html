@@ -46,9 +46,13 @@ Add Venue
 								autocomplete="off" accept="image/jpeg, image/jpg, image/png" />
 						</div>
 					</div>
-					<div class="row mb-3">
+					<div id="formbtn" class="row mb-3">
 						<div class="col-md-4">
+							{% if venue is defined %}
 							<input type="submit" name="submit" value="Update">
+							{% else %}
+							<input type="submit" name="submit" value="Add Venue">
+							{% endif %}
 						</div>
 					</div>
 				</form>
