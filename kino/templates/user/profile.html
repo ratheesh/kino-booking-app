@@ -1,21 +1,48 @@
 {% extends 'common/base.html' %}
 
-{% block title %} Profile {% endblock %}
+{% block style %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/profile.css') }}" type="text/css" />
+{% endblock style %}
+
+{% block title %} {{ user.name|capitalize }} Profile {% endblock %}
 
 
 {% block content %}
 {{ super() }}
-<div class="container">
-	<h2>{{ user.name }}'s Profile</h2>
-	<form method="POST">
-		<h3>Name: {{ user.name }}</h3>
-		<h3>User Name: {{ user.username }}</h3>
-		<h3>Role: {{ user.role }}</h3>
-		<h3>Created on: {{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</h3>
-		<h3>Updated on: {{ user.updated_timestamp.strftime('%d %b %Y %H:%M') }}</h3>
-		<form action={{ url_for('controller.home') }} method="post">
-		<button type="submit" class="submit-btn submit-btn-general" name="edit-profile" >Edit Profile</button>
-		<button type="submit" class="submit-btn submit-btn-general" name="go-back" >Goto Home</button>
-	</form>
+<div class="content">
+	<div class="container">
+		<h2 style="text-align: center;">{{ user.name|capitalize }}'s Profile</h2>
+		<div class="row g-5">
+		<table class="table table-borderless">
+			<tbody>
+			  <tr>
+				<td>Name</td>
+				<td>{{ user.name }}</td>
+			  </tr>
+			  <tr>
+				<td>User Name</td>
+				<td>{{ user.username }}</td>
+			  </tr>
+			  <tr>
+				<td>Role</td>
+				<td>{{ user.role }}</td>
+			  </tr>
+			  <tr>
+				<td>Created on</td>
+				<td>{{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</td>
+			  </tr>
+			  <tr>
+				<td>Created on</td>
+				<td>{{ user.updated_timestamp.strftime('%d %b %Y %H:%M') }}</td>
+			  </tr>
+			</tbody>
+		  </table>
+		</div>
+		<form class="card-form" method="post">
+			<button type="submit" class="btn btn-secondary" name="edit-profile">Edit Profile</button>
+			&nbsp; &nbsp;
+			<button type="submit" class="btn btn-success" name="go-back">Goto Home</button>
+		</form>
+	</div>
 </div>
 {% endblock content%}

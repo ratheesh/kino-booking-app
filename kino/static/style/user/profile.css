@@ -1,0 +1,19 @@
+
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.content .container .row {
+    justify-content: center;
+    width:100%;
+}
+
+.content .container .row .table {
+    justify-content: center;
+}
+
+.card-form {
+  display: flex;
+  align-content: center;
+}

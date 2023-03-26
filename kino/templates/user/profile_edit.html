@@ -1,32 +1,72 @@
 {% extends 'common/base.html' %}
 
-{% block title %} Profile {% endblock %}
+{% block title %}
+Update {{ current_user.name|capitalize }} Profile
+{% endblock title %}
 
+{% block style %}
+{{ super()  }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/profile_edit.css') }}" type="text/css"/>
+{% endblock style %}
 
 {% block content %}
 {{ super() }}
-<form method="POST" enctype="multipart/form-data">
-	{% with messages = get_flashed_messages(with_categories=true) %}
-	{% for category, message in messages %}
-	<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
-	{% endfor %}
-	{% endwith %}
-	<h2>{{ user.name }}'s Profile</h2>
-	Name: <input type="text" name="name" value="{{user.name}}" required>
-	<br>
-	<h6>User Name: {{ user.username }}</h6>
-	<br>
-	Password: <input type="password" name="password1" placeholder="Password">
-	<br>
-	Reenter Password: <input type="password" name="password2" placeholder="Password">
-	<br>
-	<h6>Role: {{ user.role }}</h6>
-	<br>
-	<h6>Updated on: {{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</h6>
-	<br>
-	<input type="file" name="file" placeholder="Upload Profile Image"
-								   accept="image/gif, image/jpeg, image/jpg, image/png" />
-	<br>
-	<input type="submit" value="Update">
-</form>
+<div class="content">
+	<div class="container">
+		<div class="row g-3">
+			<form class="row g-5" method="POST" enctype="multipart/form-data">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+				{% for category, message in messages %}
+				<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+				{% endfor %}
+				{% endwith %}
+				<h2 style="text-align: center;">Update {{ user.name|capitalize }}'s Profile</h2>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="name" class="form-label">Name</label>
+						<input type="text" class="form-control" id="name" name="name" value="{{current_user.name}}"
+							placeholder="Name" autocomplete="off" required>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="username" class="form-label">User Name</label>
+						<input type="text" class="form-control" id="username" name="username"
+							value="{{current_user.username}}" placeholder="User Name" autocomplete="off" disabled>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="password1" class="form-label">Password</label>
+						<input type="password" class="form-control" id="password1" name="password1" value=""
+							placeholder="Password" autocomplete="off">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="password2" class="form-label">Reenter Password</label>
+						<input type="password" class="form-control" id="password2" name="password2" value=""
+							placeholder="Reenter Password" autocomplete="off">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<h6>Role: {{ user.role }}</h6>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<input type="file" name="file" placeholder="Upload Profile Image"
+							accept="image/gif, image/jpeg, image/jpg, image/png" />
+					</div>
+				</div>
+				<div class="row mb-3" id="formbtn">
+					<div class="col-md-4">
+						<input type="submit" class="btn btn-success" value="Update">
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 {% endblock content%}
