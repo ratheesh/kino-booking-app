@@ -1,0 +1,47 @@
+{% extends 'common/base.html' %}
+{% block style %} {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='style/admin/delete.css') }}" type="text/css" />
+{% endblock style %}
+
+{% block title %}
+{% if admin is defined %}
+Delete Admin
+{% elif show is defined %}
+Delete Show
+{% endif %}
+{% endblock title %}
+
+<!-- main content -->
+{% block content %} 
+{{ super() }}
+<div class="content">
+    <div class="container">
+        <div class="row">
+            {% if venue is defined %}
+            <form class="row g-3" method="POST">
+                <div class="col-md-6">
+                <h3 class="text-center">Deleting Venue {{ venue.name|capitalize }}</h3>
+                <p class="mt-4">Deleting Venue will delete venue and related shows</p>
+                <p><em style="color:red;">This action can not be undone</em></p>
+                <p>Are you sure you want to continue?</p>
+                <button type="submit" class="btn btn-danger" name="delete-venue" value="{{venue.id}}">Delete</button>
+                <button type="submit" class="btn btn-secondary" name="cancel" value="{{venue.id}}">Cancel</button>
+                </div>
+            </form>
+            {% elif show is defined %}
+            <form class="row g-5" method="POST">
+                <div class="col-md-6">
+                <h3 class="text-center">Deleting Show {{ show.title|capitalize }}</h3>
+                <p>Deleting Venue will delete venue and related shows</p>
+                <p><em>This action can not be undone</em></p>
+                <p>Are you sure you want to continue?</p>
+                <button type="submit" class="btn btn-danger" name="delete-show" value="{{show.id}}">Delete</button>
+                <button type="submit" class="btn btn-secondary" name="cancel" value="{{show.id}}">Cancel</button>
+                </div>
+            </form>
+            {% endif %}
+
+    </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,4 @@
+.content .container .row {
+    display: flex;
+    justify-content: center;
+}
