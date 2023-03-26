@@ -18,11 +18,11 @@ Add Show
 <div class="content">
 	<div class="container">
 		<div class="row g-3">
-			<form class="row g-5" method="POST" enctype="multipart/form-data">
+			<form class="row g-3" method="POST" enctype="multipart/form-data">
 				{% if show is defined %}
-				<h5 style="text-align: center;">Update Show</h5>
+				<h3 class="mt-3 text-center">Update Show</h3>
 				{% else %}
-				<h5 style="text-align: center;">Add Show</h5>
+				<h3 class="mt-3 text-center">Add Show</h3>
 				{% endif %}
 				<div class="row mb-3">
 					<div class="col-md-4">
@@ -86,11 +86,24 @@ Add Show
 						{% endif %}
 					</div>
 				</div>
+				{% if venue_id is none %}
+				<div class="row mb-3">
+					<div class="col-md-4">
+					<label for="venue" class="form-label">Select Venue</label>
+					<select class="form-select" name="venue">
+						<option value="">Select Venue</option>
+						{% for venue in venues %}
+						<option value="{{ venue.id }}">{{ venue.name }}</option>
+						{% endfor %}
+					</select>
+					</div>
+				</div>
+				{% endif %}
 				<div class="row mb-3">
 					<div class="col-md-4">
 						<label for="show-tags" class="form-label">Tags</label>
 						{% if show is defined %}
-						<select name="tags" multiple>
+						<select class="form-select" name="tags" multiple>
 							<option value="">Select Tag(s)</option>
 							{% set is_selected="" %}
 							{% for tag in tags %}
@@ -101,7 +114,7 @@ Add Show
 							{% endfor %}
 						</select>
 						{% else %}
-						<select name="tags" multiple>
+						<select class="form-select" name="tags" multiple>
 							<option value="">Select Tag(s)</option>
 							{% for tag in tags %}
 							<option value="{{ tag }}">{{ tag }}</option>

@@ -10,6 +10,13 @@ Error
 {% endblock style %}
 
 {% block content %}
-<h1>The URL that you are accessing is not found.</h1>
-<a href="/">Go Home</a>
+{% if error_id == 403 %}
+<h4>This page is forbidden to access</h4>
+{% elif error_id == 404 %}
+<h4>Page Not Found</h4>
+{% elif error_id == 500 %}
+<h4>Internal Server Error</h4>
+{% endif %}
+
+<a href="/" class="btn btn-secondary">Go Home</a>
 {% endblock content %}

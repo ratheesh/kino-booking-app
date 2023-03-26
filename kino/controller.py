@@ -55,8 +55,11 @@ def admin():
     if request.method == "POST":
         if "venue-management" in request.form:
             return redirect(url_for("controller.venue_management"))
-        if "show-management" in request.form:
-            return redirect(url_for("controller.show_management"))
+        if "add-show" in request.form:
+            if Venue.query.count() == 0:
+                flash("No Venues created. Add atleast one venue before adding a show", "danger")
+                return redirect(url_for("controller.admin"))
+            return redirect(url_for("controller.show_add"))
     else:
         venue_count=Venue.query.count()
         show_count=Show.query.count()
@@ -220,13 +223,15 @@ def show_management(venue_id):
         return render_template("admin/show.html", shows=shows, venue=venue)
 
 
+@controller.route("/admin/show/add", methods=["GET", "POST"])
 @controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
 @login_required
 @admin_only
-def show_add(venue_id):
+def show_add(venue_id=None):
     if request.method == "GET":
         tags = Tag.query.all()
-        return render_template("admin/show_add.html", tags=tags, venue_id=venue_id)
+        venues=Venue.query.all()
+        return render_template("admin/show_add.html", tags=tags, venues=venues, venue_id=venue_id)
     if request.method == "POST":
         print("== SHOW ADD ==")
         s_date = request.form["show-date"]
@@ -235,6 +240,14 @@ def show_add(venue_id):
         s_tm = datetime.strptime(s_time, "%H:%M").time()
         dt = datetime.combine(s_dt, s_tm)
         print(dt, type(dt))
+        if venue_id is None:
+            venue_ID = request.form.get("venue")
+            venue=Venue.query.filter_by(id=venue_ID).first()
+            if venue is None:
+                abort(404)
+            else:
+                venue_id=venue.id
+
         show = Show(
             title=request.form["title"],
             language=request.form["language"],
@@ -278,7 +291,10 @@ def show_add(venue_id):
         db.session.commit()
 
         flash("Show Created Successfully!", "success")
-        return redirect(url_for("controller.show_management", venue_id=venue_id))
+        if venue_id is None:
+            return redirect(url_for("controller.admin"))
+        else:
+            return redirect(url_for("controller.show_management", venue_id=venue_id))
 
 
 @controller.route(
@@ -722,13 +738,16 @@ def logout():
 
 
 @controller.errorhandler(404)
-def page_not_found():
-    return "page not found!"
+def page_not_found(e):
+    return render_template('error.html', error_id=404), 404
 
+@controller.errorhandler(403)
+def page_not_found(e):
+    return render_template('error.html', error_id=403), 403
 
 @controller.errorhandler(500)
-def internal_server_error():
-    return "Internal Server Error!"
+def internal_server_error(e):
+    return render_template('error.html', error_id=500), 500
 
 
 # End of File
