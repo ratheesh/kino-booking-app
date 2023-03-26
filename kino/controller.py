@@ -265,7 +265,7 @@ def show_add(venue_id):
             )
             print(show_img_path)
             request.files["file"].save(show_img_path)
-            show.venue_img = os.path.basename(show_img_path)
+            show.show_img = os.path.basename(show_img_path)
 
         tags = request.form.getlist("tags")
         for tag in tags:
@@ -465,13 +465,13 @@ def book(show_id):
     show = Show.query.filter_by(id=show_id).first()
     print("Show: ", show)
     if show is None:
-        flash(f"No show by id:{show_id}")
+        flash(f"No show by id:{show_id}", "danger")
         return redirect(url_for("controller.home"))
 
     venue = Venue.query.filter_by(id=show.venue_id).first()
     print("Venue: ", venue)
     if venue is None:
-        flash(f"no venue associated with the show:{show.title}")
+        flash(f"no venue associated with the show:{show.title}", "danger")
         return redirect(url_for("controller.home"))
 
     if request.method == "POST":
@@ -550,7 +550,7 @@ def profile_edit():
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported")
+                flash("img format is not supported", "danger")
                 return render_template("user/profile.html", pic_err=True)
 
             split_tup = os.path.splitext(file.filename)
@@ -669,7 +669,7 @@ def signup():
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported")
+                flash("img format is not supported", "danger")
                 return render_template("auth/signup.html", pic_err=True)
 
             split_tup = os.path.splitext(file.filename)
@@ -696,6 +696,9 @@ def login():
         password = request.form["password"]
         print(request.form)
         user = db.session.query(User).filter(User.username == username).first()
+        if not user:
+            flash(f"User {username} does not exist!", "danger")
+            return redirect(url_for("controller.login"))
         if not user or not check_password_hash(user.password, password):
             flash("User/password not matching!", "danger")
             return redirect(url_for("controller.login"))
