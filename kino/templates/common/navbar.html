@@ -42,10 +42,17 @@
           <li class="nav-item"><a href="/admin" class="nav-link">Home</a></li>
           {%else%}
           <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
-          {%endif%} {% if current_user.is_authenticated %}
+          {%endif%}
+          {% if current_user.is_authenticated %}
+          {% if current_user.username == 'admin' %}
+          <li class="nav-item">
+            <a href="/admin/venue" class="nav-link">Venues</a>
+          </li>
+          {% else %}
           <li class="nav-item">
             <a href="/bookings" class="nav-link">Bookings</a>
           </li>
+          {% endif %}
           <li class="nav-item">
             <a href="/profile" class="nav-link"
               >{{current_user.name.capitalize()}}</a
@@ -64,7 +71,7 @@
     category, message in messages %}
     <div
       class="alert alert-{{category}}"
-      style="text-align:center;font-weight:700;bold;margin:0px"
+      style="text-align:center;font-weight:700;margin:0px"
     >
       {{ message }}
     </div>

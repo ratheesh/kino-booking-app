@@ -18,6 +18,13 @@
   align-content: center;
 }
 
+.kard-add {
+  margin: auto;
+  text-align: center;
+  background: transparent;
+  opacity: 1;
+}
+
 .kard-add-form {
   margin: auto;
 }
