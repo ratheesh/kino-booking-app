@@ -95,12 +95,7 @@ def venue_management():
 
         if "delete-venue" in request.form:
             print("== VENUE DELETE ==")
-            return redirect(
-                url_for(
-                    "controller.venue_delete",
-                    venue_id=int(request.form["delete-venue"]),
-                )
-            )
+            return redirect( url_for( "controller.venue_delete", venue_id=int(request.form["delete-venue"])))
 
         return redirect(url_for("controller.admin"))
 
@@ -176,33 +171,33 @@ def venue_edit(venue_id):
         return redirect(url_for("controller.venue_management"))
 
 
-@controller.route("/admin/venue/<int:venue_id>/delete", methods=["POST"])
+@controller.route("/admin/venue/<int:venue_id>/delete", methods=["GET", "POST"])
 @login_required
 @admin_only
 def venue_delete(venue_id):
     if request.method == "POST":
-        venue = Venue.get_or_404(venue_id)
-        try:
-            db.session.delete(venue)
-            db.session.commit()
-        except:
-            flash("Unable to delete Venue")
-        flash("Venue deleted successfully")
-        return redirect("controller.venue_management")
+        venue = Venue.query.get_or_404(venue_id)
+        if 'delete-venue' in request.form:
+            try:
+                db.session.delete(venue)
+                db.session.commit()
+            except:
+                flash("Unable to delete Venue", "danger")
+                return redirect(url_for("controller.venue_management"))
+
+            flash("Venue deleted successfully", "success")
+        return redirect(url_for("controller.venue_management"))
+
     else:
-        abort(403)
+        venue=Venue.query.get_or_404(venue_id)
+        return render_template("admin/delete.html", venue=venue)
 
 
 @controller.route("/admin/<int:venue_id>/show", methods=["GET", "POST"])
 @login_required
 @admin_only
 def show_management(venue_id):
-    if request.method == "GET":
-        venue = Venue.query.get_or_404(venue_id)
-        shows = Show.query.filter_by(venue_id=venue_id).all()
-        return render_template("admin/show.html", shows=shows, venue=venue)
-
-    elif request.method == "POST":
+    if request.method == "POST":
         if "edit-show" in request.form:
             print("== SHOW EDIT ==")
             show_id = int(request.form["edit-show"])
@@ -214,11 +209,14 @@ def show_management(venue_id):
             print("== SHOW DELETE ==")
             show_id = int(request.form["delete-show"])
             return redirect(
-                url_for("controller.show_delete", venue_id=venue_id, show_id=show_id)
+                url_for("controller.show_delete", show_id=show_id)
             )
         return redirect(url_for("controller.show_add", venue_id=venue_id))
+
     else:
-        pass
+        venue = Venue.query.get_or_404(venue_id)
+        shows = Show.query.filter_by(venue_id=venue_id).all()
+        return render_template("admin/show.html", shows=shows, venue=venue)
 
 
 @controller.route("/admin/<int:venue_id>/show/add", methods=["GET", "POST"])
@@ -341,6 +339,24 @@ def show_edit(venue_id, show_id):
         flash("Show details updated successfully!", "success")
         return redirect(url_for("controller.show_management", venue_id=venue_id))
 
+@controller.route('/admin/<int:show_id>/show/delete', methods=["GET", "POST"])
+@admin_only
+def show_delete(show_id):
+    if request.method == "POST":
+        show = Show.query.get_or_404(show_id)
+        if 'delete-show' in request.form:
+            try:
+                db.session.delete(show)
+                db.session.commit()
+            except:
+                flash("Unable to delete Show", "danger")
+                return redirect(url_for("controller.show_management", venue_id=show.venue_id))
+            flash("Show deleted successfully", "success")
+        return redirect(url_for("controller.show_management", venue_id=show.venue_id))
+
+    else:
+        show=Show.query.get_or_404(show_id)
+        return render_template("admin/delete.html", show=show)
 
 # data
 # {
