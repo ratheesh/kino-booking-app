@@ -1,7 +1,11 @@
 {% extends 'common/base.html' %}
 
 {% block title %}
-Add Venue
+{% if show is defined %}
+Update Show
+{% else %}
+Add Show
+{% endif %}
 {% endblock title %}
 
 {% block style %}
@@ -12,124 +16,167 @@ Add Venue
 {% block content %}
 {{ super() }}
 <div class="content">
-<div class="container">
-	<!-- <h2 style="text-align=center:">Add New Venue </h2> -->
-	<div class="add-show">
-		<form class="form" method="POST" enctype="multipart/form-data">
-			{% if show is defined %}
-			<h5>Update Show</h5>
-			{% else %}
-			<h5>Add Show</h5>
-			{% endif %}
-			<div>
-				<label for="title">Title</label> <br>
+	<div class="container">
+		<div class="row g-3">
+			<form class="row g-5" method="POST" enctype="multipart/form-data">
 				{% if show is defined %}
-				<input type="text" name="title" value="{{ show.title }}" placeholder="Title" required>
+				<h5 style="text-align: center;">Update Show</h5>
 				{% else %}
-				<input type="text" name="title" value="" placeholder="Title" required>
+				<h5 style="text-align: center;">Add Show</h5>
 				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="language">Language</label> <br>
-				{% if show is defined %}
-				<input type="text" name="language" value="{{ show.language }}" placeholder="Language" minlength="4" required>
-				{% else %}
-				<input type="text" name="language" value="" placeholder="Language" minlength="4" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="duration">Duration</label><br>
-				{% if show is defined %}
-				<input type="number" name="duration" value="{{ show.duration }}" placeholder="duration(mins)" min="10" max="180" required>
-				{% else %}
-				<input type="number" name="duration" value="" placeholder="duration(mins)" min="10" max="180" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="price">Price</label><br>
-				{% if show is defined %}
-				<input type="number" name="price" value="{{ show.price }}" placeholder="Ticket Price" min="100" max="500" required>
-				{% else %}
-				<input type="number" name="price" value="" placeholder="Ticket Price" min="100" max="500" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="rating">Rating</label><br>
-				{% if show is defined %}
-				<input type="number" name="rating" value="{{ show.rating }}" placeholder="Critics Rating" min="0.5" max="5.0" step="0.5" required><span>&nbsp;/5</span>
-				{% else %}
-				<input type="number" name="rating" value="" placeholder="Critics Rating" min="0.5" max="5.0" step="0.5" required><span>&nbsp;/5</span>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="tags">Tags</label><br>
-				{% if show is defined %}
-				{% else %}
-				{% endif %}
-				<select name="tags" multiple>
-					<option value="">Select Tag(s)</option>
-					{% for tag in tags %}
-					<option value="{{ tag }}">{{ tag }}</option>
-					{% endfor %}
-				</select>
-			</div>
-			<br>
-			<div>
-				<label for="show_date">Show Date</label><br>
-				{% if show is defined %}
-				<input type="date" name="show_date" value="{{ show.show_time.strftime("%Y-%m-%d") }}" placeholder="" required>
-				{% else %}
-				<input type="date" name="show_date" value="" placeholder="" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="show_time">Show Time</label><br>
-				{% if show is defined %}
-				<input type="time" name="show_time" value="{{ show.show_time.strftime("%H:%M") }}" placeholder="" step="900" required>
-				{% else %}
-				<input type="time" name="show_time" value="" placeholder="" step="900" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="rows">Rows</label><br>
-				{% if show is defined %}
-				<input type="number" name="rows" value="{{ show.n_rows }}" placeholder="Number of rows" min="5" max="15" required>
-				{% else %}
-				<input type="number" name="rows" value="" placeholder="Number of rows" min="5" max="15" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="seats">Seats per Row</label><br>
-				{% if show is defined %}
-				<input type="number" name="seats" value="{{ show.n_seats }}" placeholder="Seats per row" min="10" max="20" required>
-				{% else %}
-				<input type="number" name="seats" value="" placeholder="Seats per row" min="10" max="20" required>
-				{% endif %}
-			</div>
-			<br>
-			<div>
-				<label for="file">Banner</label><br>
-				<input type="file" name="file" value="" placeholder="Choose banner file">
-			</div>
-			<br>
-			<div>
-				{% if show is defined %}
-				<input type="submit" name="update-show" value="Update">
-				{% else %}
-				<input type="submit" name="add-show" value="Add Show">
-				{% endif %}
-			</div>
-		</form>
-
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-title" class="form-label">Name</label>
+						{% if show is defined %}
+						<input type="text" class="form-control" id="show-title" name="title" value="{{ show.title }}"
+							placeholder="Show Title" autocomplete="off" required>
+						{% else %}
+						<input type="text" class="form-control" id="show-title" name="title" value=""
+							placeholder="Show Title" autocomplete="off" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-language" class="form-label">Language</label>
+						{% if show is defined %}
+						<input type="text" class="form-control" id="show-language" name="language"
+							value="{{ show.language }}" placeholder="Show Language" autocomplete="off" minlength="4"
+							required>
+						{% else %}
+						<input type="text" class="form-control" id="show-language" name="language" value=""
+							placeholder="Show Language" autocomplete="off" minlength="4" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-duration" class="form-label">Duration</label>
+						{% if show is defined %}
+						<input type="text" class="form-control" id="show-duration" name="duration"
+							value="{{ show.duration }}" placeholder="Show Duration(mins)" autocomplete="off" min=10
+							max=180 required>
+						{% else %}
+						<input type="text" class="form-control" id="show-duration" name="duration" value=""
+							placeholder="Show Duration(mins)" autocomplete="off" min=10 max=180 required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-price" class="form-label">Price</label>
+						{% if show is defined %}
+						<input type="text" class="form-control" id="show-price" name="price" value="{{ show.price }}"
+							placeholder="Price(INR) per ticket" autocomplete="off" min=100 max=500 required>
+						{% else %}
+						<input type="text" class="form-control" id="show-price" name="price" value=""
+							placeholder="Price(INR) per ticket" autocomplete="off" min=100 max=500 required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-rating" class="form-label">Rating</label>
+						{% if show is defined %}
+						<input type="text" class="form-control" id="show-rating" name="rating" value="{{ show.rating }}"
+							placeholder="Show Rating" autocomplete="off" min="0.5" max="5.0" required>
+						{% else %}
+						<input type="text" class="form-control" id="show-rating" name="rating" value=""
+							placeholder="Show Rating" autocomplete="off" min="0.5" max="5.0" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-tags" class="form-label">Tags</label>
+						{% if show is defined %}
+						<select name="tags" multiple>
+							<option value="">Select Tag(s)</option>
+							{% set is_selected="" %}
+							{% for tag in tags %}
+							{% if tag in show.tags %}
+							{% set is_selected="selected" %}
+							{%endif%}
+							<option value="{{ tag }}" {{is_selected}}>{{ tag }}</option>
+							{% endfor %}
+						</select>
+						{% else %}
+						<select name="tags" multiple>
+							<option value="">Select Tag(s)</option>
+							{% for tag in tags %}
+							<option value="{{ tag }}">{{ tag }}</option>
+							{% endfor %}
+						</select>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-date" class="form-label">Show Date</label>
+						{% if show is defined %}
+						<input type="date" class="form-control" id="show-date" name="show-date"
+							value="{{ show.show_time.strftime("%Y-%m-%d") }}" placeholder="Date of Show" autocomplete="off"
+							required>
+						{% else %}
+						<input type="date" class="form-control" id="show-date" name="show-date" value=""
+							placeholder="Date of Show" autocomplete="off" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="show-time" class="form-label">Show Time</label>
+						{% if show is defined %}
+						<input type="time" class="form-control " id="show-time" name="show-time"
+							value="{{ show.show_time.strftime("%H:%M") }}" placeholder="Show Time" min="08:00"
+							max="23:00" required>
+						{% else %}
+						<input type="time" class="form-control" id="show-time" name="show-time" value=""
+							placeholder="Show Time" min="08:00" max="23:00" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="rows" class="form-label">Rows</label>
+						{% if show is defined %}
+						<input type="number" class="form-control" id="rows" name="rows" value="{{ show.n_rows }}"
+							placeholder="Number of Rows" min="5" max="15" required>
+						{% else %}
+						<input type="number" class="form-control" id="rows" name="rows" value=""
+							placeholder="Number of Rows" min="5" max="15" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="seats" class="form-label">Seats per Row</label>
+						{% if show is defined %}
+						<input type="number" class="form-control" id="seats" name="seats" value="{{ show.n_seats }}"
+							placeholder="Seats per Row" min="10" max="20" required>
+						{% else %}
+						<input type="number" class="form-control" id="seats" name="seats" value=""
+							placeholder="Seats per Row" min="10" max="20" required>
+						{% endif %}
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4">
+						<label for="file" class="form-label">Banner</label>
+						<input type="file" id="file" name="file" value="" placeholder="Choose Banner File">
+					</div>
+				</div>
+				<div class="row mb-3">
+					<div class="col-md-4" style="text-align: center;">
+						{% if show is defined %}
+						<input type="submit" name="update-show" value="Update">
+						{% else %}
+						<input type="submit" name="add-show" value="Add Show">
+						{% endif %}
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
-</div>
 </div>
 {% endblock content %}

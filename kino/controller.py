@@ -230,8 +230,8 @@ def show_add(venue_id):
         return render_template("admin/show_add.html", tags=tags, venue_id=venue_id)
     if request.method == "POST":
         print("== SHOW ADD ==")
-        s_date = request.form["show_date"]
-        s_time = request.form["show_time"]
+        s_date = request.form["show-date"]
+        s_time = request.form["show-time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
         dt = datetime.combine(s_dt, s_tm)
@@ -291,28 +291,31 @@ def show_edit(venue_id, show_id):
     show = Show.query.filter_by(id=show_id).first()
     if request.method == "GET":
         if show is not None:
-            return render_template("admin/show_add.html", show=show)
+            tags = Tag.query.all()
+            if tags is None:
+                abort(404)
+            return render_template("admin/show_add.html",tags=tags, show=show)
         else:
             abort(404)
 
     if request.method == "POST":
-        s_date = request.form["show_date"]
-        s_time = request.form["show_time"]
+        s_date = request.form["show-date"]
+        s_time = request.form["show-time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
         dt = datetime.combine(s_dt, s_tm)
         print(dt, type(dt))
 
-        show.title = (request.form["title"],)
-        show.language = (request.form["language"],)
-        show.duration = (request.form["duration"],)
-        show.price = (request.form["price"],)
-        show.popularity = (0,)  # this should updated based on user ratings
-        show.show_time = (dt,)  # datetime.combine(s_dt, s_tm),
-        show.n_rows = (request.form["rows"],)
-        show.n_seats = (request.form["seats"],)
-        show.venue_id = (venue_id,)
-        show.show_img = ("default.png",)
+        show.title = request.form["title"]
+        show.language = request.form["language"]
+        show.duration = request.form["duration"]
+        show.price = request.form["price"]
+        # show.popularity = 0  # this should updated based on user ratings
+        show.show_time = datetime.combine(s_dt, s_tm)
+        show.n_rows = request.form["rows"]
+        show.n_seats = request.form["seats"]
+        show.venue_id = venue_id
+        show.show_img = "default.png"
 
         db.session.add(show)
         db.session.flush()
