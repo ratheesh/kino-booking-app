@@ -1,19 +1,22 @@
 
-.container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
 .content .container .row {
     justify-content: center;
     width:100%;
 }
 
-.content .container .row .table {
+#profile_img {
+    object-fit: contain;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.content .container .row table {
     justify-content: center;
 }
 
 .card-form {
   display: flex;
-  align-content: center;
+  justify-content: center;
 }

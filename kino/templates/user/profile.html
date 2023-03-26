@@ -11,38 +11,46 @@
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<h2 style="text-align: center;">{{ user.name|capitalize }}'s Profile</h2>
-		<div class="row g-5">
-		<table class="table table-borderless">
-			<tbody>
-			  <tr>
-				<td>Name</td>
-				<td>{{ user.name }}</td>
-			  </tr>
-			  <tr>
-				<td>User Name</td>
-				<td>{{ user.username }}</td>
-			  </tr>
-			  <tr>
-				<td>Role</td>
-				<td>{{ user.role }}</td>
-			  </tr>
-			  <tr>
-				<td>Created on</td>
-				<td>{{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</td>
-			  </tr>
-			  <tr>
-				<td>Created on</td>
-				<td>{{ user.updated_timestamp.strftime('%d %b %Y %H:%M') }}</td>
-			  </tr>
-			</tbody>
-		  </table>
+		<div class="row g-3 mt-3">
+			<h2 style="text-align: center;">{{ user.name|capitalize }}'s Profile</h2>
+			<div class="row g-1">
+				<div style="text-align: center;">
+					<img id="profile_img" src="{{ url_for('static', filename='img/profile/' + user.profile_img) }}"
+						class="card-img-top" alt="profile image" />
+				</div>
+			</div>
+			<div class="row g-3">
+				<table class="table table-borderless">
+					<tbody>
+						<tr>
+							<td>Name</td>
+							<td>{{ user.name }}</td>
+						</tr>
+						<tr>
+							<td>User Name</td>
+							<td>{{ user.username }}</td>
+						</tr>
+						<tr>
+							<td>Role</td>
+							<td>{{ user.role }}</td>
+						</tr>
+						<tr>
+							<td>Created on</td>
+							<td>{{ user.created_timestamp.strftime('%d %b %Y %H:%M') }}</td>
+						</tr>
+						<tr>
+							<td>Created on</td>
+							<td>{{ user.updated_timestamp.strftime('%d %b %Y %H:%M') }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<form class="card-form" method="post">
+				<button type="submit" class="btn btn-secondary" name="edit-profile">Edit Profile</button>
+				&nbsp; &nbsp;
+				<button type="submit" class="btn btn-success" name="go-back">Goto Home</button>
+			</form>
 		</div>
-		<form class="card-form" method="post">
-			<button type="submit" class="btn btn-secondary" name="edit-profile">Edit Profile</button>
-			&nbsp; &nbsp;
-			<button type="submit" class="btn btn-success" name="go-back">Goto Home</button>
-		</form>
 	</div>
 </div>
 {% endblock content%}
