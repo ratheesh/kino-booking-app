@@ -60,7 +60,8 @@ def admin():
     else:
         venue_count=Venue.query.count()
         show_count=Show.query.count()
-        return render_template("admin/index.html", venue_count=venue_count, show_count=show_count)
+        users_count=User.query.count()
+        return render_template("admin/index.html",users_count=users_count, venue_count=venue_count, show_count=show_count)
 
 
 @controller.route("/admin/venue", methods=["GET", "POST"])
@@ -699,7 +700,7 @@ def login():
         if not user:
             flash(f"User {username} does not exist!", "danger")
             return redirect(url_for("controller.login"))
-        if not user or not check_password_hash(user.password, password):
+        if not check_password_hash(user.password, password):
             flash("User/password not matching!", "danger")
             return redirect(url_for("controller.login"))
         else:
