@@ -3,7 +3,7 @@
 {% block style %}
 {{ super() }}
 <link rel="stylesheet" href="{{ url_for('static', filename='style/admin/show.css') }}" type="text/css"/>
-<link rel="stylesheet" href="{{ url_for('static', filename='style/user/index.css') }}" type="text/css"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/user/search.css') }}" type="text/css"/>
 {% endblock style %}
 {% block title %}
 Search
@@ -13,18 +13,47 @@ Search
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<br>
+		<div class="row g3 mt-3">
+			<div class="row mb-3 pt-3 justify-content-center border ">
+				<div class="col-4 md-3">
+					<label class="form-label" for="start-time">Start Time</label>
+					<input class="form-control" type="datetime-local" id="start-time">
+				</div>
+				<div class="col-4 md-3">
+					<label class="form-label" for="end-time">End Time</label>
+					<input class="form-control" type="datetime-local" id="end-time">
+				</div>
+				<div class="col-4 md-3">
+					<label class="form-label" for="search-by-time">&nbsp;</label>
+					<div>
+					<input class="btn btn-secondary" type="submit" id="search-date" name="search-by-time" value="Search">
+					</div>
+				</div>
+			</div>
 		<h3>You searched for <em style="color:red;">{{ searched }}</em></h3>
-		<h4>Venue based</h4>
-		{% for venue in venues %}
-		{% endfor %}
-		<hr>
-		<h4>Show based</h4>
+		{% for venue, shows in venue_shows.items() %}
+			<h3 class="named-line">&nbsp;&nbsp; {{ venue|capitalize }}&nbsp;&nbsp; </h3>
 		{% for show in shows %}
-		<div class="kard-container">
+		<div class="row g-3">
 			{{ macros.display_show(show) }}
 		</div>
 		{% endfor %}
+		{% endfor %}
+		{% if shows|length != 0 %}
+		<h3 class="named-line">&nbsp;&nbsp; Shows &nbsp;&nbsp; </h3>
+		{% for show in shows %}
+		<div class="row g-3">
+			{{ macros.display_show(show) }}
+		</div>
+		{% endfor %}
+		{% endif%}
+		{% for tag,shows in tag_shows.items() %}
+			<h3 class="named-line">&nbsp;&nbsp; {{ tag|capitalize }}&nbsp;&nbsp; </h3>
+			{% for show in shows %}
+				{{ macros.display_show(show) }}
+			{% endfor %}
+		{% endfor %}
+		</div>
 	</div>
 </div>
 {% endblock content %}

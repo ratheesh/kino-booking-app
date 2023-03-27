@@ -492,6 +492,10 @@ def book(show_id):
         return redirect(url_for("controller.home"))
 
     if request.method == "POST":
+        if show.seats >= (show.n_rows * show.n_seats):
+            flash("Show is already housefull!, Try next available show!", "danger")
+            return redirect(url_for("controller.home"))
+
         sel_seats = request.form.getlist("seat")
         print(sel_seats)
         if sel_seats == []:
@@ -632,6 +636,9 @@ def search():
         )
         .all()
     )
+    venue_shows = {}
+    for venue in venues:
+        venue_shows[venue.name] = venue.shows
 
     shows = (
         db.session.query(Show).filter(
@@ -640,15 +647,17 @@ def search():
                 Show.language.ilike("%" + search + "%"),
                 Show.rating.ilike("%" + search + "%"),
                 Show.popularity.ilike("%" + search + "%"),
-                # Show.tags.ilike("%" + search + "%"),
             )
         )
     ).all()
 
-    # tags = db.session.query(Tag).filter(Tag.name.ilike("%" + search + "%")).all()
+    tag_shows = {}
+    search_tags = db.session.query(Tag).filter( Tag.name.ilike("%" + search + "%")).all()
+    for tag in search_tags:
+        tag_shows[tag.name] = tag.shows
 
-    print("Search Results: ", venues, shows)
-    return render_template("/search.html", searched=search, venues=venues, shows=shows)
+    print("Search Results: ", venues, shows, tag_shows)
+    return render_template("/search.html", searched=search, venue_shows=venue_shows, shows=shows, tag_shows=tag_shows)
 
 
 @controller.route("/signup", methods=["GET", "POST"])
