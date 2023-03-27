@@ -492,7 +492,7 @@ def book(show_id):
         return redirect(url_for("controller.home"))
 
     if request.method == "POST":
-        if show.seats >= (show.n_rows * show.n_seats):
+        if len(show.seats) >= (show.n_rows * show.n_seats):
             flash("Show is already housefull!, Try next available show!", "danger")
             return redirect(url_for("controller.home"))
 
@@ -602,36 +602,20 @@ def profile_delete():
 @login_required
 @user_only
 def search():
-    search = request.args.get("search")
-    print("Searched:", search)
-    if search is None:
-        flash("search query is empty", "warning")
+    query = request.args.get("search")
+
+    print(query, type(query))
+
+    if query is None:
+        flash("Search query is empty", "warning")
         return redirect(url_for("controller.home"))
 
-    # venue_name = (
-    #     db.session.query(Venue).filter(Venue.name.ilike("%" + search + "%")).all()
-    # )
-    # venue_place = (
-    #     db.session.query(Venue).filter(Venue.place.ilike("%" + search + "%")).all()
-    # )
-    # show_title = (
-    #     db.session.query(Show).filter(Show.title.ilike("%" + search + "%")).all()
-    # )
-    # show_language = (
-    #     db.session.query(Show).filter(Show.language.ilike("%" + search + "%")).all()
-    # )
-    # show_rating = (
-    #     db.session.query(Show).filter(Show.rating.ilike("%" + search + "%")).all()
-    # )
-    # show_popularity = (
-    #     db.session.query(Show).filter(Show.popularity.ilike("%" + search + "%")).all()
-    # )
     venues = (
         db.session.query(Venue)
         .filter(
             or_(
-                Venue.name.ilike("%" + search + "%"),
-                Venue.place.ilike("%" + search + "%"),
+                Venue.name.ilike("%" + query + "%"),
+                Venue.place.ilike("%" + query + "%"),
             )
         )
         .all()
@@ -643,21 +627,21 @@ def search():
     shows = (
         db.session.query(Show).filter(
             or_(
-                Show.title.ilike("%" + search + "%"),
-                Show.language.ilike("%" + search + "%"),
-                Show.rating.ilike("%" + search + "%"),
-                Show.popularity.ilike("%" + search + "%"),
+                Show.title.ilike("%" + query + "%"),
+                Show.language.ilike("%" + query + "%"),
+                Show.rating.ilike("%" + query + "%"),
+                Show.popularity.ilike("%" + query + "%"),
             )
         )
     ).all()
 
     tag_shows = {}
-    search_tags = db.session.query(Tag).filter( Tag.name.ilike("%" + search + "%")).all()
+    search_tags = db.session.query(Tag).filter( Tag.name.ilike("%" + query + "%")).all()
     for tag in search_tags:
         tag_shows[tag.name] = tag.shows
 
-    print("Search Results: ", venues, shows, tag_shows)
-    return render_template("/search.html", searched=search, venue_shows=venue_shows, shows=shows, tag_shows=tag_shows)
+    print("Search Results: ", venue_shows, shows, tag_shows)
+    return render_template("/search.html", searched=query, venue_shows=venue_shows, shows=shows, tag_shows=tag_shows)
 
 
 @controller.route("/signup", methods=["GET", "POST"])

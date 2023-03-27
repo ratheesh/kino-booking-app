@@ -14,45 +14,57 @@ Search
 <div class="content">
 	<div class="container">
 		<div class="row g3 mt-3">
-			<div class="row mb-3 pt-3 justify-content-center border ">
-				<div class="col-4 md-3">
-					<label class="form-label" for="start-time">Start Time</label>
-					<input class="form-control" type="datetime-local" id="start-time">
-				</div>
-				<div class="col-4 md-3">
-					<label class="form-label" for="end-time">End Time</label>
-					<input class="form-control" type="datetime-local" id="end-time">
-				</div>
-				<div class="col-4 md-3">
-					<label class="form-label" for="search-by-time">&nbsp;</label>
-					<div>
-					<input class="btn btn-secondary" type="submit" id="search-date" name="search-by-time" value="Search">
+		<h3>Search Results for <em style="color:red;">{{ searched }}</em></h3>
+			<form class="row g-5" method="get">
+		<div class="row mb-3 mt-3 py-3 justify-content-center border ">
+				<div class="row g3 mt3 justify-content-center">
+					<div class="col-8 my-3">
+						<input class="form-control" type="search" name="search" , placeholder="venues/shows/categories">
 					</div>
 				</div>
-			</div>
-		<h3>You searched for <em style="color:red;">{{ searched }}</em></h3>
+				<div class="col-2 text-center">
+					<input class="btn btn-secondary" type="submit" id="search-date" name="" value="Search">
+				</div>
+		</div>
+			</form>
+
+		{% if time_shows is not none %}
+		{% for show in time_shows %}
+			<h3 class="named-line">&nbsp;&nbsp; Time based results &nbsp;&nbsp; </h3>
+		<div class="row g-3">
+			{{ macros.display_show(show) }}
+		</div>
+		{% endfor %}
+		{% endif %}
+
+		{% if venue_shows is not none %}
 		{% for venue, shows in venue_shows.items() %}
 			<h3 class="named-line">&nbsp;&nbsp; {{ venue|capitalize }}&nbsp;&nbsp; </h3>
 		{% for show in shows %}
-		<div class="row g-3">
 			{{ macros.display_show(show) }}
-		</div>
 		{% endfor %}
 		{% endfor %}
+		{% endif %}
+		
+		{% if shows is not none %}
 		{% if shows|length != 0 %}
 		<h3 class="named-line">&nbsp;&nbsp; Shows &nbsp;&nbsp; </h3>
 		{% for show in shows %}
-		<div class="row g-3">
 			{{ macros.display_show(show) }}
-		</div>
 		{% endfor %}
 		{% endif%}
+		{% endif%}
+
+		{% if tag_shows is not none %}
 		{% for tag,shows in tag_shows.items() %}
+		{% if shows|length != 0 %}
 			<h3 class="named-line">&nbsp;&nbsp; {{ tag|capitalize }}&nbsp;&nbsp; </h3>
 			{% for show in shows %}
 				{{ macros.display_show(show) }}
 			{% endfor %}
+		{% endif %}
 		{% endfor %}
+		{% endif %}
 		</div>
 	</div>
 </div>
