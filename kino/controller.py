@@ -563,6 +563,8 @@ def profile():
         if request.method == "POST":
             if "edit-profile" in request.form:
                 return redirect(url_for("controller.profile_edit"))
+            elif "delete-profile" in request.form:
+                return redirect(url_for("controller.profile_delete"))
             else:
                 return redirect(url_for("controller.home"))
 
@@ -615,8 +617,21 @@ def profile_edit():
 @login_required
 @user_only
 def profile_delete():
-    pass
+    if request.method == "POST":
+        if 'delete-profile' in request.form:
+            try:
+                db.session.delete(current_user)
+                db.session.commit()
+            except:
+                flash("Unable to delete User", "danger")
+                return redirect(url_for("controller.home"))
+            flash("User deleted successfully", "success")
+        else:
+            return redirect(url_for("controller.home"))
+        return redirect(url_for("controller.logout"))
 
+    else:
+        return render_template("user/delete.html")
 
 @controller.route("/search", methods=["GET", "POST"])
 @login_required
