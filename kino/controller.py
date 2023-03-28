@@ -626,10 +626,9 @@ def profile_delete():
                 flash("Unable to delete User", "danger")
                 return redirect(url_for("controller.home"))
             flash("User deleted successfully", "success")
+            return redirect(url_for("controller.logout"))
         else:
             return redirect(url_for("controller.home"))
-        return redirect(url_for("controller.logout"))
-
     else:
         return render_template("user/delete.html")
 
@@ -750,7 +749,7 @@ def login():
         else:
             login_user(user)
             print(f"{user.username} logged in")
-            flash(f"Welcome {user.name.capitalize()}!", "success")
+            flash(f"Welcome {user.name.title()}!", "success")
             if current_user.username == "admin":
                 return redirect(url_for("controller.admin"))
             else:
