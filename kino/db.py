@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash
+from sqlalchemy import func
+
 
 Base = declarative_base()
 db = SQLAlchemy()
@@ -124,7 +126,7 @@ def create_admin_user(db):
         name="Admin",
         username="admin",
         role="admin",
-        password=generate_password_hash("iitm"),
+        password=generate_password_hash("admin"),
         created_timestamp=datetime.now(),
         updated_timestamp=datetime.now(),
     )
