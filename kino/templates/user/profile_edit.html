@@ -14,18 +14,17 @@ Update {{ current_user.name|capitalize }} Profile
 <div class="content">
 	<div class="container">
 		<div class="row g-3">
-			<form class="row g-5" method="POST" enctype="multipart/form-data">
+			<form class="row g-3" method="POST" enctype="multipart/form-data">
 				{% with messages = get_flashed_messages(with_categories=true) %}
 				{% for category, message in messages %}
 				<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
 				{% endfor %}
 				{% endwith %}
-				<h2 style="text-align: center;">Update {{ user.name|capitalize }}'s Profile</h2>
+				<h3 class="text-center">Update {{ user.name|capitalize }}'s Profile</h3>
 				<div class="row mb-3">
 					<div class="col-md-4">
 						<label for="name" class="form-label">Name</label>
-						<input type="text" class="form-control" id="name" name="name" value="{{current_user.name}}"
-							placeholder="Name" autocomplete="off" required>
+						<input type="text" class="form-control" id="name" name="name" value="{{current_user.name}}" placeholder="Name" autocomplete="off" required>
 					</div>
 				</div>
 				<div class="row mb-3">
@@ -51,13 +50,15 @@ Update {{ current_user.name|capitalize }} Profile
 				</div>
 				<div class="row mb-3">
 					<div class="col-md-4">
-						<h6>Role: {{ user.role }}</h6>
+						<label for="role" class="form-label">Role</label>
+						<input type="text" class="form-control" id="role" name="role"
+							value="{{current_user.role}}" placeholder="Role" autocomplete="off" disabled>
 					</div>
 				</div>
 				<div class="row mb-3">
 					<div class="col-md-4">
-						<input type="file" name="file" placeholder="Upload Profile Image"
-							accept="image/gif, image/jpeg, image/jpg, image/png" />
+							<label for="form-file" class="form-label">Profile Image</label>
+							<input type="file" class="form-control form-control-sm" id="form-file" name="file" placeholder="Upload Profile Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 					</div>
 				</div>
 				<div class="row mb-3" id="formbtn">

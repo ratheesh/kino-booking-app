@@ -42,17 +42,18 @@ Add Venue
 					</div>
 					<div class="row mb-3">
 						<div class="col-md-4">
-							<input type="file" name="file" placeholder="Upload Profile Image" value=""
-								autocomplete="off" accept="image/jpeg, image/jpg, image/png" />
+							<label for="form-file" class="form-label">Venue Image</label>
+							<input type="file" class="form-control form-control-sm" id="form-file" name="file" placeholder="Upload Venue Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 						</div>
 					</div>
 					<div id="formbtn" class="row mb-3">
 						<div class="col-md-4">
 							{% if venue is defined %}
-							<input type="submit" name="submit" value="Update">
+							<input type="submit" class="btn btn-success" name="submit" value="Update">
 							{% else %}
-							<input type="submit" name="submit" value="Add Venue">
+							<input type="submit" class="btn btn-success" name="submit" value="Add Venue">
 							{% endif %}
+							<a href="/admin/venue" class="btn btn-secondary">Back to Venues</a>
 						</div>
 					</div>
 				</form>

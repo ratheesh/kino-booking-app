@@ -175,16 +175,19 @@ Add Show
 				</div>
 				<div class="row mb-3">
 					<div class="col-md-4">
-						<label for="file" class="form-label">Banner</label>
-						<input type="file" id="file" name="file" value="" placeholder="Choose Banner File">
+						<label for="file" class="form-label">Show Banner Image</label>
+						<input type="file" class="form-control form-control-sm" id="file" name="file" placeholder="Upload Show Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 					</div>
 				</div>
 				<div class="row mb-3">
 					<div class="col-md-4" style="text-align: center;">
 						{% if show is defined %}
-						<input type="submit" name="update-show" value="Update">
+						<input type="submit" class="btn btn-success" name="update-show" value="Update">
 						{% else %}
-						<input type="submit" name="add-show" value="Add Show">
+						<input type="submit" class="btn btn-success" name="add-show" value="Add Show">
+						{% endif %}
+						{% if venue_id is not none %}
+						<a href="/admin/{{venue_id}}/show" class="btn btn-secondary">Back to Shows</a>
 						{% endif %}
 					</div>
 				</div>
