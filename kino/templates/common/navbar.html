@@ -71,12 +71,11 @@
     </nav>
     {% with messages = get_flashed_messages(with_categories=true) %} {% for
     category, message in messages %}
-    <div
-      class="alert alert-{{category}}"
-      style="text-align:center;font-weight:700;margin:0px"
-    >
+    <div class="alert alert-{{category}} alter-dismissible fade show text-center m-auto font-weight-bolder" role="alert">
       {{ message }}
+      <button class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    {% endfor %} {% endwith %}
+    {% endfor %}
+    {% endwith %}
   </body>
 </html>

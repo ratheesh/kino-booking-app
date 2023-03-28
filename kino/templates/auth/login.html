@@ -8,9 +8,12 @@
 <div class="content">
 	<div class="container">
 		<div class="row g-3">
-			{% with messages = get_flashed_messages(with_categories=true) %}
-			{% for category, message in messages %}
-			<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+			{% with messages = get_flashed_messages(with_categories=true) %} {% for
+			category, message in messages %}
+			<div class="alert alert-{{category}} alter-dismissible fade show text-center m-auto font-weight-bolder" role="alert">
+			{{ message }}
+			<button class="btn-close" data-bs-dismiss="alert"></button>
+			</div>
 			{% endfor %}
 			{% endwith %}
 			<form class="row g-5" action="{{ url_for('controller.login') }}" method="post">
