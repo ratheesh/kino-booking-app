@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash
-from sqlalchemy import func
+from sqlalchemy import PrimaryKeyConstraint, func
 
 
 Base = declarative_base()
@@ -24,15 +24,10 @@ class User(db.Model, UserMixin):
     updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     bookings = db.relationship("Booking", backref="user", cascade="all, delete-orphan")
+    likes = db.relationship("Like", backref="user", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
         return self.username
-
-
-# @login_manager.user_loader
-# def load_user(id):
-#     return User.query.get(int(id))
-
 
 class Venue(db.Model):
     __tablename__ = "venue"
@@ -54,6 +49,14 @@ show_tags = db.Table(
     db.Column("tag_id", db.Integer, db.ForeignKey("tag.id")),
 )
 
+class Like(db.Model):
+    id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    show_id = db.Column(db.Integer, db.ForeignKey("show.id", ondelete="CASCADE"), nullable=False)
+
+    def __repr__(self) -> str:
+        return str(self.id)
+
 
 class Show(db.Model):
     __tablename__ = "show"
@@ -71,10 +74,13 @@ class Show(db.Model):
     )  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.png")
 
-    venue_id = db.Column(db.Integer, db.ForeignKey("venue.id", ondelete="CASCADE"))
+    venue_id = db.Column(db.Integer, db.ForeignKey("venue.id", ondelete="CASCADE"), nullable=False)
     tags = db.relationship("Tag", secondary=show_tags, backref="shows")
 
     seats = db.relationship("Seat", backref="show", cascade="all,delete-orphan")
+    bookings = db.relationship("Booking", backref="show", cascade="all,delete-orphan")
+
+    likes = db.relationship("Like", backref="show", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:
         return self.title
@@ -94,27 +100,22 @@ class Seat(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     seat = db.Column(db.String(4), nullable=False)
 
-    show_id = db.Column(db.Integer, db.ForeignKey("show.id", ondelete="CASCADE"))
-    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id", ondelete="CASCADE"))
+    show_id = db.Column(db.Integer, db.ForeignKey("show.id", ondelete="CASCADE"), nullable=False)
+    booking_id = db.Column(db.Integer, db.ForeignKey("booking.id", ondelete="CASCADE"), nullable=False)
 
     def __repr__(self) -> str:
         return self.seat
 
 
-# class Likes(db.Model):
-#     __tablename__ = "likes"
-#     isliked = db.Column(db.Boolean, nullable=False)
-
-
 class Booking(db.Model):
     __tablename__ = "booking"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    booking_time = db.Column(db.DateTime, nullable=False)
+    booking_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
     # time = db.Column(db.String(64), nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"))
-    # show_id = db.Column(db.Integer, db.ForeignKey("show.id"))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    show_id = db.Column(db.Integer, db.ForeignKey("show.id", ondelete="CASCADE"), nullable=False)
     seats = db.relationship("Seat", backref="booking", cascade="all,delete-orphan")
 
     def __repr__(self) -> str:

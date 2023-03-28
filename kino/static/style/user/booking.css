@@ -17,6 +17,7 @@
 .card-text {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .card-details {
@@ -35,4 +36,15 @@
 
 .card-body .card-details {
   display: flex;
+}
+
+.seat {
+  margin: 1px;
+  padding-right: 2px;
+  padding-left: 2px;
+  text-align: center;
+  font-size: 0.9em;;
+  border-radius: 3px;
+  color:white;
+  background-color: slategray;
 }

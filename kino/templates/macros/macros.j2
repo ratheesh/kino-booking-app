@@ -105,28 +105,56 @@
 
 {# show booking #}
 {% macro display_booking(booking) %}
-<div class="card mb-3" style="max-width: 540px;">
+<div class="card mb-3">
 	<div class="row g-0">
 		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.seats[0].show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
+			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
-			<h6> Ticket: #{{ booking.id }}</h6>
-				<h6 class="card-title text-center">{{ booking.seats[0].show.title }}({{ booking.seats[0].show.language }})</h6>
+				<div class="card-title d-flex justify-content-between align-times-center">
+				<span> Ticket: <span class="font-weight-bolder">#{{ booking.id }}</span></span>
+				<span>Booked on: {{ booking.booking_time.strftime("%a %d %b %Y %I.%M%p") }}</span>
+				</div>
+				
+				<h5 class="card-title text-center mt-3 font-weight-bolder">
+				{{ booking.show.title }}({{ booking.show.language }})</h5>
+				<hr>
+
+				<div class="card-text">
+				<i class="fa fa-map-marker"></i>&nbsp;{{ booking.show.venue.name }},{{ booking.show.venue.place }}
+				</div>
+
+				<div class="card-text">
+					&#x1F4C5;{{ booking.show.show_time.strftime("%a %d %b %Y") }}
+				</div>
+				<div class="card-text">
+					&#x1F551;{{ booking.show.show_time.strftime("%I.%M%p") }},{{ booking.show.duration }}mins
+				</div>
+				<div class="card-text mb-1">
+					<label class="font-weight-bold m-0">Seats({{booking.seats|length}}): </label>
+					<p class="m-0" style="font-family: monospace">
+					{% for seat in booking.seats %}
+						<span class="seat">{{seat.seat}}</span>
+					{% endfor %}
+					</p>
+				</div>
 				<hr>
 				<div class="card-text">
-					{{ booking.seats[0].show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ booking.seats[0].show.duration }}mins
+					<span class="font-weight-bold">Total Ticket Price:&nbsp;&#x20B9; </span>{{ booking.final_amount }}/-
 				</div>
-				<div class="card-text">
-					<br>
-					<label>Seats: </label>
-					{% for seat in booking.seats %}
-						<span>&nbsp;{{ seat.seat }}</span>
-					{% endfor %}
+				<div class="d-flex flex-column items-end">
+					<form class="align-end" method="post">
+					<span class="font-weight-bold">Like </span>
+					<button style="border:none;padding:0;background:none;" name="like" type="submit" value="{{booking.show_id}}">
+					{% if booking.show.like %}
+					<i class="bi bi-hand-thumbs-up"></i>
+					{% else %}
+					<i class="bi bi-hand-thumbs-up-fill"></i>
+					{%  endif %}
+					</button>
+					</form>
 				</div>
-				<br>
-				<p class="card-text"><small class="text-muted">{{ booking.seats[0].show.venue.name }},{{ booking.seats[0].show.venue.place }}</small></p>
 			</div>
 		</div>
 	</div>
@@ -138,16 +166,16 @@
 <div class="card mb-3" style="max-width: 540px;">
 	<div class="row g-0">
 		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.seats[0].show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
+			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
 			<h6> Ticket: #{{ booking.id }}</h6>
-				<h6 class="card-title text-center">{{ booking.seats[0].show.title }}({{ booking.seats[0].show.language }})</h6>
+				<h6 class="card-title text-center">{{ booking.show.title }}({{ booking.show.language }})</h6>
 				<hr>
-				<p class="card-text"><i class="fa fa-map-marker"></i><small>{{ booking.seats[0].show.venue.name }},{{ booking.seats[0].show.venue.place }}</small></p>
+				<p class="card-text"><i class="fa fa-map-marker"></i><small>{{ booking.show.venue.name }},{{ booking.show.venue.place }}</small></p>
 				<div class="card-text">
-					{{ booking.seats[0].show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ booking.seats[0].show.duration }}mins
+					{{ booking.show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ booking.show.duration }}mins
 				</div>
 				<div class="card-text">
 					<br>

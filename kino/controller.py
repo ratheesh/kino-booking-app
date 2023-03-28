@@ -8,7 +8,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import func, or_
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from .db import Booking, Seat, Show, Tag, User, Venue, db
+from .db import Booking, Seat, Show, Tag, User, Venue, db, Like
 
 # from .forms import ShowForm
 
@@ -469,7 +469,26 @@ def gen_seatingmap(show):
 @user_only
 def bookings():
     if request.method == "POST":
-        pass
+        if "like" in request.form:
+            show_id=request.form["like"]
+            print(show_id)
+            show=Show.query.filter_by(id=show_id).first()
+            like = Like.query.filter_by(user_id=current_user.id, show_id=show.id).first()
+            if not show:
+                flash("show does not exist!", "danger")
+                _bookings = Booking.query.filter_by(user_id=current_user.id).all()
+                return render_template("user/bookings.html", bookings=_bookings)
+            elif like:
+                db.session.delete(like)
+                db.session.commit()
+                print('like deleted')
+            else:
+                like=Like(user_id=current_user.id, show_id=show_id)
+                db.session.add(like)
+                db.session.commit()
+                print('like created')
+            _bookings = Booking.query.filter_by(user_id=current_user.id).all()
+            return render_template("user/bookings.html", bookings=_bookings)
     else:
         _bookings = Booking.query.filter_by(user_id=current_user.id).all()
         return render_template("user/bookings.html", bookings=_bookings)
@@ -511,6 +530,7 @@ def book(show_id):
                 booking_time=datetime.now(),
                 final_amount=len(sel_seats) * show.price,
                 user_id=current_user.id,
+                show_id=show.id,
             )
             db.session.add(booking)
             db.session.flush()
