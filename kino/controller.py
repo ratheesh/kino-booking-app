@@ -416,20 +416,6 @@ def home():
 
     return render_template("user/index.html", data=data)
 
-
-# test data
-# B -> Booked
-# U -> unbooked(available for booking)
-# T -> reserved but not confirmed(used in PUT/transient state)
-# seating_map = {
-#     "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-#     "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-#     "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-#     "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
-#     "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-# }
-
-
 @controller.route("/<int:booking_id>/checkout", methods=["GET", "POST"])
 @login_required
 @user_only
@@ -440,29 +426,6 @@ def checkout(booking_id=None):
         if booking_id:
             booking = Booking.query.get_or_404(booking_id)
             return render_template("/user/checkout.html", booking=booking)
-
-
-def gen_seatingmap(show):
-    print(show)
-    init_row = "A"
-    # map = dict.fromkeys(
-    #     [chr(ord("A") + i) for i in range(show.n_rows)],
-    #     ["U" for _ in range(show.n_seats)],
-    # )
-    map = {}
-    for i in range(show.n_rows):
-        map[chr(ord(init_row) + i)] = ["U" for _ in range(show.n_seats)]
-
-    for seat in show.seats:
-        print("seat:", seat)
-        col = int(seat.seat[1:])
-        row = seat.seat[0]
-        map[row][col - 1] = "B"
-        # print(map[row])
-
-    # print(map)
-    return map
-
 
 @controller.route("/bookings", methods=["GET", "POST"])
 @login_required
@@ -493,6 +456,38 @@ def bookings():
         _bookings = Booking.query.filter_by(user_id=current_user.id).all()
         return render_template("user/bookings.html", bookings=_bookings)
 
+# test data
+# B -> Booked
+# U -> unbooked(available for booking)
+# T -> reserved but not confirmed(used in PUT/transient state)
+# seating_map = {
+#     "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
+# }
+
+def gen_seatingmap(show):
+    print(show)
+    init_row = "A"
+    # map = dict.fromkeys(
+    #     [chr(ord("A") + i) for i in range(show.n_rows)],
+    #     ["U" for _ in range(show.n_seats)],
+    # )
+    map = {}
+    for i in range(show.n_rows):
+        map[chr(ord(init_row) + i)] = ["U" for _ in range(show.n_seats)]
+
+    for seat in show.seats:
+        print("seat:", seat)
+        col = int(seat.seat[1:])
+        row = seat.seat[0]
+        map[row][col - 1] = "B"
+        # print(map[row])
+
+    # print(map)
+    return map
 
 @controller.route("/<int:show_id>/book", methods=["GET", "POST"])
 @login_required
