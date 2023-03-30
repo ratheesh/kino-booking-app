@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from flask import Blueprint, make_response
-from flask_httpauth import HTTPBasicAuth
 from flask_restful import (NotFound, Resource, fields, marshal_with, reqparse,
                            request)
 from werkzeug.exceptions import HTTPException
@@ -9,11 +8,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Booking, Show, Tag, User, Venue, db
 
-# from flask_sqlalchemy import SQLAlchemy
-
-auth = HTTPBasicAuth()
 api = Blueprint("api", __name__)
-
 hapi = None
 
 
@@ -31,27 +26,6 @@ class NotFoundError(HTTPException):
     def __init__(self, msg=""):
         self.response = make_response(msg, 404)
 
-
-@auth.verify_password
-def verify_password(username, password):
-    print("user:", username, "pass: ", password)
-    user = db.session.query(User).filter(User.username == username).first()
-    print(user)
-    if username == user.username and check_password_hash(user.password, password):
-        print("authentication successful!")
-        return username
-    else:
-        print("authentication failure")
-
-
-@auth.get_user_roles
-def get_user_roles(user: User):
-    if user.name == "admin":
-        return "admin"
-    else:
-        return "user"
-
-
 user_request_parse = reqparse.RequestParser()
 user_request_parse.add_argument("name", type=str)
 user_request_parse.add_argument("username", type=str)
@@ -62,24 +36,27 @@ user_response_fields = {
     "name": fields.String,
     "username": fields.String,
     "password": fields.String,
-    "image": fields.String,
+    "role":fields.String,
+    "profile_img": fields.String,
+    "created_timestamp":fields.DateTime,
+    "updated_timestamp":fields.DateTime,
 }
 
 
 class UserAPI(Resource):
     @marshal_with(user_response_fields)
-    def get(self, username):
+    def get(self, username=None):
         if username is not None:
-            _user = db.session.query(User).filter(
-                User.username == username).first()
-
-            if _user:
-                return _user
+            user = User.query.filter_by(username=username).first()
+            if user:
+                return user,200
             else:
                 raise NotFoundError(msg="User not found")
+        else:
+            users=User.query.all()
+            return users,200
 
     @marshal_with(user_response_fields)
-    # @auth.login_required
     def post(self):
         args = user_request_parse.parse_args(strict=True)
         name = args.get("name", None)
@@ -87,7 +64,6 @@ class UserAPI(Resource):
         password = args.get("password", None)
 
         # if args is None or name is None or username is None or password is None:
-        #     raise BadRequest("incorrect argument")
         if name is None:
             raise BadRequest("name not provided")
         if username is None:
@@ -98,25 +74,26 @@ class UserAPI(Resource):
             raise BadRequest("password length is less than 4 chars")
 
         # check if the user already exists based on username
-        _user = db.session.query(User).filter(
-            User.username == username).first()
-        if _user is not None:
+        user = User.query.filter_by(username=username).first()
+        if user is not None:
             print("=== user already exists === ")
             raise BadRequest("user already exists")
 
-        _user = User(
+        user = User(
             name=name,
-            role="user",
             username=username,
             password=generate_password_hash(password),
+            role="user",
+            profile_img="default.jpg",
+            created_timestamp=datetime.now(),
+            updated_timestamp=datetime.now(),
         )
-        db.session.add(_user)
+        db.session.add(user)
         db.session.commit()
 
-        return _user, 201
+        return user, 201
 
     @marshal_with(user_response_fields)
-    @auth.login_required
     def put(self, username):
         if username is None:
             raise BadRequest("username not given")
@@ -125,11 +102,11 @@ class UserAPI(Resource):
             name = args.get("name", None)
             password = generate_password_hash(args.get("password", None))
 
-            user = db.session.query(User).filter(
-                User.username == username).first()
+            user = User.query.filter_by(username=username).first()
             if user is not None:
                 user.name = name
                 user.password = password
+                updated_timestamp=datetime.now(),
             else:
                 raise NotFoundError("user not found")
 
@@ -137,21 +114,16 @@ class UserAPI(Resource):
             db.session.commit()
             return user
 
-    @auth.login_required
     def delete(self, username):
-        if "Authorization" not in request.headers:
-            raise UnAuthorizedAccess("no authentication data")
-
         if username is None:
             raise BadRequest("user name is missing")
         else:
-            user = db.session.query(User).filter(
-                User.username == username).first()
-            # user = User.query.filter_by(username=username)
-            # user.delete()
+            user = User.query.filter_by(username=username).first()
+            if user is None:
+                raise NotFoundError(msg="User not found")
             db.session.delete(user)
             db.session.commit()
-
+        return "User deleted successfully",200
 
 venue_request_parse = reqparse.RequestParser()
 venue_request_parse.add_argument("name", type=str, required=True)

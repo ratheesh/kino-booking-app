@@ -1,0 +1,773 @@
+openapi: 3.0.0
+info:
+  title: Kino Booking App
+  description: >
+    <div> This YAML file describe the API functionality of the MAD1 project by the name <b>Kino Booking App</b>
+    <h3>General Info:</h3>
+    <ol> 
+      <li> The YAML covers CRUD operations of User, Venue and Show Models. </li>
+    <li> Flask RESTful API are used to  implement APIs.</li>
+    </ol>
+    </div>
+
+    <h3> User Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>username</td>
+        <td>String</td>
+        <td>Unique, Not Null</td>
+      </tr>      
+      <tr>
+        <td>password</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>role</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>created_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>updated_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr> 
+    </tbody>
+    </table>
+
+    <h3> Venue Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>place</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>      
+    </tbody>
+    </table>
+
+
+    <h3> Show Table Schema </h3> 
+    <table>
+      <thead>
+        <th>Column Name</th>
+        <th>Column Type</th>
+        <th>Constraints</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>id</td>
+        <td>Integer</td>
+        <td>Primary Key, Auto Increment</td>
+      </tr>
+      <tr>
+        <td>title</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>language</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>duration</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>price</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>rating</td>
+        <td>Float</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>popularity</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>show_time</td>
+        <td>DateTime</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>n_rows</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>n_seats</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>File</td>
+        <td>Binary</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>venue_id</td>
+        <td>Integer</td>
+        <td>Foreign Key(venue.id) Not Null</td>
+      </tr>
+    </tbody>
+    </table>
+
+    <h3> Error Codes </h3> 
+    <table>
+      <thead>
+        <th>Resource</th>
+        <th>Error Code</th>
+        <th>Message</th>
+      </thead>
+      <tbody>
+      <tr>
+        <td>User</td>
+        <td>USER001</td>
+        <td>User Name is not registered</td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td>USER002</td>
+        <td>User Name already registered</td>
+      </tr>
+      <tr>
+        <td>Venue</td>
+        <td>Venue001</td>
+        <td>Venue does not exist</td>
+      </tr>
+      <tr>
+        <td>Show</td>
+        <td>Show001</td>
+        <td>Show does not exist</td>
+      </tr>
+    </tbody>
+    </table>
+
+  version: 1.0.0
+servers:
+  - url: http://127.0.0.1:5000/
+paths:
+  /api/user/{username}:
+    description: End point for User CRUD
+    get:
+      description: Operation to Read User data
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: john
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: course object
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: John Smith
+                  username:
+                    type: string
+                    example: john
+                  password:
+                    type: string
+                    example: xxxxxxxxxxx
+                  role:
+                    type: string
+                    example: user
+                  profile_image:
+                    type: string
+                    example: default.jpg
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+        '500':
+          description: Internal Server Error
+        '404':
+          description: User not found
+
+    put:
+      description: Operation to update the user profile.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: john
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John
+                password:
+                  type: string
+                  example: password
+      responses:
+        '200':
+          description: Profile Successfuly updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: John
+                  username:
+                    type: string
+                    example: john
+                  password:
+                    type: string
+                    example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                  role:
+                    type: string
+                    example: user
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the course resource
+      parameters:
+        - in: path
+          name: username
+          required: true
+          schema:
+            type: string
+            example: john
+      responses:
+        '200':
+          description: Successfully Deleted
+        '404':
+          description: User not found
+        '500':
+          description: Intenal Server Error
+  /api/user:
+    description: Endpoint to get all users details and create new users
+    get:
+      description: Operation to Read all Users data
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: John Smith
+                    username:
+                        type: string
+                        example: john
+                    password:
+                      type: string
+                      example: xxxxxxxxxxx
+                    role:
+                      type: string
+                      example: user
+                    profile_image:
+                      type: string
+                      example: default.jpg
+                    created_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
+                    updated_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
+        '500':
+          description: Internal Server Error
+        '404':
+          description: User not found
+
+    post:
+      description: Create user profile.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John
+                username:
+                  type: string
+                  example: john
+                password:
+                  type: string
+                  example: password
+      responses:
+        '201':
+          description: Profile Successfuly created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: John
+                  username:
+                    type: string
+                    example: john
+                  password:
+                    type: string
+                    example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+                  role:
+                    type: string
+                    example: user
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  
+        '404':
+          description: User not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+    
+  /api/course:
+    description: End point to create course resource
+    post:
+      description: Operation to create the course resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_name:
+                  type: string
+                  example: Maths1
+                course_code:
+                  type: string
+                  example: MA101
+                course_description:
+                  type: string
+                  example: Course Description Example
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  course_id:
+                    type: integer
+                    example: 201
+                  course_name:
+                    type: string
+                    example: Maths1
+                  course_code:
+                    type: string
+                    example: MA101
+                  course_description:
+                    type: string
+                    example: Course Description Example
+        '409':
+          description: course_code already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+  /api/student/{student_id}:
+    description: Url to read, update and delete the student resource.
+    get:
+      description: Operation to read student resource
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 201
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                title: student object
+                type: object
+                properties:
+                  student_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '500':
+          description: Internal server error
+        '404':
+          description: Student not found
+
+    put:
+      description: Operation to update the student resource
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Narendra
+                last_name:
+                  type: string
+                  example: Mishra
+                roll_number:
+                  type: string
+                  example: MA19M010
+      responses:
+        '200':
+          description: Successfully updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  student_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '404':
+          description: Student not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+    delete:
+      description: Operation to delete the course resource
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Successfully Deleted
+        '500':
+          description: Internal Server Error
+        '404':
+          description: Student not found
+
+  /api/student:
+    description: Url to create student resource
+    post:
+      description: Operation to create the student resource
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                  example: Narendra
+                last_name:
+                  type: string
+                  example: Mishra
+                roll_number:
+                  type: string
+                  example: MA19M010
+      responses:
+        '201':
+          description: Successfully Created
+          content:
+            application/json:
+              schema:
+                title: student object
+                type: object
+                properties:
+                  student_id:
+                    type: integer
+                    example: 101
+                  first_name:
+                    type: string
+                    example: Narendra
+                  last_name:
+                    type: string
+                    example: Mishra
+                  roll_number:
+                    type: string
+                    example: MA19M010
+        '409':
+          description: Student already exist
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/student/{student_id}/course:
+    description: Url to get the the list of enrollments a student with student_id is enrolled in.
+    get:
+      description: URL to get the list of enrollments, the student is enrolled in. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Request Successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    enrollment_id:
+                      type: integer
+                      example: 10
+                    student_id:
+                      type: integer
+                      example: 101
+                    course_id:
+                      type: integer
+                      example: 201
+        '400':
+          description: Invalid Student Id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Student is not enrolled in any course
+        '500':
+          description: Internal Server Error
+
+    post:
+      description: Add student enrollment aka enroll the student to the course. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                course_id:
+                  type: integer
+                  example: 12345
+      responses:
+        '201':
+          description: Enrollment successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties:
+                    enrollment_id:
+                      type: integer
+                      example: 10
+                    student_id:
+                      type: integer
+                      example: 101
+                    course_id:
+                      type: integer
+                      example: 201
+        '404':
+          description: Student not found
+        '500':
+          description: Internal Server Error
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+
+  /api/student/{student_id}/course/{course_id}:
+    description: URL to delete enrollment of a student in a course. This path belongs to the Enrollment table.
+    delete:
+      description: URL to delete enrollment of the student in the course. This path belongs to the Enrollment table.
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: integer
+            example: 101
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully deleted
+        '400':
+          description: Invalid Student Id or Course Id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error_code:
+                    type: string
+                  error_message:
+                    type: string
+        '404':
+          description: Enrollment for the student not found
+        '500':
+          description: Internal Server Error
