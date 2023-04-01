@@ -6,6 +6,8 @@ from flask_restful import (NotFound, Resource, fields, marshal_with, reqparse,
 from werkzeug.exceptions import HTTPException
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from kino.controller import internal_server_error
+
 from .db import Booking, Show, Tag, User, Venue, db
 
 api = Blueprint("api", __name__)
@@ -25,6 +27,16 @@ class BadRequest(HTTPException):
 class NotFoundError(HTTPException):
     def __init__(self, msg=""):
         self.response = make_response(msg, 404)
+
+class AlreadyExistsError(HTTPException):
+    def __init__(self, msg=""):
+        self.response = make_response(msg, 403)
+
+class InternalServerError(HTTPException):
+    def __init__(self, msg=""):
+        self.response = make_response(msg, 500)
+
+
 
 user_request_parse = reqparse.RequestParser()
 user_request_parse.add_argument("name", type=str)
@@ -125,14 +137,16 @@ class UserAPI(Resource):
             db.session.commit()
         return "User deleted successfully",200
 
+################################################## VENUE ###############################################################
+
 venue_request_parse = reqparse.RequestParser()
 venue_request_parse.add_argument("name", type=str, required=True)
-venue_request_parse.add_argument("city", type=str, required=True)
+venue_request_parse.add_argument("place", type=str, required=True)
 
 venue_response_fields = {
     "id": fields.Integer,
     "name": fields.String,
-    "city": fields.String,
+    "place": fields.String,
 }
 
 
@@ -141,69 +155,60 @@ class VenueAPI(Resource):
     # @auth.login_required(role="admin")
     def get(self, venue_id=None):
         if venue_id is not None:
-            _venue = db.session.query(Venue).filter(
-                Venue.id == venue_id).first()
-
-            if _venue:
-                return _venue
+            venue = Venue.query.filter_by(id=venue_id).first()
+            if venue:
+                return venue,200
             else:
-                raise NotFoundError(status_code=404)
+                raise NotFoundError(msg="Venue not found")
         else:
-            venues = db.session.query(Venue).all()
-            print(Venue)
-            return venues
+            venues = Venue.query.all()
+            return venues,200
 
     @marshal_with(venue_response_fields)
     def post(self):
         args = venue_request_parse.parse_args(strict=True)
         name = args.get("name", None)
-        city = args.get("city", None)
+        place = args.get("place", None)
 
-        print("name", name)
-        print("city", city)
-
-        _venue = Venue(
-            name=name,
-            city=city,
-        )
-        db.session.add(_venue)
+        venue = Venue( name=name, place=place)
+        if venue is None:
+            raise InternalServerError(msg="Error creating Venue")
+        db.session.add(venue)
         db.session.commit()
-
-        return _venue, 201
+        return venue, 201
 
     @marshal_with(venue_response_fields)
     def put(self, venue_id):
         args = venue_request_parse.parse_args(strict=True)
         name = args.get("name", None)
-        city = args.get("city", None)
+        place = args.get("place", None)
         if name is None:
             raise BadRequest("name is missing")
-        if city is None:
-            raise BadRequest("city is missing")
+        if place is None:
+            raise BadRequest("place is missing")
 
-        venue_details = db.session.query(
-            Venue).filter(Venue.id == venue_id).first()
-
-        if venue_details:
-            venue_details.name = name
-            venue_details.city = city
+        venue =  Venue.query.filter_by(id=venue_id).first()
+        if venue:
+            venue.name = name
+            venue.place = place
         else:
-            raise NotFoundError(status_code=404)
+            raise NotFoundError("Venue not found")
 
-        db.session.add(venue_details)
+        db.session.add(venue)
         db.session.commit()
+        return "Venue details updated", 200
 
     def delete(self, venue_id):
         if venue_id is None:
             raise BadRequest("id is missing")
         else:
-            venue = db.session.query(Venue).filter(
-                Venue.id == venue_id).first()
+            venue = Venue.query.filter_by(id=venue_id).first()
             if venue is None:
-                raise NotFoundError("venue not found")
+                raise NotFoundError("Venue not found")
             else:
                 db.session.delete(venue)
                 db.session.commit()
+                return "Venue deleted successfully", 200
 
 
 show_request_parse = reqparse.RequestParser()
