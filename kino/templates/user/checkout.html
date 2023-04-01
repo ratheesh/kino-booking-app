@@ -13,18 +13,13 @@ Ticket Confirmation
 <div class="content">
   <div class="container">
 	  {% if booking %}
-	  <h3> Ticket Confirmation </h3>
-	  <br>
-	  <input type="submit" name="" value="Back to Home" style="background-color: lightgray; border: 1px solid black; border-radius: 5px; margin: 0px; text-align: center;">
-	  <br>
-	  <br>
-	  {{ macros.display_checkout(booking) }}
-	  <h4>Ticket Info<h4>
-      <h5>No.of Seats: {{ booking.seats|length }}</h5>
-	  <h5>Total Ticket Price: {{ booking.final_amount }}
+	  <h3 class="text-center my-3"> Ticket Confirmation </h3>
+	  <a href="/bookings"><button class="btn btn-secondary mb-3">All Bookings</button></a>
+	  {{ macros.display_booking(booking) }}
 	  {% else %}
 	  <h3>Booking does not exist</h3>
 	  {% endif %}
+	  <a href="/"><button class="btn btn-secondary mb-3">Back to Home</button></a>
   </div>
 </div>
 {% endblock content %}
