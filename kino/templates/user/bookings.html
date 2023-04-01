@@ -8,7 +8,7 @@
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<h3>{{current_user.name}}'s Bookings</h3>
+		<h3 class="text-center">{{current_user.name|title}}'s Bookings</h3>
 		<hr>
 		{% if bookings is defined and bookings[0] is not defined %}
 		<h4 style="margin:0px auto;">You have No Bookings! </h4>
