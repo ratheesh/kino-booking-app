@@ -1,11 +1,11 @@
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,time
 from functools import wraps
 
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Booking, Seat, Show, Tag, User, Venue, db, Like
@@ -167,6 +167,7 @@ def venue_edit(venue_id):
                 request.files["file"].save(venue_img_path)
                 venue.venue_img = os.path.basename(venue_img_path)
 
+        venue.updated_timestamp = datetime.now()
         db.session.add(venue)
         db.session.commit()
         flash("Venue details Updated", "success")
@@ -352,6 +353,7 @@ def show_edit(venue_id, show_id):
             request.files["file"].save(show_img_path)
             show.venue_img = os.path.basename(show_img_path)
 
+        show.updated_timestamp = datetime.now()
         db.session.commit()
         flash("Show details updated successfully!", "success")
         return redirect(url_for("controller.show_management", venue_id=venue_id))
@@ -397,7 +399,13 @@ def home():
         return redirect(url_for("controller.admin"))
 
     data = {}
-    today = Show.query.filter(func.date(Show.show_time) == datetime.now().date()).all()
+    # today = db.session.query(Show).filter(func.date(Show.show_time) == datetime.now().date()).all()
+    print('timestamp now:', datetime.now())
+    print('date now:', datetime.now().date())
+    print('time now:', datetime.now().time())
+    print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
+    # today = list(filter(lambda x:func.date(x.show_time) == datetime.now().date() and func.time(x.show_time) > datetime.now().time() and func.time(x.show_time) < time(23,59,59),Show.query.all()))
+    today=filter(lambda x: x.showtime > datetime.now(), today)
     data["today"] = today
     tomorrow = Show.query.filter(
         func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))
@@ -406,13 +414,14 @@ def home():
     data["venues"] = {}
     venues = Venue.query.all()
     for venue in venues:
-        data["venues"][venue.name] = venue.shows
+        data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now() + timedelta(minutes=x.duration),venue.shows))
+        # data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now().time() + timedelta(minutes=x.duration),venue.shows))
 
     data["tags"] = {}
     taglist = Tag.query.all()
     for tag in taglist:
-        print(tag.name)
-        data["tags"][tag.name] = tag.shows
+        # print(tag.name)
+        data["tags"][tag.name] = list(filter(lambda x: x.show_time > datetime.now(),tag.shows))
 
     return render_template("user/index.html", data=data)
 

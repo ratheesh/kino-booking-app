@@ -36,6 +36,7 @@ class Venue(db.Model):
     place = db.Column(db.String(64), nullable=False)
     venue_img = db.Column(db.String(64), nullable=False, default="default.png")
     created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     shows = db.relationship("Show", backref="venue", cascade="all,delete-orphan")
 
@@ -73,6 +74,8 @@ class Show(db.Model):
         db.Integer, nullable=False
     )  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.png")
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id", ondelete="CASCADE"), nullable=False)
     tags = db.relationship("Tag", secondary=show_tags, backref="shows")

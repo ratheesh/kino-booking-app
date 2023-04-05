@@ -147,6 +147,8 @@ venue_response_fields = {
     "id": fields.Integer,
     "name": fields.String,
     "place": fields.String,
+    "created_time": fields.String,
+    "updated_time": fields.String,
 }
 
 
@@ -236,6 +238,8 @@ show_response_fields = {
     "show_date": fields.String,
     "show_time": fields.String,
     "banner_path": fields.String,
+    "created_time": fields.String,
+    "updated_time": fields.String,
 }
 
 
