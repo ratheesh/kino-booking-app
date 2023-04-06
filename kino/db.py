@@ -70,9 +70,7 @@ class Show(db.Model):
     popularity = db.Column(db.Integer)
     show_time = db.Column(db.DateTime, nullable=False)
     n_rows = db.Column(db.Integer, nullable=False)
-    n_seats = db.Column(
-        db.Integer, nullable=False
-    )  # seats per row -> not total no. of seats in the show
+    n_seats = db.Column( db.Integer, nullable=False)  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.png")
     created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
     updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
