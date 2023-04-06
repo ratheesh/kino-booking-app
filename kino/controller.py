@@ -5,7 +5,8 @@ from functools import wraps
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
                    url_for)
 from flask_login import current_user, login_required, login_user, logout_user
-from sqlalchemy import func, or_, and_
+from numpy import timedelta64
+from sqlalchemy import desc, func, or_, and_
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Booking, Seat, Show, Tag, User, Venue, db, Like
@@ -400,29 +401,31 @@ def home():
 
     data = {}
     # today = db.session.query(Show).filter(func.date(Show.show_time) == datetime.now().date()).all()
-    print('timestamp now:', datetime.now())
-    print('date now:', datetime.now().date())
-    print('time now:', datetime.now().time())
-    print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
-    # today = list(filter(lambda x:func.date(x.show_time) == datetime.now().date() and func.time(x.show_time) > datetime.now().time() and func.time(x.show_time) < time(23,59,59),Show.query.all()))
-    today=filter(lambda x: x.showtime > datetime.now(), today)
+    # print('timestamp now:', datetime.now().strftime("%Y-%m-%d %H:%M"))
+    # print('date now:', datetime.now().date())
+    # print('time now:', datetime.now().time())
+    # print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
+    latest = db.session.query(Show).order_by(Show.created_timestamp.desc()).all()
+    data["latest"] = latest
+    # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()
+    dtcompare = datetime.now() - timedelta(minutes=60)
+    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtcompare)).all()
+    print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
     data["today"] = today
     tomorrow = Show.query.filter(
-        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))
-    ).all()
+        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).all()
     data["tomorrow"] = tomorrow
     data["venues"] = {}
     venues = Venue.query.all()
     for venue in venues:
-        data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now() + timedelta(minutes=x.duration),venue.shows))
-        # data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now().time() + timedelta(minutes=x.duration),venue.shows))
+        data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now(),venue.shows))
 
     data["tags"] = {}
     taglist = Tag.query.all()
     for tag in taglist:
         # print(tag.name)
         data["tags"][tag.name] = list(filter(lambda x: x.show_time > datetime.now(),tag.shows))
-
+    print(data)
     return render_template("user/index.html", data=data)
 
 @controller.route("/<int:booking_id>/checkout", methods=["GET", "POST"])
