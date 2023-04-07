@@ -360,6 +360,7 @@ def show_edit(venue_id, show_id):
         return redirect(url_for("controller.show_management", venue_id=venue_id))
 
 @controller.route('/admin/<int:show_id>/show/delete', methods=["GET", "POST"])
+@login_required
 @admin_only
 def show_delete(show_id):
     if request.method == "POST":
@@ -394,7 +395,6 @@ def show_delete(show_id):
 # }
 #
 @controller.route("/", methods=["GET", "POST"])
-# @login_required
 def home():
     if current_user.is_authenticated and current_user.role == "admin":
         return redirect(url_for("controller.admin"))
@@ -408,8 +408,8 @@ def home():
     latest = db.session.query(Show).order_by(Show.created_timestamp.desc()).all()
     data["latest"] = latest
     # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()
-    dtcompare = datetime.now() - timedelta(minutes=60)
-    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtcompare)).all()
+    dtdelta = datetime.now() - timedelta(minutes=60)
+    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtdelta)).all()
     print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
     data["today"] = today
     tomorrow = Show.query.filter(
@@ -428,6 +428,30 @@ def home():
     print(data)
     return render_template("user/index.html", data=data)
 
+
+@controller.route("/<int:show_id>/like", methods=["GET", "POST"])
+@login_required
+@user_only
+def like(show_id):
+        if request.method == "POST":
+            print(show_id)
+            show=Show.query.filter_by(id=show_id).first()
+            like = Like.query.filter_by(user_id=current_user.id, show_id=show.id).first()
+            if not show:
+                flash("show does not exist!", "danger")
+            elif like:
+                db.session.delete(like)
+                db.session.commit()
+                print('like deleted')
+            else:
+                like=Like(user_id=current_user.id, show_id=show_id)
+                db.session.add(like)
+                db.session.commit()
+                print('like created')
+            return redirect(url_for("controller.home"))
+        else:
+            return redirect(url_for("controller.home"))
+
 @controller.route("/<int:booking_id>/checkout", methods=["GET", "POST"])
 @login_required
 @user_only
@@ -444,25 +468,6 @@ def checkout(booking_id=None):
 @user_only
 def bookings():
     if request.method == "POST":
-        if "like" in request.form:
-            show_id=request.form["like"]
-            print(show_id)
-            show=Show.query.filter_by(id=show_id).first()
-            like = Like.query.filter_by(user_id=current_user.id, show_id=show.id).first()
-            if not show:
-                flash("show does not exist!", "danger")
-                _bookings = Booking.query.filter_by(user_id=current_user.id).all()
-                return render_template("user/bookings.html", bookings=_bookings)
-            elif like:
-                db.session.delete(like)
-                db.session.commit()
-                print('like deleted')
-            else:
-                like=Like(user_id=current_user.id, show_id=show_id)
-                db.session.add(like)
-                db.session.commit()
-                print('like created')
-            _bookings = Booking.query.filter_by(user_id=current_user.id).all()
             return render_template("user/bookings.html", bookings=_bookings)
     else:
         _bookings = Booking.query.filter_by(user_id=current_user.id).all()
@@ -560,6 +565,7 @@ def book(show_id):
 
 @controller.route("/profile", methods=["GET", "POST"])
 @login_required
+@user_only
 def profile():
     if current_user.username == "admin":
         flash("Admin profile can't be viewed", "danger")

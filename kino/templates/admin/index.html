@@ -27,6 +27,17 @@ Admin Dash Board
 				<div class="tr-element"><div class="tr-element-left">Seats  </div><div class="tr-element-right">{{ seat_count }} </div></div>
 			</div>
 		</div>
+		<div class="bottom-segment">
+			<div class="bottom-left">
+				<img src="{{ url_for('static', filename='img/booking_trend.jpg' ) }}" alt="seats trend">
+
+			</div>
+			<div class="bottom-right">
+				<img src="{{ url_for('static', filename='img/categories_trend.jpg' ) }}" alt="categories trend">
+
+			</div>
+
+		</div>
 	</div>
 </div>
 {% endblock content %}

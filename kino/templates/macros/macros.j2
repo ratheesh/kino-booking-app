@@ -34,7 +34,7 @@
 {################################################################}
 
 {# show show #}
-{% macro display_show(show, is_admin) %}
+{% macro display_show(show, is_admin, current_user) %}
 <div class="col-sm-3 m-2">
 <div class="card" style="width: 16rem;">
 	{% if show.show_img %}
@@ -42,8 +42,8 @@
 	{% else %}
 	<img src="https://via.placeholder.com/150" class="card-img-top" alt="show" />
 	{% endif %}
-  <div class="card-body">
-    <h5 class="card-title text-center">{{ show.title }}({{ show.language }})</h5>
+  <div class="card-body p-0">
+    <h5 class="card-title text-center">{{ show.title|title }}({{ show.language|title }})</h5>
 	<div class="card-detail">
 		<span> {{show.venue.name}} </span>
 		<span> {{show.venue.place}} </span>
@@ -58,7 +58,6 @@
 	</div>
 	<div class="card-detail">
 		<span> &#9733; {{show.rating}}/5.0 </span>
-		<span><i class="fa-solid fa-1x" style="color:red;">&hearts;</i>{{show.popularity}}%</span>
 	</div>
 
 	<div class="card-detail">
@@ -96,6 +95,32 @@
 	</form>
 	</div>
 	{% endif %}
+	<div class="card-footer p-1 mt-2 d-flex justify-content-between">
+		<span>
+		{% if not is_admin %}
+		{% set ns = namespace(isculiked=0) %}
+		{% for like in show.likes %}
+			{% if like.user.id==current_user.id %}
+				{% set ns.isculiked=1 %}
+				{% break %}
+			{% endif %}
+		{% endfor %}
+		<form action={{url_for('controller.like', show_id=show.id)}} method="post">
+		<button class="btn p-0 m-0" name="show-like" value="{{show.id}}">
+		{% if ns.isculiked == 1 %}
+			<i class="fa-solid fa-heart" style="color:red;"></i>
+		{% else %}
+			<i class="fa-regular fa-heart" style="color:red;"></i>
+		{% endif %}
+		</button>
+		&nbsp;{{show.likes|length}}
+		</form>
+		{% else %}
+			<i class="fa-solid fa-heart" style="color:red;">&nbsp;<span style="color:black">{{show.likes|length}}</span></i>
+		{% endif %}
+		</span>
+		<span class="text-align-right"><small>Updated on {{show.updated_timestamp.strftime("%a %d %b %Y@%I:%M%p")}}</small></span>
+	</div>
   </div>
 </div>
 </div>
@@ -108,21 +133,21 @@
 <div class="card mb-3 h-100">
 	<div class="row g-0">
 		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
+			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-thumbnail rounded-start" alt="Show banner">
 		</div>
 		<div class="col-md-8">
-			<div class="card-body">
+			<div class="card-body p-2">
 				<div class="card-title d-flex justify-content-between align-times-center">
 				<span> Ticket: <span class="font-weight-bolder">#{{ booking.id }}</span></span>
-				<span>Booked on: {{ booking.booking_time.strftime("%a %d %b %Y %I.%M%p") }}</span>
+				<span><b>Booking Date:</b> {{ booking.booking_time.strftime("%a %d %b %Y %I.%M%p") }}</span>
 				</div>
 				
 				<h5 class="card-title text-center mt-3 font-weight-bolder">
-				{{ booking.show.title }}({{ booking.show.language }})</h5>
+				{{ booking.show.title|title }}({{ booking.show.language|capitalize }})</h5>
 				<hr>
 
 				<div class="card-text">
-				<i class="fa fa-map-marker"></i>&nbsp;{{ booking.show.venue.name }},{{ booking.show.venue.place }}
+				<i class="fa fa-map-marker"></i>&nbsp;{{ booking.show.venue.name|title }},{{ booking.show.venue.place|title }}
 				</div>
 
 				<div class="card-text">
@@ -141,19 +166,7 @@
 				</div>
 				<hr>
 				<div class="card-text">
-					<span class="font-weight-bold">Total Ticket Price:&nbsp;&#x20B9; </span>{{ booking.final_amount }}/-
-				</div>
-				<div class="d-flex flex-column items-end">
-					<form class="align-end" method="post">
-					<span class="font-weight-bold">Like </span>
-					<button style="border:none;padding:0;background:none;" name="like" type="submit" value="{{booking.show_id}}">
-					{% if booking.show.like %}
-					<i class="bi bi-hand-thumbs-up"></i>
-					{% else %}
-					<i class="bi bi-hand-thumbs-up-fill"></i>
-					{%  endif %}
-					</button>
-					</form>
+					<span class="font-weight-bold">Total Billable Amount:&nbsp;&#x20B9; </span>{{ booking.final_amount }}/-
 				</div>
 			</div>
 		</div>
