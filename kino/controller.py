@@ -18,13 +18,12 @@ controller = Blueprint("controller", __name__)
 
 def valid_img_type(filename):
     # return "." in filename and filename.rsplit(".", 1)[1].lower() in [
-    #     "png",
     #     "jpg",
     #     "jpeg",
     # ]
-    split_tup = os.path.splitext(filename)
+    split_tup = os.path.splitext(filename).lower()
     print("extension: " + split_tup[1][1:])
-    return split_tup[1][1:] in ["png", "jpg", "jpeg"]
+    return split_tup[1][1:] in ["jpg", "jpeg"]
 
 
 def admin_only(f):
@@ -124,7 +123,7 @@ def venue_add():
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
-                return render_template("admin/venue_add.html", pic_err=True)
+                return render_template("admin/venue_add.html")
 
             split_tup = os.path.splitext(file.filename)
 
@@ -605,7 +604,7 @@ def profile_edit():
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
-                return render_template("user/profile.html", pic_err=True)
+                return render_template("user/profile.html")
 
             split_tup = os.path.splitext(file.filename)
 
@@ -724,7 +723,7 @@ def signup():
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
-                return render_template("auth/signup.html", pic_err=True)
+                return render_template("auth/signup.html")
 
             split_tup = os.path.splitext(file.filename)
 
