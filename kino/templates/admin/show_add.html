@@ -185,11 +185,14 @@ Add Show
 					<div class="col-md-8" style="text-align: center;">
 						{% if show is defined %}
 						<input type="submit" class="btn btn-success" name="update-show" value="Update">
+						<a href="/admin/{{show.venue.id}}/show" class="btn btn-secondary">Back to Venue</a>
 						{% else %}
 						<input type="submit" class="btn btn-success" name="add-show" value="Add Show">
+						{% if venue_id is none %}
+						<a href="/admin" class="btn btn-secondary">Back to Home</a>
+						{% elif venue is not none %}
+						<a href="/admin/{{venue_id}}/show" class="btn btn-secondary">Back to Venue</a>
 						{% endif %}
-						{% if venue_id is not none %}
-						<a href="/admin/{{show.venue.id}}/show" class="btn btn-secondary">Back to Shows</a>
 						{% endif %}
 					</div>
 				</div>
