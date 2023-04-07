@@ -15,8 +15,8 @@
 				{% for venue in venues %}
 				{{ macros.display_venue(venue, is_admin=true) }}
 				{% endfor %}
-				<div class="col-sm-3 ms-2">
-					<div class="card" style="width:16rem;height:100%;min-height:400px">
+				<div class="col-sm-3 m-2">
+					<div class="card card-add border-0" style="width:16rem;height:100%;min-height:400px">
 						<div class="kard-add">
 							<form action="/admin/venue" method="POST">
 								<button style="border:0px;border-radius:0px;border-radius:0px;" class="kard-add"
