@@ -13,15 +13,23 @@ Delete {{current_user.name}}
 {{ super() }}
 <div class="content">
     <div class="container">
-        <div class="row">
-            <form class="row g-3" method="POST">
-                <div class="col-md-6">
-                <h3 class="text-center">Deleting {{ current_user.name|capitalize }}'s Profile</h3>
-                <p class="mt-4">Deleting Profile will delete user and associated booking info</p>
-                <p><em style="color:red;">This action can not be undone</em></p>
-                <p>Are you sure you want to continue?</p>
-                <button type="submit" class="btn btn-danger" name="delete-profile" value="{{current_user.id}}">Delete</button>
-                <button type="submit" class="btn btn-secondary" name="cancel" value="{{current_user.id}}">Cancel</button>
+        <div class="row mt-4">
+            <form class="col-8 g-3 border rounded-2" method="POST">
+                <h3 class="text-center mt-3">Deleting {{ current_user.name|capitalize }}'s Profile</h3>
+                <hr class="border-dark">
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <p class="mt-4">Deleting Profile will delete user and associated booking info</p>
+                        <p><em style="color:red;">This action can not be undone</em></p>
+                    </div>
+                </div>
+                <hr class="border-dark">
+                <div class="row mb-3">
+                    <div class="col-md-8 text-center">
+                        <p>Are you sure you want to continue?</p>
+                        <button type="submit" class="btn btn-danger" name="delete-profile" value="{{current_user.id}}">Delete</button>
+                        <a href="/profile" class="btn btn-secondary">Cancel</a>
+                    </div>
                 </div>
             </form>
     </div>

@@ -13,57 +13,60 @@ Update {{ current_user.name|capitalize }} Profile
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<div class="row g-3">
-			<form class="row g-3" method="POST" enctype="multipart/form-data">
+		<div class="row g-3 mt-4">
+			<form class="col-8 g-3 justify-contents-center m-auto border rounded" method="POST" enctype="multipart/form-data">
 				{% with messages = get_flashed_messages(with_categories=true) %}
 				{% for category, message in messages %}
-				<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
+				<div class="alert alert-{{category}} text-center m-0">{{ message }}</div>
 				{% endfor %}
 				{% endwith %}
-				<h3 class="text-center">Update {{ user.name|capitalize }}'s Profile</h3>
+				<h3 class="text-center mt-2">Update {{ user.name|capitalize }}'s Profile</h3>
+				<hr class="border-dark">
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="name" class="form-label">Name</label>
 						<input type="text" class="form-control" id="name" name="name" value="{{current_user.name}}" placeholder="Name" autocomplete="off" required>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="username" class="form-label">User Name</label>
 						<input type="text" class="form-control" id="username" name="username"
 							value="{{current_user.username}}" placeholder="User Name" autocomplete="off" disabled>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="password1" class="form-label">Password</label>
 						<input type="password" class="form-control" id="password1" name="password1" value=""
 							placeholder="Password" autocomplete="off">
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="password2" class="form-label">Reenter Password</label>
 						<input type="password" class="form-control" id="password2" name="password2" value=""
 							placeholder="Reenter Password" autocomplete="off">
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="role" class="form-label">Role</label>
 						<input type="text" class="form-control" id="role" name="role"
 							value="{{current_user.role}}" placeholder="Role" autocomplete="off" disabled>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 							<label for="form-file" class="form-label">Profile Image</label>
 							<input type="file" class="form-control form-control-sm" id="form-file" name="file" placeholder="Upload Profile Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 					</div>
 				</div>
+				<hr class="border-dark">
 				<div class="row mb-3" id="formbtn">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<input type="submit" class="btn btn-success" value="Update">
+						<a href="/profile" class="btn btn-secondary">Back to Profile</a>
 					</div>
 				</div>
 			</form>

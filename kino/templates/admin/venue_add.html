@@ -13,15 +13,16 @@ Add Venue
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<div class="row g-3">
-				<form class="row g-5" name="venue-add-form" method="POST" enctype="multipart/form-data">
+		<div class="row g-3 mt-4">
+				<form class="col-8 g-5 justify-contents-center m-auto border rounded-2" name="venue-add-form" method="POST" enctype="multipart/form-data">
 					{% if venue is defined %}
-					<h3 style="text-align: center;"> Update Venue </h3>
+					<h3 class="text-center"> Update Venue </h3>
 					{% else %}
-					<h3 style="text-align: center;"> Add New Venue </h3>
+					<h3 class="text-center"> Add New Venue </h3>
 					{% endif %}
+					<hr class="border-dark">
 					<div class="row mb-3">
-						<div class="col-md-4">
+						<div class="col-md-8">
 							<label for="-name" class="form-label">Name</label>
 							{% if venue is defined %}
 							<input type="text" class="form-control" id="name" name="name" value="{{ venue.name }}" placeholder="Name" autocomplete="off" required>
@@ -31,7 +32,7 @@ Add Venue
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-md-4">
+						<div class="col-md-8">
 							<label for="place" class="form-label">Place</label>
 							{% if venue is defined %}
 							<input type="text" class="form-control" id="place" name="place" value="{{ venue.place}}" placeholder="Place" autocomplete="off" required>
@@ -41,13 +42,14 @@ Add Venue
 						</div>
 					</div>
 					<div class="row mb-3">
-						<div class="col-md-4">
+						<div class="col-md-8">
 							<label for="form-file" class="form-label">Venue Image</label>
 							<input type="file" class="form-control form-control-sm" id="form-file" name="file" placeholder="Upload Venue Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 						</div>
 					</div>
+					<hr class="border-dark">
 					<div id="formbtn" class="row mb-3">
-						<div class="col-md-4">
+						<div class="col-md-8">
 							{% if venue is defined %}
 							<input type="submit" class="btn btn-success" name="submit" value="Update">
 							{% else %}

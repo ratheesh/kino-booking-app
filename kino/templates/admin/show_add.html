@@ -17,15 +17,16 @@ Add Show
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<div class="row g-3">
-			<form class="row g-3" method="POST" enctype="multipart/form-data">
+		<div class="row g-3 mt-4">
+			<form class="col-8 g-3 justify-contents-center border rounded-2" method="POST" enctype="multipart/form-data">
 				{% if show is defined %}
 				<h3 class="mt-3 text-center">Update Show</h3>
 				{% else %}
 				<h3 class="mt-3 text-center">Add Show</h3>
 				{% endif %}
+				<hr class="border-dark">
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-title" class="form-label">Name</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-title" name="title" value="{{ show.title }}"
@@ -37,7 +38,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-language" class="form-label">Language</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-language" name="language"
@@ -50,7 +51,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-duration" class="form-label">Duration</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-duration" name="duration"
@@ -63,7 +64,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-price" class="form-label">Price</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-price" name="price" value="{{ show.price }}"
@@ -75,7 +76,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-rating" class="form-label">Rating</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-rating" name="rating" value="{{ show.rating }}"
@@ -88,7 +89,7 @@ Add Show
 				</div>
 				{% if venue_id is none %}
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 					<label for="venue" class="form-label">Select Venue</label>
 					<select class="form-select" name="venue">
 						<option value="">Select Venue</option>
@@ -100,7 +101,7 @@ Add Show
 				</div>
 				{% endif %}
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-tags" class="form-label">Tags</label>
 						{% if show is defined %}
 						<select class="form-select" name="tags" multiple>
@@ -124,7 +125,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-date" class="form-label">Show Date</label>
 						{% if show is defined %}
 						<input type="date" class="form-control" id="show-date" name="show-date"
@@ -137,7 +138,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="show-time" class="form-label">Show Time</label>
 						{% if show is defined %}
 						<input type="time" class="form-control " id="show-time" name="show-time"
@@ -150,7 +151,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="rows" class="form-label">Rows</label>
 						{% if show is defined %}
 						<input type="number" class="form-control" id="rows" name="rows" value="{{ show.n_rows }}"
@@ -162,7 +163,7 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="seats" class="form-label">Seats per Row</label>
 						{% if show is defined %}
 						<input type="number" class="form-control" id="seats" name="seats" value="{{ show.n_seats }}"
@@ -174,20 +175,21 @@ Add Show
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="file" class="form-label">Show Banner Image</label>
 						<input type="file" class="form-control form-control-sm" id="file" name="file" placeholder="Upload Show Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 					</div>
 				</div>
+				<hr class="border-dark">
 				<div class="row mb-3">
-					<div class="col-md-4" style="text-align: center;">
+					<div class="col-md-8" style="text-align: center;">
 						{% if show is defined %}
 						<input type="submit" class="btn btn-success" name="update-show" value="Update">
 						{% else %}
 						<input type="submit" class="btn btn-success" name="add-show" value="Add Show">
 						{% endif %}
 						{% if venue_id is not none %}
-						<a href="/admin/{{venue_id}}/show" class="btn btn-secondary">Back to Shows</a>
+						<a href="/admin/{{show.venue.id}}/show" class="btn btn-secondary">Back to Shows</a>
 						{% endif %}
 					</div>
 				</div>
