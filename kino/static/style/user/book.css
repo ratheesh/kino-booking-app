@@ -42,21 +42,21 @@ form .layout {
   /* background-color: gray; */
 }
 
-.seating-booked {
-  background-color: gray;
+.seating-legend-booked {
+  background-color: #c0c0c0;
   border: 1px solid black;
   border-radius: 3px;
   font-size: 0.7rem;
 }
 
-.seating-avl {
+.seating-legend-avl {
   background-color: white;
   border: 1px solid black;
   border-radius: 3px;
   font-size: 0.7rem;
 }
 
-.seating-selected {
+.seating-legend-selected {
   background-color: #5159ac;
   border: 1px solid black;
   border-radius: 3px;
@@ -64,15 +64,12 @@ form .layout {
 }
 
 .seating-layout {
-  padding: 0px 0px 10px 0px;
   display: flex;
-  /* border: 1px solid black; */
   border-radius: 5px;
   align-items: center;
   justify-items: center;
   justify-content: center;
   width: 100%;
-  /* margin: 10px; */
 }
 
 .layout {
@@ -87,35 +84,16 @@ form .layout {
   width: 100%;
 }
 
-.row {
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  justify-content: center;
-  width: 100%;
-  margin: 10px;
-  padding: 0px 10px 0px 10px;
-  /* border:1px solid black; */
-}
-
-.row:nth-child(1) {
-  margin-top: 10px;
-}
-
-.layout .row {
-  margin: 0 auto auto;
-}
-
 .seat {
   height: 24px;
   width: 30px;
-  padding: 4px;
+  padding: 3px 3px 3px 3px;
   color: #000;
   text-align: center;
   font-size: 10px;
   font-weight: bold;
   background-color: #ffffff;
-  margin: 5px;
+  margin: 3px;
   border: 1px solid #000;
   border-radius: 3px;
   vertical-align: bottom;
@@ -123,14 +101,15 @@ form .layout {
 
 .seat:hover {
   cursor: default;
-  padding: 3px;
+  padding: 2px 2px 2px 2px;
   border: 2px solid;
+  font-size: 10px;
   transform: scale(1.1);
 }
 
 .seat input:disabled:hover {
   cursor: default;
-  padding: 3px;
+  padding: 3px 3px 3px 3px;
   transform: scale(1);
 }
 
@@ -141,40 +120,33 @@ input[type="checkbox"]:checked {
 
 .seat:checked + label {
   height: 24px;
-  /* width: 24px; */
   text-align: center;
+  padding: 3px 3px 3px 3px;
   border: 1px solid black;
   color: white;
   background-color: #5159ac;
+  font-size: 10px;
 }
 
 .seat:disabled + label {
   height: 24px;
-  /* width: 24px; */
   text-align: center;
+  padding: 3px 3px 3px 3px;
   border: 1px solid black;
   color: white;
-  background-color: #b0b0b0;
+  background-color: #c0c0c0;
+  font-size: 10px;
   transform: scale(1);
 }
 
 .row-screen {
-  width: 81%;
+  width: 80%;
   background-color: black;
   color: white;
   border: 1px solid white;
-  border-radius: 8px;
+  border-radius: 3px;
   margin: 0px 0px 0px 0px;
-  font-size: 9px;
+  font-size: 10px;
   text-align: center;
   justify-content: center;
-}
-
-h3 {
-  color: black;
-}
-
-h6 {
-  margin: 0px;
-  border: 1px solid black;
 }

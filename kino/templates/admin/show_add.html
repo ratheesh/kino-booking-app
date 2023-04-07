@@ -155,10 +155,10 @@ Add Show
 						<label for="rows" class="form-label">Rows</label>
 						{% if show is defined %}
 						<input type="number" class="form-control" id="rows" name="rows" value="{{ show.n_rows }}"
-							placeholder="Number of Rows" min="5" max="15" required>
+							placeholder="Number of Rows" min="5" max="12" required>
 						{% else %}
 						<input type="number" class="form-control" id="rows" name="rows" value=""
-							placeholder="Number of Rows" min="5" max="15" required>
+							placeholder="Number of Rows" min="5" max="12" required>
 						{% endif %}
 					</div>
 				</div>
@@ -167,11 +167,11 @@ Add Show
 						<label for="seats" class="form-label">Seats per Row</label>
 						{% if show is defined %}
 						<input type="number" class="form-control" id="seats" name="seats" value="{{ show.n_seats }}"
-							placeholder="Seats per Row" min="10" max="20" required>
+							placeholder="Seats per Row" min="10" max="15" required>
 						{% else %}
 						<input type="number" class="form-control" id="seats" name="seats" value=""
-							placeholder="Seats per Row" min="10" max="20" required>
-						{% endif %}
+						placeholder="Seats per Row" min="10" max="15" required>
+					{% endif %}
 					</div>
 				</div>
 				<div class="row mb-3">
