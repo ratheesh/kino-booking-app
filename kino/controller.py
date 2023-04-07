@@ -416,13 +416,13 @@ def home():
     data["venues"] = {}
     venues = Venue.query.all()
     for venue in venues:
-        data["venues"][venue.name] = list(filter(lambda x: x.show_time > datetime.now(),venue.shows))
+        data["venues"][venue.name] = list(filter(lambda x: x.show_time > dtdelta,venue.shows))
 
     data["tags"] = {}
     taglist = Tag.query.all()
     for tag in taglist:
         # print(tag.name)
-        data["tags"][tag.name] = list(filter(lambda x: x.show_time > datetime.now(),tag.shows))
+        data["tags"][tag.name] = list(filter(lambda x: x.show_time > dtdelta,tag.shows))
     print(data)
     return render_template("user/index.html", data=data)
 
