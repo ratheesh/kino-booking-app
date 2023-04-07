@@ -256,7 +256,6 @@ def show_add(venue_id=None):
             duration=request.form["duration"],
             price=request.form["price"],
             rating=request.form["rating"],
-            popularity=0,  # this should updated based on user ratings
             show_time=datetime.combine(s_dt, s_tm),
             n_rows=request.form["rows"],
             n_seats=request.form["seats"],
@@ -327,7 +326,6 @@ def show_edit(venue_id, show_id):
         show.language = request.form["language"]
         show.duration = request.form["duration"]
         show.price = request.form["price"]
-        # show.popularity = 0  # this should updated based on user ratings
         show.show_time = datetime.combine(s_dt, s_tm)
         show.n_rows = request.form["rows"]
         show.n_seats = request.form["seats"]
@@ -677,7 +675,6 @@ def search():
                 Show.title.ilike("%" + query + "%"),
                 Show.language.ilike("%" + query + "%"),
                 Show.rating.ilike("%" + query + "%"),
-                Show.popularity.ilike("%" + query + "%"),
             )
         )
     ).all()

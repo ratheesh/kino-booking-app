@@ -122,11 +122,6 @@ info:
         <td>Not Null</td>
       </tr>
       <tr>
-        <td>popularity</td>
-        <td>Integer</td>
-        <td>Not Null</td>
-      </tr>
-      <tr>
         <td>show_time</td>
         <td>DateTime</td>
         <td>Not Null</td>
@@ -630,9 +625,6 @@ paths:
                     rating:
                       type: number
                       example: 4.5
-                    popularity:
-                      type: integer
-                      example: 80
                     show_time:
                       type: string
                       example: 
@@ -681,9 +673,6 @@ paths:
                 rating:
                   type: number
                   example: 4.5
-                popularity:
-                  type: integer
-                  example: 80
                 show_time:
                   type: string
                   example: 
@@ -726,9 +715,6 @@ paths:
                   rating:
                     type: number
                     example: 4.5
-                  popularity:
-                    type: integer
-                    example: 80
                   show_time:
                     type: string
                     example: 
@@ -803,9 +789,6 @@ paths:
                   rating:
                     type: number
                     example: 4.5
-                  popularity:
-                    type: integer
-                    example: 80
                   show_time:
                     type: string
                     example: 
@@ -873,9 +856,6 @@ paths:
                 rating:
                   type: number
                   example: 4.5
-                popularity:
-                  type: integer
-                  example: 80
                 show_time:
                   type: string
                   example: 
@@ -917,9 +897,6 @@ paths:
                   rating:
                     type: number
                     example: 4.5
-                  popularity:
-                    type: integer
-                    example: 80
                   show_time:
                     type: string
                     example: 

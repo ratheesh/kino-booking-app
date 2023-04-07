@@ -67,7 +67,6 @@ class Show(db.Model):
     duration = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False, default=0.0)
-    popularity = db.Column(db.Integer)
     show_time = db.Column(db.DateTime, nullable=False)
     n_rows = db.Column(db.Integer, nullable=False)
     n_seats = db.Column( db.Integer, nullable=False)  # seats per row -> not total no. of seats in the show

@@ -6,7 +6,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from flask_restful import Api
 
-from .api import BookingAPI, ShowAPI, UserAPI, VenueAPI, api
+from .api import ShowAPI, UserAPI, VenueAPI, api
 from .controller import controller
 from .db import User, create_admin_user, db, populate_tags
 
@@ -20,6 +20,7 @@ def create_app():
 
     db_file = "sqlite:///" + os.path.join(basedir, DB_FILE)
     app = Flask(__name__, template_folder="templates")
+    app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
     app.debug = True
 
@@ -56,14 +57,9 @@ def create_app():
     app.register_blueprint(controller, url_prefix="/")
     app.register_blueprint(api, url_prefix="/api")
 
-    hapi.add_resource(
-        UserAPI,
-        "/api/user/",
-        "/api/user/<username>/",
-    )
+    hapi.add_resource(UserAPI, "/api/user/", "/api/user/<username>/")
     hapi.add_resource(VenueAPI, "/api/venue/", "/api/venue/<int:venue_id>/")
-    hapi.add_resource(ShowAPI, "/api/<int:venue_id>/show/", "/api/<int:venue_id>/show/<int:show_id>/"
-    )
+    hapi.add_resource(ShowAPI, "/api/<int:venue_id>/show/", "/api/<int:venue_id>/show/<int:show_id>/")
 
     return app
 

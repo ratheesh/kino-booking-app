@@ -214,32 +214,30 @@ class VenueAPI(Resource):
 
 
 show_request_parse = reqparse.RequestParser()
-show_request_parse.add_argument("name", type=str)
+show_request_parse.add_argument("title", type=str)
 show_request_parse.add_argument("language", type=str)
 show_request_parse.add_argument("duration", type=int)
-show_request_parse.add_argument("rating", type=str)
 show_request_parse.add_argument("price", type=int)
-show_request_parse.add_argument("popularity", type=int)
-show_request_parse.add_argument("genre", type=str)
-show_request_parse.add_argument("show_date", type=str)
-show_request_parse.add_argument("show_time", type=str)
-show_request_parse.add_argument("banner_path", type=str)
+show_request_parse.add_argument("rating", type=str)
+show_request_parse.add_argument("show_time", type=datetime)
+show_request_parse.add_argument("n_rows", type=int)
+show_request_parse.add_argument("n_seats", type=int)
+show_request_parse.add_argument("show_img", type=str)
 
 
 show_response_fields = {
     "id": fields.Integer,
-    "name": fields.String,
+    "title": fields.String,
     "language": fields.String,
     "duration": fields.Integer,
-    "rating": fields.String,
     "price": fields.Integer,
-    "popularity": fields.Integer,
-    "genre": fields.String,
-    "show_date": fields.String,
-    "show_time": fields.String,
-    "banner_path": fields.String,
-    "created_time": fields.String,
-    "updated_time": fields.String,
+    "rating": fields.String,
+    "show_time": fields.DateTime,
+    "n_rows": fields.Integer,
+    "n_seats": fields.Integer,
+    "show_img": fields.String,
+    "created_timestamp": fields.DateTime,
+    "updated_timestamp": fields.DateTime,
 }
 
 
@@ -249,63 +247,94 @@ class ShowAPI(Resource):
         if venue_id is None:
             raise BadRequest("venue id null")
 
-        _venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
-        if _venue is None:
+        venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
+        if venue is None:
             raise BadRequest("venue not found")
 
         if show_id is not None:
-            _show = (
+            show = (
                 db.session.query(Show)
-                .filter(Show.id == show_id and _venue.id == venue_id)
+                .filter(Show.id == show_id and venue.id == venue_id)
                 .first()
             )
-            if _show is None:
+            if show is None:
                 raise NotFound("show not found")
             else:
-                return _show
+                return show
         else:
-            _shows = db.session.query(Show).filter(_venue.id == venue_id).all()
-            return _shows
+            shows = db.session.query(Show).filter(venue.id == venue_id).all()
+            return shows
 
     @marshal_with(show_response_fields)
     def post(self, venue_id):
         args = show_request_parse.parse_args(strict=True)
-        name = args.get("name", None)
+        title = args.get("title", None)
+        language = args.get("language", None)
+        duration = args.get("duration", None)
+        price = args.get("price", None)
+        rating = args.get("rating", None)
+        show_time = args.get("show_time", None)
+        n_rows = args.get("n_rows", None)
+        n_seats = args.get("n_seats", None)
+        show_img = args.get("show_img", None)
+
+        venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
+        if venue is None:
+            raise NotFound("venue not found")
+
+        show = Show(
+            title=title,
+            language=language,
+            duration=duration,
+            price=price,
+            rating=rating,
+            show_time=show_time,
+            n_rows=n_rows,
+            n_seats=n_seats,
+            show_img=show_img,
+            venue_id=venue.id,
+        )
+        db.session.add(show)
+        db.session.commit()
+
+        return show, 201
+
+    @marshal_with(show_response_fields)
+    def put(self, venue_id, show_id):
+        args = show_request_parse.parse_args(strict=True)
+        title = args.get("title", None)
         language = args.get("language", None)
         duration = args.get("duration", None)
         rating = args.get("rating", None)
         price = args.get("price", None)
         genre = args.get("genre", None)
-        popularity = args.get("popularity", None)
         show_date = args.get("show_date", None)
         show_time = args.get("show_time", None)
         banner_path = args.get("banner_path", None)
 
-        _venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
-        if _venue is None:
+        venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
+        if venue is None:
             raise NotFound("venue not found")
 
-        _show = Show(
-            name=name,
-            language=language,
-            duration=duration,
-            rating=rating,
-            price=price,
-            genre=genre,
-            popularity=popularity,
-            show_date=show_date,
-            show_time=show_time,
-            banner_path=banner_path,
-            venue_id=_venue.id,
-        )
-        db.session.add(_show)
+        show =  Show.query.filter_by(id=show_id, venue_id=venue.id).first()
+        if show:
+            show.title=title,
+            show.language=language,
+            show.duration=duration,
+            show.rating=rating,
+            show.price=price,
+            show.genre=genre,
+            show.show_date=show_date,
+            show.show_time=show_time,
+            show.show_img=banner_path,
+            show.venue_id=venue.id,
+            show.updated_timestamp=datetime.now(),
+        else:
+            raise NotFoundError("Show not found")
+
+        db.session.add(venue)
         db.session.commit()
-
-        return _venue, 201
-
-    @marshal_with(show_response_fields)
-    def put(self, venue_id, show_id):
-        pass
+        return "Venue details updated", 200
 
     @marshal_with(show_response_fields)
     def delete(self, venue_id, show_id):
@@ -324,96 +353,5 @@ class ShowAPI(Resource):
         else:
             db.session.delete(Show)
             db.session.commit()
-
-
-booking_request_parse = reqparse.RequestParser()
-booking_request_parse.add_argument("date", type=str, required=True)
-booking_request_parse.add_argument("time", type=str, required=True)
-booking_request_parse.add_argument("amount", type=str, required=True)
-
-booking_response_fields = {
-    "id": fields.Integer,
-    "date": fields.String,
-    "time": fields.String,
-    "amount": fields.String,
-}
-
-
-class BookingAPI(Resource):
-    @marshal_with(booking_response_fields)
-    def get(self, user_id, show_id, booking_id=None):
-        if user_id is None:
-            raise BadRequest("user id is not present")
-        if show_id is None:
-            raise BadRequest("show id is not present")
-        if booking_id is not None:
-            _booking = (
-                db.session.query(Booking)
-                .filter(
-                    Booking.id == booking_id
-                    and Show.id == show_id
-                    and User.id == user_id
-                )
-                .first()
-            )
-            if _booking is None:
-                raise NotFound("booking not found")
-        else:
-            _bookings = db.session.query(Booking).filter(
-                Booking.id == booking_id).all()
-            return _bookings
-
-    @marshal_with(booking_response_fields)
-    def post(self, user_id, show_id, seats):
-        if user_id is None:
-            raise BadRequest("user id is not present")
-        if show_id is None:
-            raise BadRequest("show id is not present")
-        if seats is None:
-            raise BadRequest("no seats selected")
-
-        _user = db.session.query(User).filter(User.id == user_id).first()
-        if _user is None:
-            raise NotFound(f"user id {user_id} not found")
-        _show = db.session.query(Show).filter(Show.id == show_id).first()
-        if _show is None:
-            raise NotFound(f"show {show_id} not found")
-
-    def delete(self, user_id, show_id, booking_id):
-        pass
-
-
-# def create_admin_user(db):
-#     admin = User(
-#         name="Admin",
-#         username="admin",
-#         role="admin",
-#         password=generate_password_hash("iitm"),
-#     )
-#     db.session.add(admin)
-#     db.session.commit()
-#
-#
-# def populate_tags(db):
-#     tags = (
-#         "action",
-#         "comedy",
-#         "thriller",
-#         "crime",
-#         "scifi",
-#         "fantasy",
-#         "horror",
-#         "period",
-#         "romedy",
-#     )
-#     taglist = []
-#
-#     for tag in tags:
-#         action = Tag(name=tag)
-#         taglist.append(action)
-#
-#     db.session.add_all(taglist)
-#     db.session.commit()
-
 
 # End of File
