@@ -130,16 +130,16 @@
 
 {# show booking #}
 {% macro display_booking(booking) %}
-<div class="card mb-3 h-100">
+<div class="card mb-3">
 	<div class="row g-0">
 		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-thumbnail rounded-start" alt="Show banner">
+			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
 		</div>
 		<div class="col-md-8">
 			<div class="card-body p-2">
 				<div class="card-title d-flex justify-content-between align-times-center">
-				<span> Ticket: <span class="font-weight-bolder">#{{ booking.id }}</span></span>
-				<span><b>Booking Date:</b> {{ booking.booking_time.strftime("%a %d %b %Y %I.%M%p") }}</span>
+				<span class="fs-6"> Ticket: <span class="font-weight-bolder">#{{ booking.id }}</span></span>
+				<span class="fs-6"><b>Booking Date:</b> {{ booking.booking_time.strftime("%a %d %b %Y %I.%M%p") }}</span>
 				</div>
 				
 				<h5 class="card-title text-center mt-3 font-weight-bolder">

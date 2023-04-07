@@ -8,16 +8,22 @@
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<h3 class="text-center">{{current_user.name|title}}'s Bookings</h3>
-		<hr>
-		{% if bookings is defined and bookings[0] is not defined %}
-		<h4 style="margin:0px auto;">You have No Bookings! </h4>
-		{% else %}
-		{% for booking in bookings %}
-		{{ macros.display_booking(booking) }}
-		<hr>
-		{% endfor %}
-		{% endif %}
+		<div class="row mt-3 justify-contents-center">
+			<div class="col-8 m-auto border rounded-2">
+				<h3 class="text-center">{{current_user.name|title}}'s Bookings</h3>
+				<hr class="border-dark">
+				{% if bookings is defined and bookings[0] is not defined %}
+				<h4 class="text-center">You have No Bookings! </h4>
+				{% else %}
+				{% for booking in bookings %}
+				{{ macros.display_booking(booking) }}
+				{% if not loop.last %}
+				<hr class="border-dark">
+				{% endif %}
+				{% endfor %}
+				{% endif %}
+			</div>
+		</div>
 	</div>
-</div>
+	</div>
 {% endblock content %}
