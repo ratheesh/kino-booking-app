@@ -26,7 +26,7 @@
         {%else%}
         <h1><a href="/" class="navbar-brand">Kino</a></h1>
         {%endif%}
-        {% if request.endpoint != 'controller.search' %}
+        {% if request.endpoint != 'controller.search' and current_user.role != 'admin' %}
         <form class="d-flex" action="/search">
           <input
             class="form-control me-2"
