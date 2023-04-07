@@ -10,7 +10,7 @@
   <div class="card-body">
     <h5 class="card-title text-center">{{ venue.name|capitalize }}</h5>
 	<div class="card-detail">
-		<span> {{venue.place|capitalize}} </span>
+		<span><i class="fa fa-map-marker"></i>&nbsp;{{venue.place|capitalize}} </span>
 	</div>
 	<div class="card-detail">
 		<span>No of Shows: {{ venue.shows|length }}</span>
@@ -46,7 +46,7 @@
     <h5 class="card-title text-center">{{ show.title|title }}({{ show.language|title }})</h5>
 	<div class="card-detail">
 		<span> {{show.venue.name}} </span>
-		<span> {{show.venue.place}} </span>
+		<span> <i class="fa fa-map-marker"></i>&nbsp;{{show.venue.place}} </span>
 	</div>
 	<div class="card-detail">
 		<span>&#x1F4C5;{{show.show_time.strftime("%a %d %b %Y")}}</span>
