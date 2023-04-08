@@ -7,6 +7,7 @@ from flask import (Blueprint, abort, flash, redirect, render_template, request,
 from flask_login import current_user, login_required, login_user, logout_user
 from numpy import timedelta64
 from sqlalchemy import desc, func, or_, and_
+# from flask_sqlalchemy import in_
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from .db import Booking, Seat, Show, Tag, User, Venue, db, Like
@@ -406,22 +407,24 @@ def home():
     data["latest"] = latest
     # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()
     dtdelta = datetime.now() - timedelta(minutes=60)
-    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtdelta)).all()
+    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtdelta)).order_by(Show.show_time.asc()).all()
     print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
     data["today"] = today
     tomorrow = Show.query.filter(
-        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).all()
+        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).order_by(Show.show_time.asc()).all()
     data["tomorrow"] = tomorrow
     data["venues"] = {}
     venues = Venue.query.all()
     for venue in venues:
-        data["venues"][venue.name] = list(filter(lambda x: x.show_time > dtdelta,venue.shows))
+        # data["venues"][venue.name] = list(filter(lambda x: x.show_time > dtdelta,venue.shows))
+        data["venues"][venue.name] = db.session.query(Show).filter(Show.venue_id==venue.id, Show.show_time > dtdelta).order_by(Show.show_time.asc()).all()
 
     data["tags"] = {}
     taglist = Tag.query.all()
     for tag in taglist:
         # print(tag.name)
         data["tags"][tag.name] = list(filter(lambda x: x.show_time > dtdelta,tag.shows))
+        # data["tags"][tag.name] = db.session.query(Show).join(tag).filter(tag.in_(Show.tags), Show.show_time > dtdelta).order_by(Show.show_time.asc()).all()
     print(data)
     return render_template("user/index.html", data=data)
 
