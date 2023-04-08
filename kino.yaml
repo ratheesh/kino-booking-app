@@ -2,12 +2,14 @@ openapi: 3.0.0
 info:
   title: Kino Booking App
   description: >
-    <div> This YAML file describe the API functionality of the MAD1 project by the name <b>Kino Booking App</b>
-    <h3>General Info:</h3>
-    <ol> 
-      <li> The YAML covers CRUD operations of User, Venue and Show Models. </li>
-    <li> Flask RESTful API are used to  implement APIs.</li>
-    </ol>
+    <div> 
+        This YAML file describe the API functionality of the MAD1 project
+      <p>Application name: <b>Kino Booking App</b></p>
+      <h3>General Info:</h3>
+      <ol> 
+        <li> The YAML covers CRUD operations of User, Venue and Show Models. </li>
+        <li> Flask RESTful API are used to  implement APIs.</li>
+      </ol>
     </div>
 
     <h3> User Table Schema </h3> 
@@ -78,7 +80,22 @@ info:
         <td>place</td>
         <td>String</td>
         <td>Not Null</td>
-      </tr>      
+      </tr>
+      <tr>
+        <td>venue_img</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>created_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>updated_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr> 
     </tbody>
     </table>
 
@@ -137,15 +154,25 @@ info:
         <td>Not Null</td>
       </tr>
       <tr>
-        <td>File</td>
-        <td>Binary</td>
-        <td></td>
+        <td>show_img</td>
+        <td>String</td>
+        <td>Not Null</td>
       </tr>
       <tr>
         <td>venue_id</td>
         <td>Integer</td>
         <td>Foreign Key(venue.id) Not Null</td>
       </tr>
+          <tr>
+        <td>created_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>updated_timestamp</td>
+        <td>String</td>
+        <td>Not Null</td>
+      </tr> 
     </tbody>
     </table>
 
@@ -243,6 +270,7 @@ paths:
                 password:
                   type: string
                   example: password
+
       responses:
         '201':
           description: Profile Successfuly created
@@ -266,7 +294,13 @@ paths:
                   role:
                     type: string
                     example: user
+                  profile_image:
+                    type: string
+                    example: default.jpg
                   created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
                   
@@ -327,6 +361,9 @@ paths:
                   created_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '500':
           description: Internal Server Error
         '404':
@@ -377,6 +414,9 @@ paths:
                     type: string
                     example: user
                   created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
         '404':
@@ -431,9 +471,18 @@ paths:
                     name:
                       type: string
                       example: forum
-                    username:
-                        type: string
-                        example: whitefield
+                    place:
+                      type: string
+                      example: whitefield
+                    venue_img:
+                      type: string
+                      example: 1.jpg
+                    created_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
+                    updated_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
         '500':
           description: Internal Server Error
             
@@ -450,7 +499,7 @@ paths:
                   example: forum
                 place:
                   type: string
-                  example: whitefield 
+                  example: whitefield
       responses:
         '201':
           description: Venue Successfully Created
@@ -468,6 +517,15 @@ paths:
                   place:
                     type: string
                     example: whitefield
+                  venue_img:
+                    type: string
+                    example: 2.jpg
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '403':
           description: Venue already exists
         '500':
@@ -512,6 +570,15 @@ paths:
                   place:
                     type: string
                     example: Whitefield
+                  venue_img:
+                    type: string
+                    example: 2.jpg
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '500':
           description: Internal server error
         '404':
@@ -555,6 +622,15 @@ paths:
                   place:
                     type: string
                     example: Whitefield
+                  venue_img:
+                    type: string
+                    example: 2.jpg
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '404':
           description: Venue not found
         '500':
@@ -588,7 +664,7 @@ paths:
           description: Venue not found
 
   /api/{venue_id}/show:
-    description: Url to create student resource and get all student details
+    description: URL to create student resource and get all student details
     get:
       description: Get all show details
       parameters:
@@ -640,6 +716,12 @@ paths:
                     venue_id:
                       type: integer
                       example: 1
+                    created_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
+                    updated_timestamp:
+                      type: string
+                      example: Tue, 28 Mar 2023 12:10:14 -0000
         '500':
           description: Internal Server Error
 
@@ -730,6 +812,12 @@ paths:
                   venue_id:
                     type: integer
                     example: 1
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '403':
           description: Show already exist
         '500':
@@ -804,6 +892,12 @@ paths:
                   venue_id:
                     type: integer
                     example: 1
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '400':
           description: Invalid Show Id
           content:
@@ -865,12 +959,10 @@ paths:
                 n_seats:
                   type: integer
                   example: 10
-                show_img:
-                  type: string
-                  example: default.jpg
                 venue_id:
                   type: integer
                   example: 1
+
       responses:
         '200':
           description: Request Successful
@@ -912,6 +1004,12 @@ paths:
                   venue_id:
                     type: integer
                     example: 1
+                  created_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
+                  updated_timestamp:
+                    type: string
+                    example: Tue, 28 Mar 2023 12:10:14 -0000
         '400':
           description: Invalid Show Id
           content:
