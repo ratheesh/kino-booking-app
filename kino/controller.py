@@ -16,12 +16,11 @@ from .db import Booking, Seat, Show, Tag, User, Venue, db, Like
 
 controller = Blueprint("controller", __name__)
 
+user_img_dir = os.path.abspath(os.path.dirname(__file__)) + "./static/img/users"
+venue_img_dir = os.path.abspath(os.path.dirname(__file__)) + "./static/img/venues/"
+show_img_dir = os.path.abspath(os.path.dirname(__file__)) + "./static/img/shows/"
 
 def valid_img_type(filename):
-    # return "." in filename and filename.rsplit(".", 1)[1].lower() in [
-    #     "jpg",
-    #     "jpeg",
-    # ]
     print(filename)
     split_tup = os.path.splitext(filename)
     # print('split:', split_tup)
@@ -475,15 +474,14 @@ def bookings():
         _bookings = Booking.query.filter_by(user_id=current_user.id).all()
         return render_template("user/bookings.html", bookings=_bookings)
 
-# test data
+# Booking data
 # B -> Booked
 # U -> unbooked(available for booking)
-# T -> reserved but not confirmed(used in PUT/transient state)
 # seating_map = {
 #     "A": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
 #     "B": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
 #     "C": ["U", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
-#     "D": ["U", "T", "U", "U", "U", "U", "U", "U", "U", "U"],
+#     "D": ["U", "B", "U", "U", "U", "U", "U", "U", "U", "U"],
 #     "E": ["B", "U", "U", "U", "U", "U", "U", "U", "U", "U"],
 # }
 
@@ -499,7 +497,7 @@ def gen_seatingmap(show):
         map[chr(ord(init_row) + i)] = ["U" for _ in range(show.n_seats)]
 
     for seat in show.seats:
-        print("seat:", seat)
+        # print("seat:", seat)
         col = int(seat.seat[1:])
         row = seat.seat[0]
         map[row][col - 1] = "B"
@@ -519,7 +517,7 @@ def book(show_id):
         return redirect(url_for("controller.home"))
 
     venue = Venue.query.filter_by(id=show.venue_id).first()
-    print("Venue: ", venue)
+    # print("Venue: ", venue)
     if venue is None:
         flash(f"no venue associated with the show:{show.title}", "danger")
         return redirect(url_for("controller.home"))
@@ -530,7 +528,7 @@ def book(show_id):
             return redirect(url_for("controller.home"))
 
         sel_seats = request.form.getlist("seat")
-        print(sel_seats)
+        # print(sel_seats)
         if sel_seats == []:
             flash("No seats selected for booking", "warning")
             return render_template(
@@ -609,37 +607,19 @@ def profile_edit():
             else:
                 flash("Password mismatch", "warning")
                 return render_template("/user/profile_edit.html", user=current_user)
-            
 
-        # if password1 != "" and password2 != "":
-        #     if password1 != password2:
-        #         flash("Passwords does not match!", "danger")
-        #         return render_template("/user/profile_edit.html", user=current_user)
-        #     else:
-        #         print(f"name:{name}, pass1={password1}, pass2={password2}")
-        #         current_user.name = name
-        #         current_user.password = generate_password_hash(password1)
-        # else:
-        #     flash("Enter password in both fields", "warning")
-        #     return render_template("/user/profile_edit.html", user=current_user)
-
-        profile_img_path = "default.jpg"
+        profile_img = "default.jpg"
         if request.files["file"]:
-            basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported", "danger")
+                flash("Image format is not supported", "danger")
                 return render_template("/user/profile.html", user=current_user)
 
-            split_tup = os.path.splitext(file.filename)
-
-            profile_img_path = os.path.join(
-                basedir + "/static/img/profile/",
-                str(current_user.id) + split_tup[1],
-            )
-            print(profile_img_path)
+            profile_img = str(current_user.id) + ".jpg"
+            profile_img_path =  os.path.join(user_img_dir, profile_img)
+            # print(profile_img_path)
             request.files["file"].save(profile_img_path)
-            current_user.profile_img = os.path.basename(profile_img_path)
+            current_user.profile_img = profile_img
 
         current_user.updated_timestamp = datetime.now()
         db.session.add(current_user)
@@ -655,6 +635,10 @@ def profile_delete():
     if request.method == "POST":
         if 'delete-profile' in request.form:
             try:
+                if current_user.profile_img != "default.jpg":
+                    profile_img_path=os.path.join(user_img_dir, current_user.profile_img)
+                    if os.path.exists(profile_img_path):
+                        os.remove(profile_img_path)
                 db.session.delete(current_user)
                 db.session.commit()
             except:
@@ -744,27 +728,24 @@ def signup():
 
         profile_img = "default.jpg"
         if request.files["file"]:
-            basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
                 return render_template("auth/signup.html")
 
-            split_tup = os.path.splitext(file.filename)
-
-            profile_img_path = os.path.join(
-                basedir + "/static/img/profile/", str(user.id) + ".jpg"
-            )
+            profile_img = str(user.id) + ".jpg"
+            profile_img_path = os.path.join( user_img_dir, profile_img)
             print(profile_img_path)
             try:
                 if os.path.exists(profile_img_path):
                     os.remove(profile_img_path)
                 request.files["file"].save(profile_img_path)
-                profile_img = profile_img_path
             except:
                 flash("file could not be saved. Assuming default file")
-                user.profile_img=profile_img
-            
+                profile_img="default.jpg"
+
+            user.profile_img=profile_img
+            print("user profile img name:", user.profile_img)
 
         # db.session.add(user)
         db.session.commit()
