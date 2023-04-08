@@ -442,12 +442,12 @@ def like(show_id):
             elif like:
                 db.session.delete(like)
                 db.session.commit()
-                print('like deleted')
+                flash(f"Unliked {show.title}!", "warning")
             else:
                 like=Like(user_id=current_user.id, show_id=show_id)
                 db.session.add(like)
                 db.session.commit()
-                print('like created')
+                flash(f"Liked {show.title}!", "success")
             return redirect(url_for("controller.home"))
         else:
             return redirect(url_for("controller.home"))
