@@ -119,22 +119,26 @@ def venue_add():
         db.session.add(venue)
         db.session.flush()
 
-        venue_img_path = "default.jpg"
+        venue_img = "default.jpg"
         if request.files["file"]:
-            basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported", "danger")
+                flash("Img format is not supported", "danger")
                 return render_template("admin/venue_add.html")
 
-            split_tup = os.path.splitext(file.filename)
-
-            venue_img_path = os.path.join(
-                basedir + "/static/img/venue/", str(venue.id) + split_tup[1]
-            )
+            venue_img = str(venue.id) + ".jpg"
+            venue_img_path = os.path.join( venue_img_dir, venue_img)
             print(venue_img_path)
-            request.files["file"].save(venue_img_path)
-            venue.venue_img = os.path.basename(venue_img_path)
+            try:
+                if os.path.exists(venue_img_path):
+                    os.remove(venue_img_path)
+                request.files["file"].save(venue_img_path)
+            except:
+                flash("File could not be saved. Assuming default file")
+                venue_img="default.jpg"
+
+            venue.venue_img=venue_img
+            print("Venue img name:", venue.venue_img)
 
         db.session.commit()
         flash("Venue Created Successfully!", "success")
@@ -151,23 +155,27 @@ def venue_edit(venue_id):
     elif request.method == "POST":
         venue.name = request.form["name"]
         venue.place = request.form["place"]
+
+        venue_img = "default.jpg"
         if request.files["file"]:
-            venue_img_path = "default.jpg"
-            if request.files["file"]:
-                basedir = os.path.abspath(os.path.dirname(__file__))
-                file = request.files["file"]
-                if not valid_img_type(file.filename):
-                    flash("img format is not supported", "danger")
-                    return render_template("admin/venue_add.html", venue=venue,pic_err=True)
+            file = request.files["file"]
+            if not valid_img_type(file.filename):
+                flash("Img format is not supported", "danger")
+                return render_template("admin/venue_add.html")
 
-                split_tup = os.path.splitext(file.filename)
-
-                venue_img_path = os.path.join(
-                    basedir + "/static/img/venue/", str(venue.id) + split_tup[1]
-                )
-                print(venue_img_path)
+            venue_img = str(venue.id) + ".jpg"
+            venue_img_path = os.path.join( venue_img_dir, venue_img)
+            print(venue_img_path)
+            try:
+                if os.path.exists(venue_img_path):
+                    os.remove(venue_img_path)
                 request.files["file"].save(venue_img_path)
-                venue.venue_img = os.path.basename(venue_img_path)
+            except:
+                flash("File could not be saved. Assuming default file")
+                venue_img="default.jpg"
+
+            venue.venue_img=venue_img
+            print("Venue img name:", venue.venue_img)
 
         venue.updated_timestamp = datetime.now()
         db.session.add(venue)
@@ -186,6 +194,10 @@ def venue_delete(venue_id):
         venue = Venue.query.get_or_404(venue_id)
         if 'delete-venue' in request.form:
             try:
+                if venue.venue_img != "default.jpg":
+                    venue_img_path=os.path.join(venue_img_dir, venue.venue_img)
+                    if os.path.exists(venue_img_path):
+                        os.remove(venue_img_path)
                 db.session.delete(venue)
                 db.session.commit()
             except:
@@ -266,22 +278,26 @@ def show_add(venue_id=None):
         db.session.add(show)
         db.session.flush()
 
-        show_img_path = "default.jpg"
+        show_img = "default.jpg"
         if request.files["file"]:
-            basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported", "danger")
-                return render_template("admin/show_add.html", pic_err=True)
+                flash("Img format is not supported", "danger")
+                return render_template("admin/show_add.html")
 
-            split_tup = os.path.splitext(file.filename)
-
-            show_img_path = os.path.join(
-                basedir + "/static/img/show/", str(show.id) + split_tup[1]
-            )
+            show_img = str(show.id) + ".jpg"
+            show_img_path = os.path.join(show_img_dir, show_img)
             print(show_img_path)
-            request.files["file"].save(show_img_path)
-            show.show_img = os.path.basename(show_img_path)
+            try:
+                if os.path.exists(show_img_path):
+                    os.remove(show_img_path)
+                request.files["file"].save(show_img_path)
+            except:
+                flash("File could not be saved. Assuming default file")
+                show_img="default.jpg"
+            show.show_img=show_img
+            print("Show img name:", show.show_img)
+
 
         tags = request.form.getlist("tags")
         for tag in tags:
@@ -336,22 +352,26 @@ def show_edit(venue_id, show_id):
         db.session.add(show)
         db.session.flush()
 
-        show_img_path = "default.jpg"
+        show_img = "default.jpg"
         if request.files["file"]:
-            basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
-                flash("img format is not supported", "danger")
-                return render_template("admin/show_add.html", show=show, pic_err=True)
+                flash("Img format is not supported", "danger")
+                return render_template("admin/show_edit.html")
 
-            split_tup = os.path.splitext(file.filename)
-
-            show_img_path = os.path.join(
-                basedir + "/static/img/show/", str(show.id) + split_tup[1]
-            )
+            show_img = str(show.id) + ".jpg"
+            show_img_path = os.path.join( show_img_dir, show_img)
             print(show_img_path)
-            request.files["file"].save(show_img_path)
-            show.venue_img = os.path.basename(show_img_path)
+            try:
+                if os.path.exists(show_img_path):
+                    os.remove(show_img_path)
+                request.files["file"].save(show_img_path)
+            except:
+                flash("File could not be saved. Assuming default file")
+                show_img="default.jpg"
+
+            show.show_img=show_img
+            print("Show img name:", show.show_img)
 
         show.updated_timestamp = datetime.now()
         db.session.commit()
@@ -366,6 +386,10 @@ def show_delete(show_id):
         show = Show.query.get_or_404(show_id)
         if 'delete-show' in request.form:
             try:
+                if show.show_img != "default.jpg":
+                    show_img_path=os.path.join(show_img_dir, show.show_img)
+                    if os.path.exists(show_img_path):
+                        os.remove(show_img_path)
                 db.session.delete(show)
                 db.session.commit()
             except:

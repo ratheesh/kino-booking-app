@@ -18,8 +18,7 @@
 								class="fa fa-map-marker"></i>&nbsp;{{venue.place|capitalize}}</b></small>
 				</div>
 				<hr class="border-dark mt-0">
-				<div class="seating-layout">
-					<form class="col-10 justify-contents-center mx-auto my-3 border rounded-2" method="POST">
+					<div class="row">
 						<div class="seating-legend my-2">
 							<span>
 								<label class="border rounded-1 px-1 m-0 border-dark fs-6">Booked: <small
@@ -30,6 +29,9 @@
 										class="seating-legend-avl">&nbsp;&nbsp;&nbsp;&nbsp;</small></label>
 							</span>
 						</div>
+					</div>
+				<div class="seating-layout">
+					<form class="col-10 justify-contents-center mx-auto mt-3 pt-3 border rounded-2" method="POST">
 						<div class="col-12">
 							{% for row,seats in map %}
 							<div class="row">

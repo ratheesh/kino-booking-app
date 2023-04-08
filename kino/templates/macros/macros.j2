@@ -1,13 +1,13 @@
 {# show venue #}
 {% macro display_venue(venue, is_admin) %}
 <div class="col-sm-3 m-2">
-<div class="card" style="width: 16rem;">
+<div class="card h-100" style="width: 16rem;">
 	{% if venue.venue_img %}
-	<img src="{{ url_for('static', filename='img/venue/' + venue.venue_img) }}" class="card-img-top" alt="venue" />
+	<img src="{{ url_for('static', filename='img/venues/' + venue.venue_img) }}" class="card-img-top img-fluid  object-fit-cover h-40" alt="venue" />
 	{% else %}
 	<img src="https://via.placeholder.com/150" class="card-img-top" alt="venue" />
 	{% endif %}
-  <div class="card-body">
+  <div class="card-body mt-3">
     <h5 class="card-title text-center">{{ venue.name|capitalize }}</h5>
 	<div class="card-detail">
 		<span><i class="fa fa-map-marker"></i>&nbsp;{{venue.place|capitalize}} </span>
@@ -36,9 +36,9 @@
 {# show show #}
 {% macro display_show(show, is_admin, current_user) %}
 <div class="col-sm-3 m-2">
-<div class="card" style="width: 16rem;">
+<div class="card h-100" style="width: 16rem;">
 	{% if show.show_img %}
-	<img src="{{ url_for('static', filename='img/show/' + show.show_img) }}" class="card-img-top" alt="show" />
+	<img src="{{ url_for('static', filename='img/shows/' + show.show_img) }}" class="card-img-top img-fluid  object-fit-cover h-40" alt="show" />
 	{% else %}
 	<img src="https://via.placeholder.com/150" class="card-img-top" alt="show" />
 	{% endif %}
@@ -134,7 +134,7 @@
 <div class="card mb-3">
 	<div class="row g-0">
 		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
+			<img src="{{ url_for('static', filename='img/shows/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
 		</div>
 		<div class="col-md-8">
 			<div class="card-body p-2">
