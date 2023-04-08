@@ -15,11 +15,6 @@ Update {{ current_user.name|capitalize }} Profile
 	<div class="container">
 		<div class="row g-3 mt-4">
 			<form class="col-8 g-3 justify-contents-center m-auto border rounded" method="POST" enctype="multipart/form-data">
-				{% with messages = get_flashed_messages(with_categories=true) %}
-				{% for category, message in messages %}
-				<div class="alert alert-{{category}} text-center m-0">{{ message }}</div>
-				{% endfor %}
-				{% endwith %}
 				<h3 class="text-center mt-2">Update {{ user.name|capitalize }}'s Profile</h3>
 				<hr class="border-dark">
 				<div class="row mb-3">
