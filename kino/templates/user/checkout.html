@@ -7,19 +7,28 @@
 {% block title %}
 Ticket Confirmation
 {% endblock title %}
-
 {% block content %}
 {{ super() }}
 <div class="content">
-  <div class="container">
-	  {% if booking %}
-	  <h3 class="text-center my-3"> Ticket Confirmation </h3>
-	  <a href="/bookings"><button class="btn btn-secondary mb-3">All Bookings</button></a>
-	  {{ macros.display_booking(booking) }}
-	  {% else %}
-	  <h3>Booking does not exist</h3>
-	  {% endif %}
-	  <a href="/"><button class="btn btn-secondary mb-3">Back to Home</button></a>
-  </div>
+	<div class="container">
+		{% if booking %}
+		<div class="row mt-3 justify-contents-center">
+			<div class="col-8 m-auto border rounded-2">
+				<h3 class="text-center my-3"> Ticket Confirmation </h3>
+				<hr class="border-dark">
+				{{ macros.display_booking(booking) }}
+				{% else %}
+				<h3>Booking does not exist</h3>
+				{% endif %}
+				<hr class="border-dark">
+				<div class="row mt-3 mx-auto">
+					<div class="col-8 mx-auto text-center">
+						<a href="/bookings"><button class="btn btn-secondary mb-3">All Bookings</button></a>
+						<a href="/"><button class="btn btn-secondary mb-3">Back to Home</button></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock content %}

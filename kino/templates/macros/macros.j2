@@ -174,39 +174,6 @@
 	</div>
 </div>
 {% endmacro %}
+{###########################################################################################}
 
-{# show checkout summary #}
-{% macro display_checkout(booking) %}
-<div class="card mb-3" style="max-width: 540px;">
-	<div class="row g-0">
-		<div class="col-md-4">
-			<img src="{{ url_for('static', filename='img/show/' + booking.show.show_img) }}" class="img-fluid rounded-start" alt="Show banner">
-		</div>
-		<div class="col-md-8">
-			<div class="card-body">
-			<h6> Ticket: #{{ booking.id }}</h6>
-				<h6 class="card-title text-center">{{ booking.show.title }}({{ booking.show.language }})</h6>
-				<hr>
-				<p class="card-text"><i class="fa fa-map-marker"></i><small>{{ booking.show.venue.name }},{{ booking.show.venue.place }}</small></p>
-				<div class="card-text">
-					{{ booking.show.show_time.strftime("%a %d %b %Y %I.%M%p") }},{{ booking.show.duration }}mins
-				</div>
-				<div class="card-text">
-					<br>
-					<label>No. of seats:{{ booking.seats|count }} </label>
-				</div>
-				<div class="card-text">
-					<br>
-					<label>Seats: </label>
-					{% for seat in booking.seats %}
-						<span>&nbsp;{{ seat.seat }}</span>
-					{% endfor %}
-				</div>
-				<br>
-			</div>
-		</div>
-	</div>
-</div>
-{% endmacro %}
-
-
+{# End of File #}
