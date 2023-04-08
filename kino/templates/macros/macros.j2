@@ -88,11 +88,12 @@
 	</div>
 	{% else %}
 	<div class="card-form mt-2">
-	<form action={{url_for('controller.book', show_id=show.id)}} method="post">
+	<a href="{{url_for('controller.book', show_id=show.id)}}", class="btn btn-success" {{ disable_booking }}>Book</a>
+<!--	<form action={{url_for('controller.book', show_id=show.id)}} method="get">
 		<div class="card-form" style="text-align:center">
-			<input type="submit" class="btn btn-success" name="book" value="Book" class="btn btn-general" {{ disable_booking }}>
+			<input type="submit" class="btn btn-success" name="" value="Book" {{ disable_booking }}>
 		</div>
-	</form>
+	</form> -->
 	</div>
 	{% endif %}
 	<div class="card-footer p-1 mt-2 d-flex justify-content-between">
