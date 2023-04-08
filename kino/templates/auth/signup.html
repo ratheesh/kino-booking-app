@@ -7,43 +7,45 @@
 {% block content %}
 <div class="content">
 	<div class="container">
-		<div class="row g-3">
+		<div class="row g-3 mt-3">
 			{% with messages = get_flashed_messages(with_categories=true) %}
 			{% for category, message in messages %}
 			<div class="alert alert-{{category}}" style="text-align: center;margin:0px">{{ message }}</div>
 			{% endfor %}
 			{% endwith %}
-			<form class="row g-5" method="POST" enctype="multipart/form-data">
+			<form class="col-8 g-5 border rounded-2" method="POST" enctype="multipart/form-data">
 				<h2>Signup</h2>
+				<hr class="border-dark">
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="name" class="form-label">Name</label> <input type="text" class="form-control" id="user" name="name" placeholder="Name" autocomplete="off"
 							minlength="2" required>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="username" class="form-label">User Name</label> <input type="text" class="form-control" id="username" name="username" placeholder="User Name" autocomplete="off" minlength="4" required>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="password1" class="form-label">Password </label> <input type="password" class="form-control" id="password1" name="password1" placeholder="Set Password" autocomplete="off" minlength="4" required>
 					</div>
 				</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 						<label for="password2" class="form-label">Password </label> <input type="password" class="form-control" id="password2" name="password2" placeholder="Reenter Password" autocomplete="off" minlength="4" required>
 					</div>
 			</div>
 				<div class="row mb-3">
-					<div class="col-md-4">
+					<div class="col-md-8">
 							<label for="form-file" class="form-label">Profile Image</label>
 							<input type="file" class="form-control form-control-sm" id="form-file" name="file" placeholder="Upload Profile Image" value="" autocomplete="off" accept="image/jpeg, image/jpg" />
 				</div>
 				</div>
-				<div class="row mb-3">
-					<div class="col-md-4" id="btnid">
+				<hr class="border-dark">
+				<div class="row mb-3 g-3">
+					<div class="col-md-8" id="btnid">
 						<a href="/" class="btn btn-secondary">Home</a>
 						&nbsp;
 						<input type="submit" class="btn btn-success" name="register" value="Register">
