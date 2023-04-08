@@ -7,33 +7,42 @@
 {% block content %}
 <div class="content">
 	<div class="container">
-		<div class="row g-3">
+		<div class="row g-1 m-3">
+			<div class="text-center">
+				<h1 style="color:lightcoral">Kino Booking App</h1>
+			</div>
+		</div>
+		<div class="row g-3 m-auto">
+			<form class="col-6 g-5 border rounded-2" action="{{ url_for('controller.login') }}" method="post">
+			<h2>Login</h2>
 			{% with messages = get_flashed_messages(with_categories=true) %} {% for
 			category, message in messages %}
-			<div class="alert alert-{{category}} alter-dismissible fade show text-center m-auto font-weight-bolder" role="alert">
-			{{ message }}
-			<button class="btn-close" data-bs-dismiss="alert"></button>
+			<div class="row mb-4">
+				<div class="col-9 alert alert-{{category}} alter-dismissible fade show text-center align-items-center" role="alert">
+					<span>{{ message }}</span>
+					<span> <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"></button></span>
+				</div>
 			</div>
 			{% endfor %}
 			{% endwith %}
-			<form class="row g-5" action="{{ url_for('controller.login') }}" method="post">
-			<h2>Login</h2>
+			<hr class="border-dark">
 				<div class="row mb-3">
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<label for="username" class="form-label">User Name</label>
 					<input type="text" class="form-control" id="username" name="username" placeholder="username"
 						autocomplete="off" required>
 				</div>
 			</div>
 			<div class="row mb-3">
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<label for="password" class="form-label">Pasword</label>
 					<input type="password" class="form-control" name="password" id="password" placeholder=" password"
 						autocomplete="off" required>
 				</div>
 				</div>
+			<hr class="border-dark">
 				<div class="row mb-3">
-					<div class="col-md-4" id="btnid">
+					<div class="col-md-8" id="btnid">
 						<a href="/" class="btn btn-secondary">Home</a> &nbsp; &nbsp;
 						<input class='btn btn-success' type="submit" value="Login" />
 						&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ url_for('controller.signup') }}"
