@@ -22,9 +22,11 @@ def valid_img_type(filename):
     #     "jpg",
     #     "jpeg",
     # ]
-    split_tup = os.path.splitext(filename).lower()
-    print("extension: " + split_tup[1][1:])
-    return split_tup[1][1:] in ["jpg", "jpeg"]
+    print(filename)
+    split_tup = os.path.splitext(filename)
+    # print('split:', split_tup)
+    # print("extension: " + split_tup[1][1:])
+    return split_tup[1][1:].lower() in ["jpg", "jpeg"]
 
 
 def admin_only(f):
@@ -114,11 +116,11 @@ def venue_add():
     if request.method == "POST":
         name = request.form["name"]
         place = request.form["place"]
-        venue = Venue(name=name, place=place, venue_img="default.png")
+        venue = Venue(name=name, place=place, venue_img="default.jpg")
         db.session.add(venue)
         db.session.flush()
 
-        venue_img_path = "default.png"
+        venue_img_path = "default.jpg"
         if request.files["file"]:
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
@@ -151,7 +153,7 @@ def venue_edit(venue_id):
         venue.name = request.form["name"]
         venue.place = request.form["place"]
         if request.files["file"]:
-            venue_img_path = "default.png"
+            venue_img_path = "default.jpg"
             if request.files["file"]:
                 basedir = os.path.abspath(os.path.dirname(__file__))
                 file = request.files["file"]
@@ -260,12 +262,12 @@ def show_add(venue_id=None):
             n_rows=request.form["rows"],
             n_seats=request.form["seats"],
             venue_id=venue_id,
-            show_img="default.png",
+            show_img="default.jpg",
         )
         db.session.add(show)
         db.session.flush()
 
-        show_img_path = "default.png"
+        show_img_path = "default.jpg"
         if request.files["file"]:
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
@@ -330,12 +332,12 @@ def show_edit(venue_id, show_id):
         show.n_rows = request.form["rows"]
         show.n_seats = request.form["seats"]
         show.venue_id = venue_id
-        show.show_img = "default.png"
+        show.show_img = "default.jpg"
 
         db.session.add(show)
         db.session.flush()
 
-        show_img_path = "default.png"
+        show_img_path = "default.jpg"
         if request.files["file"]:
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
@@ -592,22 +594,42 @@ def profile_edit():
         name = request.form["name"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
-        if password1 != "" or password2 != "":
-            if password1 != password2:
-                flash("Passwords does not match!", "danger")
-                return render_template("user/profile_edit.html", user=current_user)
-        else:
-            print(f"name:{name}, pass1={password1}, pass2={password2}")
-            current_user.name = name
-            current_user.password = generate_password_hash(password1)
+        # print(f"name:{name}, pass1={password1}, pass2={password2}")
 
-        profile_img_path = "default.png"
+        current_user.name = name
+        if password1 == "" and password2 == "":
+            print("password are not updated")
+        elif password1 == "" or password2 == "":
+            flash("Enter password in both fields", "warning")
+            return render_template("/user/profile_edit.html", user=current_user)
+        else:
+            if password1 == password2:
+                current_user.password = generate_password_hash(password1)
+                print(f"Updated: name:{name}, pass1={password1}, pass2={password2}")
+            else:
+                flash("Password mismatch", "warning")
+                return render_template("/user/profile_edit.html", user=current_user)
+            
+
+        # if password1 != "" and password2 != "":
+        #     if password1 != password2:
+        #         flash("Passwords does not match!", "danger")
+        #         return render_template("/user/profile_edit.html", user=current_user)
+        #     else:
+        #         print(f"name:{name}, pass1={password1}, pass2={password2}")
+        #         current_user.name = name
+        #         current_user.password = generate_password_hash(password1)
+        # else:
+        #     flash("Enter password in both fields", "warning")
+        #     return render_template("/user/profile_edit.html", user=current_user)
+
+        profile_img_path = "default.jpg"
         if request.files["file"]:
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
             if not valid_img_type(file.filename):
                 flash("img format is not supported", "danger")
-                return render_template("user/profile.html")
+                return render_template("/user/profile.html", user=current_user)
 
             split_tup = os.path.splitext(file.filename)
 
@@ -623,7 +645,7 @@ def profile_edit():
         db.session.add(current_user)
         db.session.commit()
         flash("User details updated!", "success")
-        return redirect(url_for("controller.profile", user=current_user))
+        return redirect(url_for("controller.profile"))
 
 
 @controller.route("/profile/delete", methods=["GET", "POST"])
@@ -695,7 +717,7 @@ def signup():
     if request.method == "GET":
         return render_template("auth/signup.html")
     if request.method == "POST":
-        profile_img = "default.png"
+        profile_img = "default.jpg"
         name = request.form["name"]
         username = request.form["username"]
         user = User.query.filter_by(username=username).first()
@@ -713,14 +735,14 @@ def signup():
             role="user",
             username=username,
             password=generate_password_hash(password1),
-            profile_img="default.png",
+            profile_img="default.jpg",
             created_timestamp=datetime.now(),
             updated_timestamp=datetime.now(),
         )
         db.session.add(user)
         db.session.flush()
 
-        venue_img_path = "default.png"
+        profile_img = "default.jpg"
         if request.files["file"]:
             basedir = os.path.abspath(os.path.dirname(__file__))
             file = request.files["file"]
@@ -731,11 +753,18 @@ def signup():
             split_tup = os.path.splitext(file.filename)
 
             profile_img_path = os.path.join(
-                basedir + "/static/img/profile/", str(user.id) + split_tup[1]
+                basedir + "/static/img/profile/", str(user.id) + ".jpg"
             )
             print(profile_img_path)
-            request.files["file"].save(profile_img_path)
-            profile.venue_img = venue_img_path
+            try:
+                if os.path.exists(profile_img_path):
+                    os.remove(profile_img_path)
+                request.files["file"].save(profile_img_path)
+                profile_img = profile_img_path
+            except:
+                flash("file could not be saved. Assuming default file")
+                user.profile_img=profile_img
+            
 
         # db.session.add(user)
         db.session.commit()
