@@ -82,6 +82,16 @@ info:
         <td>Not Null</td>
       </tr>
       <tr>
+        <td>n_rows</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
+        <td>n_seats</td>
+        <td>Integer</td>
+        <td>Not Null</td>
+      </tr>
+      <tr>
         <td>venue_img</td>
         <td>String</td>
         <td>Not Null</td>
@@ -141,16 +151,6 @@ info:
       <tr>
         <td>show_time</td>
         <td>DateTime</td>
-        <td>Not Null</td>
-      </tr>
-      <tr>
-        <td>n_rows</td>
-        <td>Integer</td>
-        <td>Not Null</td>
-      </tr>
-      <tr>
-        <td>n_seats</td>
-        <td>Integer</td>
         <td>Not Null</td>
       </tr>
       <tr>
@@ -427,6 +427,12 @@ paths:
                     place:
                       type: string
                       example: whitefield
+                    n_rows:
+                      type: integer
+                      example: 5
+                    n_seats:
+                      type: integer
+                      example: 10
                     venue_img:
                       type: string
                       example: 1.jpg
@@ -453,6 +459,12 @@ paths:
                 place:
                   type: string
                   example: whitefield
+                n_rows:
+                    type: integer
+                    example: 5
+                n_seats:
+                    type: integer
+                    example: 10
       responses:
         '201':
           description: Venue Successfully Created
@@ -470,6 +482,12 @@ paths:
                   place:
                     type: string
                     example: whitefield
+                  n_rows:
+                    type: integer
+                    example: 5
+                  n_seats:
+                    type: integer
+                    example: 10
                   venue_img:
                     type: string
                     example: 2.jpg
@@ -515,6 +533,12 @@ paths:
                   place:
                     type: string
                     example: Whitefield
+                  n_rows:
+                    type: integer
+                    example: 5
+                  n_seats:
+                    type: integer
+                    example: 10
                   venue_img:
                     type: string
                     example: 2.jpg
@@ -550,6 +574,12 @@ paths:
                 place:
                   type: string
                   example: Whitefield
+                n_rows:
+                  type: integer
+                  example: 5
+                n_seats:
+                  type: integer
+                  example: 10
       responses:
         '200':
           description: Venue Successfully updated
@@ -567,6 +597,12 @@ paths:
                   place:
                     type: string
                     example: Whitefield
+                  n_rows:
+                    type: integer
+                    example: 5
+                  n_seats:
+                    type: integer
+                    example: 10
                   venue_img:
                     type: string
                     example: 2.jpg
@@ -640,13 +676,7 @@ paths:
                       example: 4.5
                     show_time:
                       type: string
-                      example: 
-                    n_rows:
-                      type: integer
-                      example: 5
-                    n_seats:
-                      type: integer
-                      example: 10
+                      example: 2023-04-9 10:10
                     show_img:
                       type: string
                       example: default.jpg
@@ -659,6 +689,8 @@ paths:
                     updated_timestamp:
                       type: string
                       example: Tue, 28 Mar 2023 12:10:14 -0000
+        '400':
+          description: venue not found
         '500':
           description: Internal Server Error
 
@@ -694,7 +726,7 @@ paths:
                   example: 4.5
                 show_time:
                   type: string
-                  example: 2023-03-28 10:10
+                  example: 2023-04-9 10:10
                 n_rows:
                   type: integer
                   example: 5
@@ -730,13 +762,7 @@ paths:
                     example: 4.5
                   show_time:
                     type: string
-                    example: 
-                  n_rows:
-                    type: integer
-                    example: 5
-                  n_seats:
-                    type: integer
-                    example: 10
+                    example: 2023-04-9 10:10
                   show_img:
                     type: string
                     example: default.jpg
@@ -799,13 +825,7 @@ paths:
                     example: 4.5
                   show_time:
                     type: string
-                    example: 
-                  n_rows:
-                    type: integer
-                    example: 5
-                  n_seats:
-                    type: integer
-                    example: 10
+                    example: 2023-04-9 10:10
                   show_img:
                     type: string
                     example: default.jpg
@@ -863,14 +883,13 @@ paths:
                   example: 4.5
                 show_time:
                   type: string
-                  example: 
+                  example: 2023-04-9 10:10
                 n_rows:
                   type: integer
                   example: 5
                 n_seats:
                   type: integer
                   example: 10
-
       responses:
         '200':
           description: Show updated successfully
@@ -899,13 +918,7 @@ paths:
                     example: 4.5
                   show_time:
                     type: string
-                    example: 
-                  n_rows:
-                    type: integer
-                    example: 5
-                  n_seats:
-                    type: integer
-                    example: 10
+                    example: 2023-04-9 10:10
                   show_img:
                     type: string
                     example: default.jpg

@@ -153,11 +153,15 @@ class UserAPI(Resource):
 venue_request_parse = reqparse.RequestParser()
 venue_request_parse.add_argument("name", type=str, required=True)
 venue_request_parse.add_argument("place", type=str, required=True)
+venue_request_parse.add_argument("n_rows", type=int, required=True)
+venue_request_parse.add_argument("n_seats", type=int, required=True)
 
 venue_response_fields = {
     "id": fields.Integer,
     "name": fields.String,
     "place": fields.String,
+    "n_rows": fields.Integer,
+    "n_seats": fields.Integer,
     "venue_img": fields.String,
     "created_timestamp": fields.DateTime,
     "updated_timestamp": fields.DateTime,
@@ -181,10 +185,14 @@ class VenueAPI(Resource):
         args = venue_request_parse.parse_args(strict=True)
         name = args.get("name", None)
         place = args.get("place", None)
+        n_rows = args.get("n_rows", None)
+        n_seats = args.get("n_seats", None)
         venue_img="default.jpg"
 
         venue = Venue(name=name,
                        place=place,
+                       n_rows=n_rows,
+                       n_seats=n_seats,
                        venue_img=venue_img,
                        created_timestamp=datetime.now(),
                        updated_timestamp=datetime.now()
@@ -205,15 +213,15 @@ class VenueAPI(Resource):
         args = venue_request_parse.parse_args(strict=True)
         name = args.get("name", None)
         place = args.get("place", None)
-        if name is None:
-            raise BadRequest("Venue Name is missing")
-        if place is None:
-            raise BadRequest("Venue Place is missing")
+        n_rows = args.get("n_rows", None)
+        n_seats = args.get("n_seats", None)
 
         venue =  Venue.query.filter_by(id=venue_id).first()
         if venue:
             venue.name = name
             venue.place = place
+            venue.n_rows = n_rows
+            venue.n_seats = n_seats
             venue.updated_timestamp=datetime.now()
         else:
             raise NotFoundError("Venue not found")
@@ -250,8 +258,6 @@ show_request_parse.add_argument("duration", type=int, required=True)
 show_request_parse.add_argument("price", type=int, required=True)
 show_request_parse.add_argument("rating", type=float, required=True)
 show_request_parse.add_argument("show_time", type=valid_date, required=True)
-show_request_parse.add_argument("n_rows", type=int, required=True)
-show_request_parse.add_argument("n_seats", type=int, required=True)
 # show_request_parse.add_argument("venue_id", type=int, required=True)
 
 
@@ -263,8 +269,6 @@ show_response_fields = {
     "price": fields.Integer,
     "rating": fields.Float,
     "show_time": fields.DateTime,
-    "n_rows": fields.Integer,
-    "n_seats": fields.Integer,
     "show_img": fields.String,
     "created_timestamp": fields.DateTime,
     "updated_timestamp": fields.DateTime,
@@ -305,8 +309,6 @@ class ShowAPI(Resource):
         price = args.get("price", None)
         rating = args.get("rating", None)
         show_time = args.get("show_time", None)
-        n_rows = args.get("n_rows", None)
-        n_seats = args.get("n_seats", None)
         show_img="default.jpg"
 
         venue = db.session.query(Venue).filter(Venue.id == venue_id).first()
@@ -320,8 +322,6 @@ class ShowAPI(Resource):
             price=price,
             rating=rating,
             show_time=show_time,
-            n_rows=n_rows,
-            n_seats=n_seats,
             show_img=show_img,
             venue_id=venue.id,
             created_timestamp=datetime.now(),
@@ -353,8 +353,6 @@ class ShowAPI(Resource):
             price = args.get("price", None)
             rating = args.get("rating", None)
             show_time = args.get("show_time", None)
-            n_rows = args.get("n_rows", None)
-            n_seats = args.get("n_seats", None)
 
             show.title=title
             show.language=language
@@ -362,8 +360,6 @@ class ShowAPI(Resource):
             show.price=price
             show.rating=rating
             show.show_time=show_time
-            show.n_rows=n_rows
-            show.n_seats=n_seats
             show.venue_id=venue.id
             show.updated_timestamp=datetime.now()
         else:
