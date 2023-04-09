@@ -293,6 +293,11 @@ def show_add(venue_id=None):
             venue_id=venue_id,
             show_img="default.jpg",
         )
+
+        if show.show_time < datetime.now():
+            flash("Show can not scheduled in the past time", "danger")
+            return redirect(url_for("controller.show_management", venue_id=venue_id))
+
         db.session.add(show)
         db.session.flush()
 
@@ -369,6 +374,10 @@ def show_edit(venue_id, show_id):
         show.venue_id = venue_id
         show.show_img = "default.jpg"
 
+        if show.show_time < datetime.now():
+            flash("Show can not scheduled in the past time. No changes made", "danger")
+            return redirect(url_for("controller.show_management", venue_id=venue_id))
+
         db.session.add(show)
         db.session.flush()
 
@@ -424,6 +433,7 @@ def show_delete(show_id):
 
 # data
 # {
+#  "latest": [show1, show2, ...],
 #  "today": [show1, show2, ...],
 #  "tomorrow": [show1, show2, ...],
 #  "venues": {
