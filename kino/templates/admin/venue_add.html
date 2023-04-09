@@ -44,8 +44,8 @@ Add Venue
 					<div class="row mb-3">
 						<div class="col-md-8">
 							<label for="rows" class="form-label">Rows</label>
-							{% if show is defined %}
-							<input type="number" class="form-control" id="rows" name="rows" value="{{ show.n_rows }}"
+							{% if venue is defined %}
+							<input type="number" class="form-control" id="rows" name="rows" value="{{ venue.n_rows }}"
 								placeholder="Number of Rows" min="5" max="12" required>
 							{% else %}
 							<input type="number" class="form-control" id="rows" name="rows" value="" placeholder="Number of Rows" min="5"
@@ -56,8 +56,8 @@ Add Venue
 					<div class="row mb-3">
 						<div class="col-md-8">
 							<label for="seats" class="form-label">Seats per Row</label>
-							{% if show is defined %}
-							<input type="number" class="form-control" id="seats" name="seats" value="{{ show.n_seats }}"
+							{% if venue is defined %}
+							<input type="number" class="form-control" id="seats" name="seats" value="{{ venue.n_seats }}"
 								placeholder="Seats per Row" min="10" max="15" required>
 							{% else %}
 							<input type="number" class="form-control" id="seats" name="seats" value="" placeholder="Seats per Row" min="10"
