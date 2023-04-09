@@ -727,12 +727,6 @@ paths:
                 show_time:
                   type: string
                   example: 2023-04-9 10:10
-                n_rows:
-                  type: integer
-                  example: 5
-                n_seats:
-                  type: integer
-                  example: 10
       responses:
         '201':
           description: Show Successfully Created
@@ -884,12 +878,6 @@ paths:
                 show_time:
                   type: string
                   example: 2023-04-9 10:10
-                n_rows:
-                  type: integer
-                  example: 5
-                n_seats:
-                  type: integer
-                  example: 10
       responses:
         '200':
           description: Show updated successfully
