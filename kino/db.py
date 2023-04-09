@@ -34,6 +34,8 @@ class Venue(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     name = db.Column(db.String(64), nullable=False)
     place = db.Column(db.String(64), nullable=False)
+    n_rows = db.Column(db.Integer, nullable=False)
+    n_seats = db.Column( db.Integer, nullable=False)  # seats per row
     venue_img = db.Column(db.String(64), nullable=False, default="default.jpg")
     created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
     updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
@@ -68,8 +70,6 @@ class Show(db.Model):
     price = db.Column(db.Integer, nullable=False)
     rating = db.Column(db.Float, nullable=False, default=0.0)
     show_time = db.Column(db.DateTime, nullable=False)
-    n_rows = db.Column(db.Integer, nullable=False)
-    n_seats = db.Column( db.Integer, nullable=False)  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.jpg")
     created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
     updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())

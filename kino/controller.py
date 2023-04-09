@@ -115,7 +115,9 @@ def venue_add():
     if request.method == "POST":
         name = request.form["name"]
         place = request.form["place"]
-        venue = Venue(name=name, place=place, venue_img="default.jpg")
+        n_rows = request.form["rows"]
+        n_seats = request.form["seats"]
+        venue = Venue(name=name, place=place, n_rows=n_rows, n_seats=n_seats, venue_img="default.jpg")
         db.session.add(venue)
         db.session.flush()
 
@@ -139,8 +141,12 @@ def venue_add():
 
             venue.venue_img=venue_img
             print("Venue img name:", venue.venue_img)
+        try:
+            db.session.commit()
+        except:
+            flash("Error in creating venue")
+            return redirect(url_for("controller.venue_management"))
 
-        db.session.commit()
         flash("Venue Created Successfully!", "success")
         return redirect(url_for("controller.venue_management"))
 
@@ -155,6 +161,8 @@ def venue_edit(venue_id):
     elif request.method == "POST":
         venue.name = request.form["name"]
         venue.place = request.form["place"]
+        venue.n_rows = request.form["rows"]
+        venue.n_seats = request.form["seats"]
 
         venue_img = "default.jpg"
         if request.files["file"]:
@@ -178,8 +186,13 @@ def venue_edit(venue_id):
             print("Venue img name:", venue.venue_img)
 
         venue.updated_timestamp = datetime.now()
-        db.session.add(venue)
-        db.session.commit()
+        try:
+            db.session.add(venue)
+            db.session.commit()
+        except:
+            flash("Error in updating venue details")
+            return redirect(url_for("controller.venue_management"))
+
         flash("Venue details Updated", "success")
         return redirect(url_for("controller.venue_management"))
     else:
@@ -270,8 +283,6 @@ def show_add(venue_id=None):
             price=request.form["price"],
             rating=request.form["rating"],
             show_time=datetime.combine(s_dt, s_tm),
-            n_rows=request.form["rows"],
-            n_seats=request.form["seats"],
             venue_id=venue_id,
             show_img="default.jpg",
         )
@@ -345,8 +356,6 @@ def show_edit(venue_id, show_id):
         show.price = request.form["price"]
         show.rating = request.form["rating"]
         show.show_time = datetime.combine(s_dt, s_tm)
-        show.n_rows = request.form["rows"]
-        show.n_seats = request.form["seats"]
         show.venue_id = venue_id
         show.show_img = "default.jpg"
 
@@ -513,12 +522,12 @@ def gen_seatingmap(show):
     print(show)
     init_row = "A"
     # map = dict.fromkeys(
-    #     [chr(ord("A") + i) for i in range(show.n_rows)],
+    #     [chr(ord("A") + i) for i in range(show.venue.n_rows)],
     #     ["U" for _ in range(show.n_seats)],
     # )
     map = {}
-    for i in range(show.n_rows):
-        map[chr(ord(init_row) + i)] = ["U" for _ in range(show.n_seats)]
+    for i in range(show.venue.n_rows):
+        map[chr(ord(init_row) + i)] = ["U" for _ in range(show.venue.n_seats)]
 
     for seat in show.seats:
         # print("seat:", seat)
@@ -547,7 +556,7 @@ def book(show_id):
         return redirect(url_for("controller.home"))
 
     if request.method == "POST":
-        if len(show.seats) >= (show.n_rows * show.n_seats):
+        if len(show.seats) >= (show.venue.n_rows * show.venue.n_seats):
             flash("Show is already housefull!, Try next available show!", "danger")
             return redirect(url_for("controller.home"))
 

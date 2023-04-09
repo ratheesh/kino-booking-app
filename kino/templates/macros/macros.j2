@@ -9,8 +9,15 @@
 	{% endif %}
   <div class="card-body mt-3">
     <h5 class="card-title text-center">{{ venue.name|capitalize }}</h5>
+	<hr class="border-dark">
 	<div class="card-detail">
 		<span><i class="fa fa-map-marker"></i>&nbsp;{{venue.place|capitalize}} </span>
+	</div>
+	<div class="card-detail">
+		<span>Capacity: {{venue.n_rows * venue.n_seats}} </span>
+	</div>
+	<div class="card-detail">
+		<span>Seating Matrix: {{venue.n_rows}} x {{venue.n_seats}} </span>
 	</div>
 	<div class="card-detail">
 		<span>No of Shows: {{ venue.shows|length }}</span>
@@ -61,11 +68,11 @@
 	</div>
 
 	<div class="card-detail">
-		<span>Seats:{{ show.n_rows*show.n_seats }}(Avl:{{(show.n_rows * show.n_seats) - (show.seats|length) }},Booked:{{show.seats|length}})</span>
+		<span>Seats:{{ show.venue.n_rows*show.venue.n_seats }}(Avl:{{(show.venue.n_rows * show.venue.n_seats) - (show.seats|length) }},Booked:{{show.seats|length}})</span>
 	</div>
 
 	{% set disable_booking="" %}
-	{% if not admin and show.seats|length == show.n_rows*show.n_seats %}
+	{% if not admin and show.seats|length == show.venue.n_rows*show.venue.n_seats %}
 	<div class="card-detail" style="justify-content:center;text-align:center">
 		{% set disable_booking="disabled" %}
 		<span style="color:red;">HOUSEFULL!</span>
