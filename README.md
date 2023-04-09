@@ -1,34 +1,30 @@
-<h1> !! THIS IS A PRIVATE REPO !! </h1>
+About
+This is the README file of the MAD-1 Project Jan-23 Term
 
-## IITM Modern Application Development(MAD) 1 Project
-This repository hosts IITM-D Modern Application Development 1 project as a part of my Diploma in Programming course offfered by IIT Madras. Visibility of the project is **STRICTLY** private.
-I have **ABSOLUTELY** no intention to share this with others. If anybody come across this data of this repository, kindly **DELETE** it.
+Testing App
 
-## Dependencies
-### Tools
-#### stylelint(style the CSS files as per the standard):
-**Installation:**
-<br/>
-$ `sudo npm install --save-dev stylelint stylelint-config-standard`
+Requirements
+- Application project zip file
+- Python: 3.8.6
+- OS: Windows
+- Browser: Firefox
+- Terminal (Commandline/Powershell)
 
-## References
-* [MAD1 Course Page](https://seek.onlinedegree.iitm.ac.in/courses/ns_22t3_cs2003)
-* [MAD1 Project Page](https://seek.onlinedegree.iitm.ac.in/courses/ns_22t3_cs2003p)
-* [Wireframe Design](https://excalidraw.com)
-* [Bootstrap](https://getbootstrap.com)
-* [Jinja2 Documentation](https://jinja.palletsprojects.com/en/3.1.x)
-* [Flask Documentation](https://flask.palletsprojects.com/en/2.2.x)
+Instructions to Run:
+- Unzip the project zip file
+- Open commandprompt/powershell
+- cd to the uncompressed project folder
+- Run the following commands
+$ python -m venv venv
+$ .\venv\Scripts\activate
+- This will activate the virtual env
+$ pip install -r requirements.txt
+- Once all the modules are imported
+- python .\app.py
+- Open the Firefox
+- Enter the URL http://127.0.0.1:5000
+- If everything is fine, home screen should be displayed
+- App is now ready of use
 
-## Reference Videos
-<br>
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=G3e-cpL7ofc
-" target="_blank"><img src="http://img.youtube.com/vi/G3e-cpL7ofc/0.jpg"
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" />HTML & CSS Beginner to Pro</a>
-<br>
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=dam0GPOAvVI
-" target="_blank"><img src="http://img.youtube.com/vi/dam0GPOAvVI/0.jpg"
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" />Python Website Full Tutorial - Flask, Authentication, Databases & More</a>
-<br>
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=iG2jotQo9NI
-" target="_blank"><img src="http://img.youtube.com/vi/iG2jotQo9NI/0.jpg"
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" />HTML & CSS for Beginners | FREE MEGA COURSE</a>
+--- END OF FILE ---
+
