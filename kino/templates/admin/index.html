@@ -52,7 +52,11 @@ Admin Dash Board
 							</tr>
 							<tr>
 								<td>Percentage Seats Booked</td>
+								{% if data.seats_avl == 0 %}
+								<td> 0.00%</td>
+								{% else %}
 								<td>{{ "%.2f"|format((data.seats_booked/data.seats_avl) * 100) }}%</td>
+								{% endif %}
 							</tr>
 						</tbody>
 					</table>
