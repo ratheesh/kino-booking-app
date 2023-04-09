@@ -53,7 +53,7 @@ Search
 		{% if shows|length != 0 %}
 		<h3 class="named-line">&nbsp;&nbsp; Shows &nbsp;&nbsp; </h3>
 		{% for show in shows %}
-			{{ macros.display_show(show) }}
+			{{ macros.display_show(show, is_admin=false, current_user=current_user) }}
 		{% endfor %}
 		{% endif%}
 		{% endif%}

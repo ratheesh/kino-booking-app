@@ -42,6 +42,7 @@
 
 {# show show #}
 {% macro display_show(show, is_admin, current_user) %}
+{% set ns = namespace() %}
 <div class="col-sm-3 m-2">
 <div class="card h-100" style="width: 16rem;">
 	{% if show.show_img %}
@@ -71,15 +72,15 @@
 		<span>Seats:{{ show.venue.n_rows*show.venue.n_seats }}(Avl:{{(show.venue.n_rows * show.venue.n_seats) - (show.seats|length) }},Booked:{{show.seats|length}})</span>
 	</div>
 
-	{% set disable_booking="" %}
+	{% set ns.booking_style="" %}
 	{% if not admin and show.seats|length == show.venue.n_rows*show.venue.n_seats %}
 	<div class="card-detail" style="justify-content:center;text-align:center">
-		{% set disable_booking="disabled" %}
+		{% set ns.booking_style="class=\"btn btn-secondary\" style=\"pointer-events:none\"" %}
 		<span style="color:red;">HOUSEFULL!</span>
 	</div>
 	{% else %}
 	<div class="card-detail" style="justify-content:center;text-align:center">
-		{% set disable_booking="" %}
+		{% set ns.booking_style="class=\"btn btn-success\"" %}
 		<span>&nbsp;</span>
 	</div>
 	{% endif %}
@@ -95,7 +96,7 @@
 	</div>
 	{% else %}
 	<div class="card-form mt-2">
-	<a href="{{url_for('controller.book', show_id=show.id)}}", class="btn btn-success" {{ disable_booking }}>Book</a>
+	<a href="{{url_for('controller.book', show_id=show.id)}}"  {{ ns.booking_style }}>Book</a>
 <!--	<form action={{url_for('controller.book', show_id=show.id)}} method="get">
 		<div class="card-form" style="text-align:center">
 			<input type="submit" class="btn btn-success" name="" value="Book" {{ disable_booking }}>
@@ -106,7 +107,7 @@
 	<div class="card-footer p-1 mt-2 d-flex justify-content-between">
 		<span>
 		{% if not is_admin %}
-		{% set ns = namespace(isculiked=0) %}
+		{% set ns.isculiked=0 %}
 		{% for like in show.likes %}
 			{% if like.user.id==current_user.id %}
 				{% set ns.isculiked=1 %}

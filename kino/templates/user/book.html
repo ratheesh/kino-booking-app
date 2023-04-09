@@ -4,7 +4,15 @@
 {% endblock style %}
 
 <!-- main content -->
-{% block content %} {{ super() }}
+{% block content %}
+{{ super() }}
+{% if show.seats|length == show.venue.n_rows * show.venue.n_seats %}
+{% set dis_book = "disabled" %}
+{% set is_housefull = true %}
+{% else %}
+{% set dis_book = "" %}
+{% set is_housefull = false %}
+{% endif %}
 <div class="content">
 	<div class="container">
 		<div class="row mt-4">
@@ -30,6 +38,13 @@
 							</span>
 						</div>
 					</div>
+					{% if is_housefull %}
+					<div class="row">
+						<div class="seating-legend">
+							<span class="text-center" style="color:red;font-weight: bold; "> SHOW IS HOUSEFULL!</span>
+						</div>
+					</div>
+					{% endif %}
 				<div class="seating-layout">
 					<form class="col-10 justify-contents-center mx-auto mt-3 pt-3 border rounded-2" method="POST">
 						<div class="col-12">
@@ -61,7 +76,7 @@
 						<hr class="border-dark">
 						<div class="row justify-contents-center">
 							<div class="col-8 mx-auto mb-2 text-center">
-								<input class="btn btn-success" type="submit" name="" value="Book">
+								<input class="btn btn-success" type="submit" name="" value="Book" {{ dis_book }}>
 								<a href="/" class="btn btn-secondary">Go to Home</a>
 							</div>
 						</div>
