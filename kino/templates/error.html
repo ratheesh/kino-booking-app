@@ -10,13 +10,36 @@ Error
 {% endblock style %}
 
 {% block content %}
-{% if error_id == 403 %}
-<h4>This page is forbidden to access</h4>
-{% elif error_id == 404 %}
-<h4>Page Not Found</h4>
-{% elif error_id == 500 %}
-<h4>Internal Server Error</h4>
-{% endif %}
-
-<a href="/" class="btn btn-secondary">Go Home</a>
+{{ super() }}
+<div class="content">
+    <div class="container">
+        <div class="row g-1 mt-5">
+            <div class="col-8 mx-auto p-2 border rounded-2 text-center">
+                <h2 style="color:lightcoral;font-weight:bold">Kino Booking App</h2>
+                <hr class="border-dark">
+                {% if error_id == 400 %}
+                <h3>Bad Request!</h3>
+                <h4>Request to access the resource is not in expected format!</h4>
+                {% elif error_id == 403 %}
+                <h3>Forbidden!</h3>
+                <h4>Access to this resource is forbidden!</h4>
+                {% elif error_id == 404 %}
+                <h3>Not Found</h3>
+                <h4>Oops! Page/Resource that you are looking is not here!</h4>
+                {% elif error_id == 500 %}
+                <h3>Internal Server Error </h3>
+                <h4>Apologies! There seems to be an issue in our side!</h4>
+                {% endif %}
+                <hr class="border-dark">
+                {% if current_user.role == "admin" %}
+                <a href="/admin" class="btn btn-secondary">Home</a>
+                <a href="/admin/venue" class="btn btn-secondary">Venues</a>
+                {% else %}
+                <a href="/" class="btn btn-secondary">Home</a>
+                <a href="/bookings" class="btn btn-secondary">Bookings</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

@@ -811,18 +811,20 @@ def logout():
     flash("Bye till next time!", "success")
     return redirect(url_for("controller.home"))
 
-
-@controller.errorhandler(404)
+@controller.errorhandler(400)
 def page_not_found(e):
-    return render_template('error.html', error_id=404), 404
+    return render_template('error.html', error_id=400), 404
 
 @controller.errorhandler(403)
 def page_not_found(e):
     return render_template('error.html', error_id=403), 403
 
+@controller.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html', error_id=404), 404
+
 @controller.errorhandler(500)
 def internal_server_error(e):
     return render_template('error.html', error_id=500), 500
-
 
 # End of File
