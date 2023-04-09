@@ -29,8 +29,8 @@
     align-items: center;
     height:100%;
     width:50%;
-    border: 2px solid lightslategray;
-    border-radius: 10px;
+    /* border: 1px solid lightslategray; */
+    /* border-radius: 10px; */
 }
 
 .top-right {
@@ -41,8 +41,8 @@
     top: 0;
     height:100%;
     width:50%;
-    border: 2px solid lightslategray;
-    border-radius: 10px;
+    /* border: 2px solid lightslategray;
+    border-radius: 10px; */
 }
 
 .top-right h6 {

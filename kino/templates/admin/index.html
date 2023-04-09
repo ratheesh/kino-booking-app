@@ -12,31 +12,20 @@ Admin Dash Board
 <div class="content">
 	<div class="container">
 		<div class="top-segment">
-			<div class="top-left">
+			<div class="top-left border rounded-2">
 				<form method="POST">
 					<input type="submit" class="btn btn-secondary btn-lg" name="venue-management" value="Venue Management">
 					&nbsp; &nbsp;
 					<input type="submit" class="btn btn-secondary btn-lg" name="add-show" value="+ Add Show">
 				</form>
 			</div>
-			<div class="top-right">
+			<div class="top-right border rounded-2">
 				<h6>Top Level stats</h6>
 				<div class="tr-element"><div class="tr-element-left">Users </div><div class="tr-element-right">{{ users_count }}</div></div>
 				<div class="tr-element"><div class="tr-element-left">Venues </div><div class="tr-element-right">{{ venue_count }}</div></div>
 				<div class="tr-element"><div class="tr-element-left">Shows  </div><div class="tr-element-right">{{ show_count }} </div></div>
 				<div class="tr-element"><div class="tr-element-left">Seats  </div><div class="tr-element-right">{{ seat_count }} </div></div>
 			</div>
-		</div>
-		<div class="bottom-segment">
-			<div class="bottom-left">
-				<img src="{{ url_for('static', filename='img/booking_trend.jpg' ) }}" alt="seats trend">
-
-			</div>
-			<div class="bottom-right">
-				<img src="{{ url_for('static', filename='img/categories_trend.jpg' ) }}" alt="categories trend">
-
-			</div>
-
 		</div>
 	</div>
 </div>
