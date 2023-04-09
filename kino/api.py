@@ -1,5 +1,4 @@
 from datetime import datetime
-from pytz import timezone
 
 from flask import Blueprint, make_response
 from flask_restful import (NotFound, Resource, fields, marshal_with, reqparse,
@@ -91,8 +90,8 @@ class UserAPI(Resource):
             password=generate_password_hash(password),
             role="user",
             profile_img="default.jpg",
-            created_timestamp=datetime.now(timezone('Asia/Kolkata')),
-            updated_timestamp=datetime.now(timezone('Asia/Kolkata')),
+            created_timestamp=datetime.now(),
+            updated_timestamp=datetime.now(),
         )
         if user is None:
             raise InternalServerError(msg="Error in creating User")
@@ -122,7 +121,7 @@ class UserAPI(Resource):
 
                 user.name = name
                 user.password = password
-                user.updated_timestamp=datetime.now(timezone('Asia/Kolkata'))
+                user.updated_timestamp=datetime.now()
             else:
                 raise NotFoundError(msg="User not found")
 
@@ -187,8 +186,8 @@ class VenueAPI(Resource):
         venue = Venue(name=name,
                        place=place,
                        venue_img=venue_img,
-                       created_timestamp=datetime.now(timezone('Asia/Kolkata')),
-                       updated_timestamp=datetime.now(timezone('Asia/Kolkata'))
+                       created_timestamp=datetime.now(),
+                       updated_timestamp=datetime.now()
                        )
         if venue is None:
             raise InternalServerError(msg="Error creating Venue")
@@ -215,7 +214,7 @@ class VenueAPI(Resource):
         if venue:
             venue.name = name
             venue.place = place
-            venue.updated_timestamp=datetime.now(timezone('Asia/Kolkata'))
+            venue.updated_timestamp=datetime.now()
         else:
             raise NotFoundError("Venue not found")
 
@@ -325,8 +324,8 @@ class ShowAPI(Resource):
             n_seats=n_seats,
             show_img=show_img,
             venue_id=venue.id,
-            created_timestamp=datetime.now(timezone('Asia/Kolkata')),
-            updated_timestamp=datetime.now(timezone('Asia/Kolkata'))
+            created_timestamp=datetime.now(),
+            updated_timestamp=datetime.now()
         )
         if show is None:
             raise InternalServerError(msg="Error creating Show")
@@ -366,7 +365,7 @@ class ShowAPI(Resource):
             show.n_rows=n_rows
             show.n_seats=n_seats
             show.venue_id=venue.id
-            show.updated_timestamp=datetime.now(timezone('Asia/Kolkata'))
+            show.updated_timestamp=datetime.now()
         else:
             raise NotFoundError("Show not found")
 

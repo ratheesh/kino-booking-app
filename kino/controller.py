@@ -1,6 +1,5 @@
 import os
 from datetime import datetime, timedelta
-from pytz import timezone
 from functools import wraps
 
 from flask import (Blueprint, abort, flash, redirect, render_template, request,
@@ -178,7 +177,7 @@ def venue_edit(venue_id):
             venue.venue_img=venue_img
             print("Venue img name:", venue.venue_img)
 
-        venue.updated_timestamp = datetime.now(timezone('Asia/Kolkata'))
+        venue.updated_timestamp = datetime.now()
         db.session.add(venue)
         db.session.commit()
         flash("Venue details Updated", "success")
@@ -254,7 +253,7 @@ def show_add(venue_id=None):
         s_time = request.form["show-time"]
         s_dt = datetime.strptime(s_date, "%Y-%m-%d")
         s_tm = datetime.strptime(s_time, "%H:%M").time()
-        dt = datetime.combine(s_dt, s_tm, timezone('Asia/Kolkata'))
+        dt = datetime.combine(s_dt, s_tm)
         print(dt, type(dt))
         if venue_id is None:
             venue_ID = request.form.get("venue")
@@ -270,7 +269,7 @@ def show_add(venue_id=None):
             duration=request.form["duration"],
             price=request.form["price"],
             rating=request.form["rating"],
-            show_time=datetime.combine(s_dt, s_tm,timezone('Asia/Kolkata')),
+            show_time=datetime.combine(s_dt, s_tm),
             n_rows=request.form["rows"],
             n_seats=request.form["seats"],
             venue_id=venue_id,
@@ -375,7 +374,7 @@ def show_edit(venue_id, show_id):
             show.show_img=show_img
             print("Show img name:", show.show_img)
 
-        show.updated_timestamp = datetime.now(timezone('Asia/Kolkata'))
+        show.updated_timestamp = datetime.now()
         db.session.commit()
         flash("Show details updated successfully!", "success")
         return redirect(url_for("controller.show_management", venue_id=venue_id))
@@ -425,20 +424,20 @@ def home():
         return redirect(url_for("controller.admin"))
 
     data = {}
-    # today = db.session.query(Show).filter(func.date(Show.show_time) == datetime.now(timezone('Asia/Kolkata')).date()).all()
-    # print('timestamp now:', datetime.now(timezone('Asia/Kolkata')).strftime("%Y-%m-%d %H:%M"))
+    # today = db.session.query(Show).filter(func.date(Show.show_time) == datetime.now().date()).all()
+    # print('timestamp now:', datetime.now().strftime("%Y-%m-%d %H:%M"))
     # print('date now:', datetime.now().date())
     # print('time now:', datetime.now().time())
     # print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
     latest = db.session.query(Show).order_by(Show.created_timestamp.desc()).all()
     data["latest"] = latest
-    # today = db.session.query(Show).filter(Show.show_time > datetime.now(timezone('Asia/Kolkata'))).all()
-    dtdelta = datetime.now(timezone('Asia/Kolkata')) - timedelta(minutes=60)
-    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now(timezone('Asia/Kolkata')).date(), Show.show_time > dtdelta)).order_by(Show.show_time.asc()).all()
-    print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now(timezone('Asia/Kolkata'))  for show in Show.query.all()])
+    # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()
+    dtdelta = datetime.now() - timedelta(minutes=60)
+    today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtdelta)).order_by(Show.show_time.asc()).all()
+    print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
     data["today"] = today
     tomorrow = Show.query.filter(
-        func.date(Show.show_time) == (datetime.now(timezone('Asia/Kolkata')).date() + timedelta(days=+1))).order_by(Show.show_time.asc()).all()
+        func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).order_by(Show.show_time.asc()).all()
     data["tomorrow"] = tomorrow
     data["venues"] = {}
     venues = Venue.query.all()
@@ -565,7 +564,7 @@ def book(show_id):
             )
         else:
             booking = Booking(
-                booking_time=datetime.now(timezone('Asia/Kolkata')),
+                booking_time=datetime.now(),
                 final_amount=len(sel_seats) * show.price,
                 user_id=current_user.id,
                 show_id=show.id,
@@ -647,7 +646,7 @@ def profile_edit():
             request.files["file"].save(profile_img_path)
             current_user.profile_img = profile_img
 
-        current_user.updated_timestamp = datetime.now(timezone('Asia/Kolkata'))
+        current_user.updated_timestamp = datetime.now()
         db.session.add(current_user)
         db.session.commit()
         flash("User details updated!", "success")
@@ -746,8 +745,8 @@ def signup():
             username=username,
             password=generate_password_hash(password1),
             profile_img="default.jpg",
-            created_timestamp=datetime.now(timezone('Asia/Kolkata')),
-            updated_timestamp=datetime.now(timezone('Asia/Kolkata')),
+            created_timestamp=datetime.now(),
+            updated_timestamp=datetime.now(),
         )
         db.session.add(user)
         db.session.flush()

@@ -1,5 +1,4 @@
 from datetime import datetime
-from pytz import timezone
 
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -21,8 +20,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(256), nullable=False)
     role = db.Column(db.String(32), nullable=False, default="user")
     profile_img = db.Column(db.String(32), default="default.jpg")
-    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
-    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     bookings = db.relationship("Booking", backref="user", cascade="all, delete-orphan")
     likes = db.relationship("Like", backref="user", cascade="all,delete-orphan")
@@ -36,8 +35,8 @@ class Venue(db.Model):
     name = db.Column(db.String(64), nullable=False)
     place = db.Column(db.String(64), nullable=False)
     venue_img = db.Column(db.String(64), nullable=False, default="default.jpg")
-    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
-    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     shows = db.relationship("Show", backref="venue", cascade="all,delete-orphan")
 
@@ -72,8 +71,8 @@ class Show(db.Model):
     n_rows = db.Column(db.Integer, nullable=False)
     n_seats = db.Column( db.Integer, nullable=False)  # seats per row -> not total no. of seats in the show
     show_img = db.Column(db.String(64), nullable=False, default="default.jpg")
-    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
-    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
+    created_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    updated_timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now())
 
     venue_id = db.Column(db.Integer, db.ForeignKey("venue.id", ondelete="CASCADE"), nullable=False)
     tags = db.relationship("Tag", secondary=show_tags, backref="shows")
@@ -111,7 +110,7 @@ class Seat(db.Model):
 class Booking(db.Model):
     __tablename__ = "booking"
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    booking_time = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone('Asia/Kolkata')))
+    booking_time = db.Column(db.DateTime, nullable=False, default=datetime.now())
     # time = db.Column(db.String(64), nullable=False)
     final_amount = db.Column(db.Integer, nullable=False)
 
@@ -129,8 +128,8 @@ def create_admin_user(db):
         username="admin",
         role="admin",
         password=generate_password_hash("admin"),
-        created_timestamp=datetime.now(timezone('Asia/Kolkata')),
-        updated_timestamp=datetime.now(timezone('Asia/Kolkata')),
+        created_timestamp=datetime.now(),
+        updated_timestamp=datetime.now(),
     )
     db.session.add(admin)
     db.session.commit()
