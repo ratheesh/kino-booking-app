@@ -63,10 +63,17 @@ def admin():
                 return redirect(url_for("controller.admin"))
             return redirect(url_for("controller.show_add"))
     else:
-        venue_count=Venue.query.count()
-        show_count=Show.query.count()
-        users_count=User.query.count()
-        return render_template("admin/index.html",users_count=users_count, venue_count=venue_count, show_count=show_count)
+        data = {}
+        data["venue_count"] = Venue.query.count()
+        data["show_count"]=Show.query.count()
+        data["users_count"]=User.query.count()
+        shows = Show.query.filter(Show.show_time > datetime.now()).all()
+        data["show_scheduled_cnt"] = len(shows)
+        total_seats_avl = sum([show.venue.n_rows * show.venue.n_seats for show in shows])
+        data["seats_avl"]= total_seats_avl
+        seats_booked=sum([len(show.seats) for show in shows])
+        data["seats_booked"]= seats_booked
+        return render_template("admin/index.html", data=data)
 
 
 @controller.route("/admin/venue", methods=["GET", "POST"])
@@ -458,7 +465,8 @@ def home():
     # print('time now:', datetime.now().time())
     # print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
 
-    dtdelta = datetime.now() - timedelta(minutes=60)
+    # dtdelta = datetime.now() - timedelta(minutes=60)
+    dtdelta = datetime.now()
     latest = db.session.query(Show).filter(Show.show_time > dtdelta).order_by(Show.created_timestamp.asc()).all()
     data["latest"] = latest
     # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()

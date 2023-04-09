@@ -8,7 +8,8 @@ Admin Dash Board
 
 {% block content %}
 {{ super() }}
-<h1 style="text-align: center;"> Admin Dash Board</h1>
+
+<h1 class="text-center mb-4"> Admin Dash Board</h1>
 <div class="content">
 	<div class="container">
 		<div class="top-segment">
@@ -21,27 +22,41 @@ Admin Dash Board
 			</div>
 			<div class="top-right border rounded-2">
 				<h6>Top Level stats</h6>
+				<div class="col-8">
 				<div class="table-borderless">
 					<table class="table">
 						<tbody>
-							<tr class="">
+							<tr>
 								<td>Users</td>
-								<td class="text-left">{{ users_count }}</td>
+								<td>{{ data.users_count }}</td>
 							</tr>
-							<tr class="">
+							<tr>
 								<td>Venues</td>
-								<td>{{ venue_count }}</td>
+								<td>{{ data.venue_count }}</td>
 							</tr>
-							<tr class=tr-element"">
-								<td>Shows</td>
-								<td>{{ show_count }}</td>
+							<tr>
+								<td>Total Shows</td>
+								<td>{{ data.show_count }}</td>
 							</tr>
-							<tr class="tr-element">
-								<td>Available Seats</td>
-								<td>{{ avl_seat_count }}</td>
+							<tr>
+								<td>Currently Shows scheduled</td>
+								<td>{{ data.show_scheduled_cnt }}</td>
+							</tr>
+							<tr>
+								<td>Available Seats for booking</td>
+								<td>{{ data.seats_avl }}</td>
+							</tr>
+							<tr>
+								<td>Seats Booked</td>
+								<td>{{ data.seats_booked }}</td>
+							</tr>
+							<tr>
+								<td>Percentage Seats Booked</td>
+								<td>{{ "%.2f"|format((data.seats_booked/data.seats_avl) * 100) }}%</td>
 							</tr>
 						</tbody>
 					</table>
+				</div>
 				</div>
 			</div>
 		</div>
