@@ -2,7 +2,6 @@ import os
 
 from flask import Flask
 from flask_cors import CORS
-from flask_debugtoolbar import DebugToolbarExtension
 from flask_login import LoginManager
 from flask_restful import Api
 
