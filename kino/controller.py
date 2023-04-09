@@ -156,6 +156,9 @@ def venue_add():
 @admin_only
 def venue_edit(venue_id):
     venue = Venue.query.filter_by(id=venue_id).first()
+    if venue is None:
+        abort(404)
+
     if request.method == "GET":
         return render_template("admin/venue_add.html", venue=venue)
     elif request.method == "POST":
@@ -259,6 +262,10 @@ def show_add(venue_id=None):
     if request.method == "GET":
         tags = Tag.query.all()
         venues=Venue.query.all()
+        if venue_id is not None:
+            venue = Venue.query.filter_by(id=venue_id).first()
+            if venue is None:
+                abort(404)
         return render_template("admin/show_add.html", tags=tags, venues=venues, venue_id=venue_id)
     if request.method == "POST":
         print("== SHOW ADD ==")
@@ -332,7 +339,10 @@ def show_add(venue_id=None):
 @login_required
 @admin_only
 def show_edit(venue_id, show_id):
-    show = Show.query.filter_by(id=show_id).first()
+    venue = Venue.query.filter_by(id=venue_id).first()
+    if venue is None:
+        abort(404)
+    show = Show.query.filter_by(id=show_id, venue_id=venue.id).first()
     if request.method == "GET":
         if show is not None:
             tags = Tag.query.all()
