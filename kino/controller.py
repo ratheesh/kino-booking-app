@@ -424,17 +424,17 @@ def home():
         return redirect(url_for("controller.admin"))
 
     data = {}
-    # today = db.session.query(Show).filter(func.date(Show.show_time) == datetime.now().date()).all()
     # print('timestamp now:', datetime.now().strftime("%Y-%m-%d %H:%M"))
     # print('date now:', datetime.now().date())
     # print('time now:', datetime.now().time())
     # print([show.show_time.date() == datetime.now().date() for show in Show.query.all()])
-    latest = db.session.query(Show).order_by(Show.created_timestamp.desc()).all()
+
+    dtdelta = datetime.now() - timedelta(minutes=60)
+    latest = db.session.query(Show).filter(Show.show_time > dtdelta).order_by(Show.created_timestamp.asc()).all()
     data["latest"] = latest
     # today = db.session.query(Show).filter(Show.show_time > datetime.now()).all()
-    dtdelta = datetime.now() - timedelta(minutes=60)
     today=db.session.query(Show).filter(and_(func.date(Show.show_time) == datetime.now().date(), Show.show_time > dtdelta)).order_by(Show.show_time.asc()).all()
-    print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
+    # print('today', [show.show_time + timedelta(minutes=show.duration)> datetime.now()  for show in Show.query.all()])
     data["today"] = today
     tomorrow = Show.query.filter(
         func.date(Show.show_time) == (datetime.now().date() + timedelta(days=+1))).order_by(Show.show_time.asc()).all()
@@ -448,10 +448,9 @@ def home():
     data["tags"] = {}
     taglist = Tag.query.all()
     for tag in taglist:
-        # print(tag.name)
         data["tags"][tag.name] = list(filter(lambda x: x.show_time > dtdelta,tag.shows))
         # data["tags"][tag.name] = db.session.query(Show).join(tag).filter(tag.in_(Show.tags), Show.show_time > dtdelta).order_by(Show.show_time.asc()).all()
-    print(data)
+    # print(data)
     return render_template("user/index.html", data=data)
 
 

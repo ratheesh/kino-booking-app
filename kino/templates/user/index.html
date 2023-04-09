@@ -16,6 +16,7 @@
 	<br>
 	<nav>
 		<div class="nav nav-tabs" id="nav-tab" role="tablist">
+			<button class="nav-link" id="nav-today-latest" data-bs-toggle="tab" data-bs-target="#nav-latest" type="button" role="tab">Latest</button>
 			<button class="nav-link active" id="nav-today-tab" data-bs-toggle="tab" data-bs-target="#nav-today" type="button" role="tab">Today</button>
 			<button class="nav-link" id="nav-tomorrow-tab" data-bs-toggle="tab" data-bs-target="#nav-tomorrow" type="button" role="tab" >Tomorrow</button>
 			<button class="nav-link" id="nav-venue-tab" data-bs-toggle="tab" data-bs-target="#nav-venue" type="button" role="tab" >Venue</button>
@@ -23,6 +24,17 @@
 		</div>
 	</nav>
 	<div class="tab-content" id="nav-tabContent">
+		<div class="tab-pane fade show active" id="nav-latest" role="tabpanel" tabindex="0">
+			<div class="row mt-5 mb-3">
+				{% if data.latest|length == 0 %}
+				<h2 class="text-center">Oops! There are Shows added recently </h2>
+				{% else %}
+				{% for show in data.latest %}
+				{{ macros.display_show(show, is_admin=false, current_user=current_user) }}
+				{% endfor %}
+				{% endif %}
+			</div>
+		</div>
 		<div class="tab-pane fade show active" id="nav-today" role="tabpanel" tabindex="0">
 			<div class="row mt-5 mb-3">
 				{% if data.today|length == 0 %}
