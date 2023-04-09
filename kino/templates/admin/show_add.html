@@ -68,10 +68,10 @@ Add Show
 						<label for="show-price" class="form-label">Price</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-price" name="price" value="{{ show.price }}"
-							placeholder="Price(INR) per ticket" autocomplete="off" min=100 max=500 required>
+							placeholder="Price(INR) per ticket" autocomplete="off" min="100" max="500" required>
 						{% else %}
 						<input type="text" class="form-control" id="show-price" name="price" value=""
-							placeholder="Price(INR) per ticket" autocomplete="off" min=100 max=500 required>
+							placeholder="Price(INR) per ticket" autocomplete="off" min="100" max="500" required>
 						{% endif %}
 					</div>
 				</div>
@@ -80,10 +80,10 @@ Add Show
 						<label for="show-rating" class="form-label">Rating</label>
 						{% if show is defined %}
 						<input type="text" class="form-control" id="show-rating" name="rating" value="{{ show.rating }}"
-							placeholder="Show Rating" autocomplete="off" min="0.5" max="5.0" required>
+							placeholder="Show Rating" autocomplete="off" step="0.5" min="0.5" max="5.0" required>
 						{% else %}
 						<input type="text" class="form-control" id="show-rating" name="rating" value=""
-							placeholder="Show Rating" autocomplete="off" min="0.5" max="5.0" required>
+							placeholder="Show Rating" autocomplete="off" step="0.5" min="0.5" max="5.0" required>
 						{% endif %}
 					</div>
 				</div>
