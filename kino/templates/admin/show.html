@@ -12,7 +12,12 @@
 <div class="content">
 	<div class="container">
 		<div class="row mt-3 mb-3">
+			{% if venue is defined and venue is not none %}
+			<h3 class="text-center mt-1 mb-3">Manage Shows of <span class="h3 font-weight-bold">{{ venue.name }}</span></h3>
+			{% else %}
 			<h3 class="text-center mt-1 mb-3">Manage Shows</h3>
+			{% endif %}
+
 			{% for show in shows %}
 			{{ macros.display_show(show, is_admin=true, current_user=current_user) }}
 			{% endfor %}
