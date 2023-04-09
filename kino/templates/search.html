@@ -13,7 +13,7 @@ Search
 {{ super() }}
 <div class="content">
 	<div class="container">
-		<div class="row g3 mt-3">
+		<div class="row g-3 mt-3">
 		<h3>Search Results for <em style="color:red;">{{ searched }}</em></h3>
 			<form class="row g-5" method="get">
 		<div class="row mb-3 mt-3 py-3 justify-content-center border ">
@@ -22,8 +22,11 @@ Search
 						<input class="form-control" type="search" name="search" , placeholder="venues/shows/categories">
 					</div>
 				</div>
-				<div class="col-2 text-center">
-					<input class="btn btn-secondary" type="submit" id="search-date" name="" value="Search">
+				<div class="row g-3 justify-content-center">
+					<div class="col-8 justify-content-center text-center">
+						<input class="btn btn-secondary" type="submit" id="search-date" name="" value="Search">
+						<a href="/" class="btn btn-secondary">Back to Home</a>
+					</div>
 				</div>
 		</div>
 			</form>
