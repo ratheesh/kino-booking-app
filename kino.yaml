@@ -176,37 +176,6 @@ info:
     </tbody>
     </table>
 
-    <h3> Error Codes </h3> 
-    <table>
-      <thead>
-        <th>Resource</th>
-        <th>Error Code</th>
-        <th>Message</th>
-      </thead>
-      <tbody>
-      <tr>
-        <td>User</td>
-        <td>USER001</td>
-        <td>User Name is not registered</td>
-      </tr>
-      <tr>
-        <td>User</td>
-        <td>USER002</td>
-        <td>User Name already registered</td>
-      </tr>
-      <tr>
-        <td>Venue</td>
-        <td>Venue001</td>
-        <td>Venue does not exist</td>
-      </tr>
-      <tr>
-        <td>Show</td>
-        <td>Show001</td>
-        <td>Show does not exist</td>
-      </tr>
-    </tbody>
-    </table>
-
   version: 1.0.0
 servers:
   - url: http://127.0.0.1:5000/
@@ -248,13 +217,13 @@ paths:
                     updated_timestamp:
                       type: string
                       example: Tue, 28 Mar 2023 12:10:14 -0000
-        '500':
-          description: Internal Server Error
         '404':
           description: User not found
+        '500':
+          description: Internal Server Error
 
     post:
-      description: Create user profile.
+      description: Create new User
       requestBody:
         content:
           application/json:
@@ -303,27 +272,17 @@ paths:
                   updated_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
-                  
         '404':
           description: User not found
         '500':
           description: Internal Server Error
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
 
   /api/user/{username}:
-    description: End point for User CRUD
+    description: End point for individual User CRUD operations
     get:
-      description: Operation to Read User data
+      description: Get user details
       parameters:
         - in: path
           name: username
@@ -419,21 +378,15 @@ paths:
                   updated_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
+        '403':
+          description: Forbidden Access
         '404':
           description: User not found
         '500':
           description: Internal Server Error
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
+
     delete:
       description: Operation to delete the course resource
       parameters:
@@ -532,17 +485,9 @@ paths:
           description: Internal Server Error
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
+
   /api/venue/{venue_id}:
-    description: Endpoint to Read, Update and Delete a Venue
+    description: Endpoint to Venue CRUD operations
     get:
       description: Get details of a Venue
       parameters:
@@ -637,17 +582,9 @@ paths:
           description: Internal Server Error
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
+
     delete:
-      description: Operation to delete the course resource
+      description: Delete a venue
       parameters:
         - in: path
           name: venue_id
@@ -664,7 +601,7 @@ paths:
           description: Venue not found
 
   /api/{venue_id}/show:
-    description: URL to create student resource and get all student details
+    description: URL to get all shows details for a given venue and create a show given venue
     get:
       description: Get all show details
       parameters:
@@ -757,19 +694,13 @@ paths:
                   example: 4.5
                 show_time:
                   type: string
-                  example: 
+                  example: 2023-03-28 10:10
                 n_rows:
                   type: integer
                   example: 5
                 n_seats:
                   type: integer
                   example: 10
-                show_img:
-                  type: string
-                  example: default.jpg
-                venue_id:
-                  type: integer
-                  example: 1
       responses:
         '201':
           description: Show Successfully Created
@@ -818,26 +749,15 @@ paths:
                   updated_timestamp:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
-        '403':
-          description: Show already exist
         '500':
           description: Internal Server Error
         '400':
           description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
 
   /api/{venue_id}/show/{show_id}:
-    description: Endpoint to get the the list of shows,update the show and delete a show based on a given venue
+    description: Endpoint to manage CRUD operations for a given venue
     get:
-      description: Method to get show details for a given venue.
+      description: Method to get a show details for a given venue.
       parameters:
         - in: path
           name: venue_id
@@ -899,23 +819,14 @@ paths:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
         '400':
-          description: Invalid Show Id
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
+          description: Bad Request
         '404':
           description: Show does not exist
         '500':
           description: Internal Server Error
 
     put:
-      description: Method to get show details for a given venue.
+      description: Update show details for a given venue.
       parameters:
         - in: path
           name: venue_id
@@ -959,13 +870,10 @@ paths:
                 n_seats:
                   type: integer
                   example: 10
-                venue_id:
-                  type: integer
-                  example: 1
 
       responses:
         '200':
-          description: Request Successful
+          description: Show updated successfully
           content:
             application/json:
               schema:
@@ -1011,23 +919,14 @@ paths:
                     type: string
                     example: Tue, 28 Mar 2023 12:10:14 -0000
         '400':
-          description: Invalid Show Id
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error_code:
-                    type: string
-                  error_message:
-                    type: string
+          description: Bad Request
         '404':
           description: Show does not exist
         '500':
           description: Internal Server Error
     
     delete:
-      description: Delete a Show of a given venue
+      description: Delete a Show for a given venue
       parameters:
         - in: path
           name: venue_id
