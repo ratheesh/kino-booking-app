@@ -35,7 +35,7 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="tab-pane fade show active" id="nav-today" role="tabpanel" tabindex="0">
+		<div class="tab-pane fade show" id="nav-today" role="tabpanel" tabindex="0">
 			<div class="row mt-5 mb-3">
 				{% if data.today|length == 0 %}
 				<h2 class="text-center">Oops! No Shows are running today </h2>
@@ -70,8 +70,6 @@
 				{{ macros.display_show(show, is_admin=false, current_user=current_user) }}
 			{% endfor %}
 			</div>
-			{% else %}
-			<h3 class="text-center">No shows are running! </h3>
 			{% endif %}
 			{% endfor %}
 		</div>
